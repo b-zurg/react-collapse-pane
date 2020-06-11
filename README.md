@@ -1,4 +1,4 @@
-# better-react-split-pane
+# react-collapse-pane
 
 # TSDX React User Guide
 

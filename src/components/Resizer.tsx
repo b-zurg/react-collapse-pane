@@ -1,111 +1,49 @@
-import React, { forwardRef, useCallback, useMemo, useRef } from 'react';
-import { stringifyStyle } from './helpers';
+import React from 'react';
 
-const RESIZER_DEFAULT_CLASSNAME = 'Resizer';
+import { ClientPosition } from './hooks';
+const { useCallback } = React;
 
 export interface ResizerProps {
+  split: 'horizontal' | 'vertical';
   className: string;
-  onClick?: React.MouseEventHandler;
-  onDoubleClick?: React.MouseEventHandler;
-  onMouseDown: React.MouseEventHandler;
-  onTouchStart: React.TouchEventHandler;
-  onTouchEnd: React.TouchEventHandler;
-  split: string;
+  index: number;
+  collapseButton?: React.ReactElement;
+  onDragStarted: (index: number, pos: ClientPosition) => void;
 }
 
-export function useStableCallback<T extends (...args: any[]) => any>(
-  callback: T | undefined
-): T {
-  const ref = useRef<T | undefined>();
-  ref.current = callback;
-
-  return useCallback<T>(
-    ((...args: any[]) => {
-      if (ref.current) {
-        ref.current(...args);
-      }
-
-      return;
-    }) as any,
-    [ref]
-  );
-}
-
-export const Resizer = forwardRef<HTMLSpanElement, ResizerProps>(
-  (props, forwardedRef) => {
-    const stableClick = useStableCallback(props.onClick);
-    const hasClick = !!props.onClick;
-
-    const onClick = useCallback<React.MouseEventHandler>(
-      event => {
-        if (hasClick) {
-          event.preventDefault();
-          stableClick(event);
-        }
-      },
-      [stableClick, hasClick]
-    );
-
-    const stableDoubleClick = useStableCallback(props.onDoubleClick);
-    const hasDoubleClick = !!props.onDoubleClick;
-
-    const onDoubleClick = useCallback<React.MouseEventHandler>(
-      event => {
-        if (hasDoubleClick) {
-          event.preventDefault();
-          stableDoubleClick(event);
-        }
-      },
-      [stableDoubleClick, hasDoubleClick]
-    );
-
-    const onMouseDown = useStableCallback(props.onMouseDown);
-
-    const stableTouchEnd = useStableCallback(props.onTouchEnd);
-
-    const onTouchEnd = useCallback<React.TouchEventHandler>(
-      event => {
+export const Resizer = React.memo(
+  ({ split, className, index, onDragStarted }: ResizerProps) => {
+    const handleMouseDown = useCallback(
+      (event: React.MouseEvent) => {
         event.preventDefault();
-        stableTouchEnd(event);
+
+        onDragStarted(index, event);
       },
-      [stableTouchEnd]
+      [index, onDragStarted]
     );
 
-    const stableTouchStart = useStableCallback(props.onTouchStart);
-
-    const onTouchStart = useCallback<React.TouchEventHandler>(
-      event => {
+    const handleTouchStart = useCallback(
+      (event: React.TouchEvent) => {
         event.preventDefault();
-        stableTouchStart(event);
+
+        onDragStarted(index, event.touches[0]);
       },
-      [stableTouchStart]
+      [index, onDragStarted]
     );
 
-    const className = [
-      RESIZER_DEFAULT_CLASSNAME,
-      props.split,
-      props.className,
-    ].join(' ');
-
-    const style = useMemo(() => {
-      return props.style;
-    }, [stringifyStyle(props.style)]);
+    const classes = ['Resizer', split, className].join(' ');
 
     return (
-      <span
-        key="resizer"
-        role="presentation"
-        className={className}
-        style={style}
-        ref={forwardedRef}
-        onMouseDown={onMouseDown}
-        onTouchStart={onTouchStart}
-        onTouchEnd={onTouchEnd}
-        onClick={onClick}
-        onDoubleClick={onDoubleClick}
-      />
+      <>
+        <div
+          role="presentation"
+          className={classes}
+          style={{ flex: 'none' }}
+          onMouseDown={handleMouseDown}
+          onTouchStart={handleTouchStart}
+        />
+      </>
     );
   }
 );
-
-export default Resizer;
+Resizer.displayName = 'Resizer';

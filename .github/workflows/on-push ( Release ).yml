@@ -1,0 +1,32 @@
+name: "Release"
+on:
+  push:
+    branches:
+      - master
+      - next
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://npm.pkg.github.com/
+
+      - name: Build
+        run: |
+          npm ci
+          npm run build
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.READ_BAHAIORG_PACKAGES}}
+
+      - name: Semantic Release
+        id: semantic
+        uses: cycjimmy/semantic-release-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}

@@ -33,7 +33,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "ui-lib",
+  "name": "react-collapse-pane",
   "author": "Buzurgmehr Arjmandi",
   "module": "dist/ui-lib.esm.js",
   "devDependencies": {

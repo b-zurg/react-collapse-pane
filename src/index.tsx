@@ -1,3 +1,1 @@
-export * from './components/SplitPane';
-export * from './components/Pane';
-export * from './components/Resizer';
+export { SplitPane, SplitPaneProps } from './components/SplitPane';

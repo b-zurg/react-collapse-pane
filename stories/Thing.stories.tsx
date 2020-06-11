@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pane, SplitPane } from '../src';
+import { SplitPane } from '../src';
 import { storiesOf } from '@storybook/react';
 import styled from 'styled-components';
 
@@ -56,16 +56,26 @@ export const VerticalSplitWithDivs = () => (
     <div>This is a div</div>
   </StyledSplit>
 );
-export const VerticalSplitWithPanes = () => (
-  <StyledSplit split="vertical">
-    <Pane>This is a Pane</Pane>
-    <Pane>This is a Pane</Pane>
+
+const Button = styled.div`
+  width: 1.5rem;
+  height: 4rem;
+  background: grey;
+  cursor: pointer;
+`;
+export const VerticalSplitWithButton = () => (
+  <StyledSplit
+    split="vertical"
+    collapseButton={<Button onClick={() => console.log('hie')}>⬅</Button>}
+  >
+    <div>This is a div</div>
+    <div>This is a div</div>
   </StyledSplit>
 );
 
 storiesOf('Vertical', module)
   .add('with divs', () => <VerticalSplitWithDivs />)
-  .add('with Panes', () => <VerticalSplitWithPanes />);
+  .add('with button', () => <VerticalSplitWithButton />);
 
 export const HorizontalSplitWithDivs = () => (
   <StyledSplit split="horizontal">
@@ -73,13 +83,7 @@ export const HorizontalSplitWithDivs = () => (
     <div>This is a div</div>
   </StyledSplit>
 );
-export const HorizontalSplitWithPanes = () => (
-  <StyledSplit split="horizontal">
-    <Pane>This is a Pane</Pane>
-    <Pane>This is a Pane</Pane>
-  </StyledSplit>
-);
 
-storiesOf('Horizontal', module)
-  .add('with divs', () => <HorizontalSplitWithDivs />)
-  .add('with Panes', () => <HorizontalSplitWithPanes />);
+storiesOf('Horizontal', module).add('with divs', () => (
+  <HorizontalSplitWithDivs />
+));

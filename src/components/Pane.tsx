@@ -1,46 +1,51 @@
-import React, { useMemo, forwardRef } from 'react';
-import { stringifyStyle } from './helpers';
+import * as React from 'react';
 
 export interface PaneProps {
-  split?: 'vertical' | 'horizontal';
-  size: React.CSSProperties['width'];
-  order: 1 | 2;
+  size: number;
+  minSize: number;
+
+  split: 'horizontal' | 'vertical';
+  className: string;
+
+  forwardRef: React.Ref<HTMLDivElement>;
+
   children: React.ReactNode;
 }
 
-export type PaneRef = HTMLDivElement | null;
+const baseStyle: React.CSSProperties = {
+  position: 'relative',
+  outline: 'none',
+  border: 0,
+  overflow: 'hidden',
+  display: 'flex',
+  flexBasis: 'auto',
+};
 
-export const Pane = forwardRef<PaneRef, PaneProps>((props, forwardedRef) => {
-  const style = useMemo(() => {
-    const res: React.CSSProperties = {
-      flex: 1,
-      position: 'relative',
-      outline: 'none',
+export const Pane = React.memo(
+  ({ size, minSize, split, className, forwardRef, children }: PaneProps) => {
+    const style: React.CSSProperties = {
+      ...baseStyle,
+      flexGrow: size,
+      flexShrink: size,
     };
 
-    if (props.size !== undefined) {
-      if (props.split === 'vertical') {
-        res.width = props.size;
-      } else {
-        res.height = props.size;
-        res.display = 'flex';
-      }
-      res.flex = 'none';
+    if (split === 'vertical') {
+      style.width = 0;
+      style.height = '100%';
+      style.minWidth = minSize;
+    } else {
+      style.width = '100%';
+      style.height = 0;
+      style.minHeight = minSize;
     }
 
-    return res;
-  }, [stringifyStyle(props.style), props.size, props.split]);
+    const classes = ['Pane', split, className].join(' ');
 
-  const className = ['Pane', props.split, `Pane${props.order}`].join(' ');
-
-  return (
-    <div
-      key={`pane${props.order}`}
-      ref={forwardedRef}
-      className={className}
-      style={style}
-    >
-      {props.children}
-    </div>
-  );
-});
+    return (
+      <div className={classes} style={style} ref={forwardRef}>
+        {children}
+      </div>
+    );
+  }
+);
+Pane.displayName = 'Pane';
