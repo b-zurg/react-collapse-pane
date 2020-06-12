@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { SplitType } from 'components/SplitPane';
 
 export interface PaneProps {
   size: number;
   minSize: number;
 
-  split: 'horizontal' | 'vertical';
+  split: SplitType;
   className: string;
 
   forwardRef: React.Ref<HTMLDivElement>;

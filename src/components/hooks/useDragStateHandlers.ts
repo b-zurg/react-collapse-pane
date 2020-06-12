@@ -1,25 +1,11 @@
-import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-const { useCallback, useMemo, useState, useEffect } = React;
+import { useEventListener } from '../hooks/useEventListener';
+import { useCallback, useMemo, useState } from 'react';
+import { SplitType } from '../SplitPane';
 
 export interface ClientPosition {
   clientX: number;
   clientY: number;
-}
-
-export function useEventListener<K extends keyof DocumentEventMap>(
-  type: K,
-  listener?: (this: Document, ev: DocumentEventMap[K]) => void
-): void {
-  useEffect(() => {
-    if (!listener) return;
-
-    document.addEventListener(type, listener);
-
-    return (): void => {
-      document.removeEventListener(type, listener);
-    };
-  }, [type, listener]);
 }
 
 export interface DragState<T> {
@@ -36,7 +22,7 @@ interface DragStateHandlers<T> {
 }
 
 function useDragStateHandlers<T>(
-  split: 'horizontal' | 'vertical',
+  split: SplitType,
   onDragFinished: (dragState: DragState<T>) => void
 ): DragStateHandlers<T> {
   const [dragging, setDragging] = useState<[T, number] | null>(null);
@@ -90,7 +76,7 @@ function useDragStateHandlers<T>(
 }
 
 export function useDragState<T>(
-  split: 'horizontal' | 'vertical',
+  split: SplitType,
   onDragFinished: (dragState: DragState<T>) => void
 ): [DragState<T> | null, (pos: ClientPosition, extraState: T) => void] {
   const {
