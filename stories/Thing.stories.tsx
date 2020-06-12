@@ -44,7 +44,8 @@ export const VerticalSplitWithButton = () => (
     grabberSize="1rem"
   >
     <div>This is a div</div>
-    <div>This is a div</div>
+    <div>This is a second div</div>
+    <div>This is a third div</div>
   </SplitPane>
 );
 

@@ -1,69 +1,17 @@
-import React, { useState, useCallback } from 'react';
-import styled, { css } from 'styled-components';
-import { Fade, Grow, Zoom } from '@material-ui/core';
-import { ClientPosition } from 'components/hooks/useDragStateHandlers';
+import React, { useState, useCallback, useMemo } from 'react';
+import { Fade } from '@material-ui/core';
+import { ClientPosition } from '../hooks/useDragStateHandlers';
+import { getTransition, getSizeWithUnit } from '../Resizer/helpers';
+import { mergeClasses } from '../SplitPane/helpers';
+import {
+  ButtonContainer,
+  ButtonWrapper,
+  ResizeGrabber,
+  ResizePresentation,
+} from './helpers';
 
-type OrientationProps = {
-  isVertical: boolean;
-};
+export type TransitionType = 'fade' | 'grow' | 'zoom';
 
-const ButtonWrapper = styled.div<OrientationProps>`
-  cursor: pointer;
-  z-index: 3;
-`;
-
-const ButtonContainer = styled.div<OrientationProps & { grabberSize: string }>`
-  ${props =>
-    props.isVertical
-      ? css`
-          width: 6rem;
-          height: 100%;
-        `
-      : css`
-          height: 6rem;
-          width: 100%;
-        `}
-        transform: ${props =>
-          props.isVertical
-            ? `translateX(-50%) translateX(calc(${props.grabberSize} / 2))`
-            : `translateY(-50%) translateY(calc(${props.grabberSize} / 2))`}; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const topBottomCss = css`
-  top: 0;
-  bottom: 0;
-`;
-const leftRightCss = css`
-  right: 0;
-  left: 0;
-`;
-
-const ResizeGrabber = styled.div<OrientationProps>`
-  position: absolute;
-  ${props => (props.isVertical ? topBottomCss : leftRightCss)}
-  z-index: 3;
-  transform: ${props =>
-    props.isVertical ? 'translateX(-50%)' : 'translateY(-50%)'};
-  cursor: ${props => (props.isVertical ? 'col-resize' : 'row-resize')};
-`;
-
-const ResizePresentation = styled.div<{ isVertical: boolean }>`
-  z-index: 2;
-  position: absolute;
-  ${props => (props.isVertical ? topBottomCss : leftRightCss)}
-`;
-
-type TransitionType = 'fade' | 'grow' | 'zoom';
-const transitionComponentMap: {
-  [key in TransitionType]: typeof Fade | typeof Grow | typeof Zoom;
-} = {
-  fade: Fade,
-  grow: Grow,
-  zoom: Zoom,
-};
 export interface ResizerCollapseButtonProps {
   button?: React.ReactElement;
   transition?: TransitionType;
@@ -79,6 +27,7 @@ export interface ResizerProps {
   resizerHoverCss?: React.CSSProperties;
   grabberSize?: string | number;
   onDragStarted: (index: number, pos: ClientPosition) => void;
+  onCollapseToggle: () => void;
 }
 
 export const Resizer = React.memo(
@@ -91,11 +40,13 @@ export const Resizer = React.memo(
     resizerCss = { backgroundColor: 'silver' },
     resizerHoverCss = { backgroundColor: 'grey' },
     collapseButtonDetails,
+    onCollapseToggle,
   }: ResizerProps) => {
+    const [isHovered, setIsHovered] = useState(false);
+
     const handleMouseDown = useCallback(
       (event: React.MouseEvent) => {
         event.preventDefault();
-
         onDragStarted(index, event);
       },
       [index, onDragStarted]
@@ -104,7 +55,6 @@ export const Resizer = React.memo(
     const handleTouchStart = useCallback(
       (event: React.TouchEvent) => {
         event.preventDefault();
-
         onDragStarted(index, event.touches[0]);
       },
       [index, onDragStarted]
@@ -112,30 +62,33 @@ export const Resizer = React.memo(
 
     const handleButtonClick = useCallback((event: React.MouseEvent) => {
       event.stopPropagation();
-      console.log('button clicked');
+      onCollapseToggle();
     }, []);
     const handleButtonMousedown = useCallback((event: React.MouseEvent) => {
       event.stopPropagation();
     }, []);
 
-    const classes = ['Resizer', split, className].join(' ');
-    const [isHovered, setIsHovered] = useState(false);
+    const classes = useMemo(() => mergeClasses(['Resizer', split, className]), [
+      split,
+      className,
+    ]);
 
     const isVertical = split === 'vertical';
 
-    const widthOrHeightSize = (size: string | number) =>
+    const getWidthOrHeight = (size: string | number) =>
       isVertical ? { width: size } : { height: size };
+    const grabberSizeWithUnit = useMemo(() => getSizeWithUnit(grabberSize), [
+      grabberSize,
+    ]);
 
-    const Transition =
-      transitionComponentMap[collapseButtonDetails?.transition ?? 'fade'];
-    const button = collapseButtonDetails ? (
+    const Transition = useMemo(() => getTransition(collapseButtonDetails), [
+      collapseButtonDetails,
+    ]);
+
+    const collapseButton = collapseButtonDetails ? (
       <ButtonContainer
         isVertical={isVertical}
-        grabberSize={
-          isNaN(grabberSize as number)
-            ? grabberSize.toString()
-            : `${grabberSize}px`
-        }
+        grabberSize={grabberSizeWithUnit}
       >
         <Transition in={isHovered} timeout={collapseButtonDetails.timeout}>
           <ButtonWrapper
@@ -149,10 +102,10 @@ export const Resizer = React.memo(
       </ButtonContainer>
     ) : null;
 
-    const handleMouseEnter = () => {
+    const handleMouseEnterGrabber = () => {
       setIsHovered(true);
     };
-    const handleMouseLeave = () => {
+    const handleMouseLeaveGrabber = () => {
       setIsHovered(false);
     };
 
@@ -160,26 +113,26 @@ export const Resizer = React.memo(
       <div style={{ position: 'relative' }}>
         <ResizeGrabber
           isVertical={isVertical}
-          style={widthOrHeightSize(grabberSize)}
+          style={getWidthOrHeight(grabberSize)}
           role="presentation"
           className={classes}
           onMouseDown={handleMouseDown}
           onTouchStart={handleTouchStart}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
+          onMouseEnter={handleMouseEnterGrabber}
+          onMouseLeave={handleMouseLeaveGrabber}
         >
-          {button}
+          {collapseButton}
         </ResizeGrabber>
         <Fade in={isHovered === false}>
           <ResizePresentation
             isVertical={isVertical}
-            style={{ ...widthOrHeightSize(1), ...resizerCss }}
+            style={{ ...getWidthOrHeight(1), ...resizerCss }}
           />
         </Fade>
         <Fade in={isHovered}>
           <ResizePresentation
             isVertical={isVertical}
-            style={{ ...widthOrHeightSize(1), ...resizerHoverCss }}
+            style={{ ...getWidthOrHeight(1), ...resizerHoverCss }}
           />
         </Fade>
       </div>

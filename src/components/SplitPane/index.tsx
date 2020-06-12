@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Pane } from '../Pane';
 import { Resizer, ResizerCollapseButtonProps } from '../Resizer';
@@ -70,13 +70,24 @@ export const SplitPane = React.memo((props: SplitPaneProps) => {
     options
   );
 
-  const classes = mergeClasses(['SplitPane', split, className]);
-  const dragLayerClasses = mergeClasses([
-    'DragLayer',
+  const classes = useMemo(() => mergeClasses(['SplitPane', split, className]), [
     split,
-    resizeState ? 'resizing' : '',
     className,
   ]);
+  const dragLayerClasses = useMemo(
+    () =>
+      mergeClasses([
+        'DragLayer',
+        split,
+        resizeState ? 'resizing' : '',
+        className,
+      ]),
+    [split, resizeState, className]
+  );
+
+  const onCollapse = () => {
+    console.log('clicked collapse!');
+  };
 
   const entries: React.ReactNode[] = [];
 
@@ -94,6 +105,7 @@ export const SplitPane = React.memo((props: SplitPaneProps) => {
           resizerHoverCss={props.resizerHoverCss}
           collapseButtonDetails={props.collapseButtonDetails}
           onDragStarted={handleDragStart}
+          onCollapseToggle={onCollapse}
         />
       );
     }
