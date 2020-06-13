@@ -79,13 +79,10 @@ export function useDragState<T>(
   split: SplitType,
   onDragFinished: (dragState: DragState<T>) => void
 ): [DragState<T> | null, (pos: ClientPosition, extraState: T) => void] {
-  const {
-    beginDrag,
-    dragState,
-    onMouseMove,
-    onTouchMove,
-    onMouseUp,
-  } = useDragStateHandlers<T>(split, onDragFinished);
+  const { beginDrag, dragState, onMouseMove, onTouchMove, onMouseUp } = useDragStateHandlers<T>(
+    split,
+    onDragFinished
+  );
 
   useEventListener('mousemove', onMouseMove);
   useEventListener('touchmove', onTouchMove);

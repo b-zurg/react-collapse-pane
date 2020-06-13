@@ -17,14 +17,19 @@ const Button = styled.div`
   background: grey;
   cursor: pointer;
   user-select: none;
+  text-align: center;
+  color: lightskyblue;
+  border: 1px silver solid;
 `;
 export const VerticalSplitWithButton = () => (
   <SplitPane
     split="vertical"
-    collapseButtonDetails={{
-      button: <Button>⬅</Button>,
-      transition: 'zoom',
+    collapseOptions={{
+      beforeToggleButton: <Button>⬅</Button>,
+      afterToggleButton: <Button>➡</Button>,
+      transition: 'fade',
       timeout: 200,
+      collapseSize: 40,
     }}
     resizerCss={{
       width: '1px',
@@ -35,7 +40,6 @@ export const VerticalSplitWithButton = () => (
       marginLeft: '-10px',
       backgroundImage:
         'radial-gradient(at center center,rgba(0,0,0,0.2) 0%,transparent 70%,transparent 100%)',
-
       backgroundSize: '50px 100%',
       backgroundPosition: '0 50%',
       backgroundRepeat: 'no-repeat',
@@ -46,12 +50,11 @@ export const VerticalSplitWithButton = () => (
     <div>This is a div</div>
     <div>This is a second div</div>
     <div>This is a third div</div>
+    <div>This is a fourth div</div>
   </SplitPane>
 );
 
-storiesOf('Vertical', module).add('With Button and Shadows', () => (
-  <VerticalSplitWithButton />
-));
+storiesOf('Vertical', module).add('With Button and Shadows', () => <VerticalSplitWithButton />);
 
 export const HorizontalSplitWithDivs = () => (
   <SplitPane split="horizontal">
@@ -60,6 +63,4 @@ export const HorizontalSplitWithDivs = () => (
   </SplitPane>
 );
 
-storiesOf('Horizontal', module).add('with divs', () => (
-  <HorizontalSplitWithDivs />
-));
+storiesOf('Horizontal', module).add('with divs', () => <HorizontalSplitWithDivs />);

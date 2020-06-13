@@ -1,5 +1,8 @@
 import * as React from 'react';
-import { SplitType } from 'components/SplitPane';
+import { SplitType } from './SplitPane';
+import styled, { css } from 'styled-components';
+import { mergeClasses } from './SplitPane/helpers';
+import { useMemo } from 'react';
 
 export interface PaneProps {
   size: number;
@@ -7,45 +10,60 @@ export interface PaneProps {
 
   split: SplitType;
   className: string;
-
+  isCollapsed: boolean;
+  collapsedSize: number;
   forwardRef: React.Ref<HTMLDivElement>;
 
   children: React.ReactNode;
 }
 
-const baseStyle: React.CSSProperties = {
-  position: 'relative',
-  outline: 'none',
-  border: 0,
-  overflow: 'hidden',
-  display: 'flex',
-  flexBasis: 'auto',
-};
+const verticalCss = css`
+  width: 0;
+  height: 100%;
+`;
+const horizontalCss = css`
+  width: 100%;
+  height: 0;
+`;
+const StyledDiv = styled.div<{ isVertical: boolean }>`
+  position: relative;
+  outline: none;
+  border: 0;
+  overflow: hidden;
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 1;
+  ${props => (props.isVertical ? verticalCss : horizontalCss)}
+`;
 
 export const Pane = React.memo(
-  ({ size, minSize, split, className, forwardRef, children }: PaneProps) => {
-    const style: React.CSSProperties = {
-      ...baseStyle,
-      flexGrow: size,
-      flexShrink: size,
-    };
+  ({
+    size,
+    minSize,
+    collapsedSize,
+    isCollapsed,
+    split,
+    className,
+    forwardRef,
+    children,
+  }: PaneProps) => {
+    const classes = useMemo(() => mergeClasses(['Pane', split, className]), [split, className]);
 
-    if (split === 'vertical') {
-      style.width = 0;
-      style.height = '100%';
-      style.minWidth = minSize;
-    } else {
-      style.width = '100%';
-      style.height = 0;
-      style.minHeight = minSize;
-    }
-
-    const classes = ['Pane', split, className].join(' ');
+    const isVertical = split === 'vertical';
+    const flexBasis = isCollapsed ? collapsedSize : Math.max(size, minSize);
+    const maxSizeStyle = isVertical
+      ? { maxWidth: collapsedSize, minWidth: collapsedSize }
+      : { maxHeight: collapsedSize, minHeight: collapsedSize };
 
     return (
-      <div className={classes} style={style} ref={forwardRef}>
+      <StyledDiv
+        isVertical={split === 'vertical'}
+        className={classes}
+        ref={forwardRef}
+        style={{ flexBasis, ...(isCollapsed ? maxSizeStyle : {}) }}
+      >
         {children}
-      </div>
+      </StyledDiv>
     );
   }
 );

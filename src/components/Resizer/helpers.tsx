@@ -1,7 +1,7 @@
-import React from 'react';
 import styled, { css } from 'styled-components';
 import { Fade, Grow, Zoom } from '@material-ui/core';
-import { TransitionType, ResizerCollapseButtonProps } from '.';
+import { TransitionType } from '.';
+import { CollapseOptions } from './index';
 
 type OrientationProps = {
   isVertical: boolean;
@@ -36,11 +36,10 @@ export const ButtonContainer = styled.div<ButtonContainerProps>`
 
 export const ResizeGrabber = styled.div<OrientationProps>`
   position: absolute;
-  ${props => (props.isVertical ? topBottomCss : leftRightCss)}
   z-index: 3;
-  transform: ${props =>
-    props.isVertical ? 'translateX(-50%)' : 'translateY(-50%)'};
+  transform: ${props => (props.isVertical ? 'translateX(-50%)' : 'translateY(-50%)')};
   cursor: ${props => (props.isVertical ? 'col-resize' : 'row-resize')};
+  ${props => (props.isVertical ? topBottomCss : leftRightCss)}
 `;
 
 export const ResizePresentation = styled.div<{ isVertical: boolean }>`
@@ -58,9 +57,8 @@ const transitionComponentMap: {
   zoom: Zoom,
 };
 
-export const getTransition = (
-  details: ResizerCollapseButtonProps | undefined
-): TransitionComponent => transitionComponentMap[details?.transition ?? 'fade'];
+export const getTransition = (details: CollapseOptions | undefined): TransitionComponent =>
+  transitionComponentMap[details?.transition ?? 'fade'];
 
 export const getSizeWithUnit = (size: string | number): string =>
   isNaN(size as number) ? size.toString() : `${size}px`;

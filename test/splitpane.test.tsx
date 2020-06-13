@@ -1,9 +1,7 @@
 import React from 'react';
 import * as ReactDOM from 'react-dom';
-import {
-  HorizontalSplitWithDivs,
-  VerticalSplitWithDivs,
-} from '../stories/Thing.stories';
+// @ts-ignore
+import { HorizontalSplitWithDivs, VerticalSplitWithDivs } from '../stories/SplitPane.stories';
 
 describe('Vertical', () => {
   it('Split with Divs renders without crashing', () => {

@@ -28,14 +28,14 @@
     }
   },
   "prettier": {
-    "printWidth": 80,
+    "printWidth": 100,
     "semi": true,
     "singleQuote": true,
     "trailingComma": "es5"
   },
   "name": "react-collapse-pane",
   "author": "Buzurgmehr Arjmandi",
-  "module": "dist/ui-lib.esm.js",
+  "module": "dist/react-collapse-pane.esm.js",
   "devDependencies": {
     "@babel/core": "^7.10.2",
     "@material-ui/core": "^4.10.2",

@@ -1,4 +1,6 @@
 import React from 'react';
+import styled, { css } from 'styled-components';
+import { SplitType } from '.';
 
 const DEFAULT_MIN_SIZE = 50;
 
@@ -9,10 +11,7 @@ export const getNodeKey = (node: React.ReactChild, index: number): string => {
   return 'index.' + index;
 };
 
-export const getMinSize = (
-  index: number,
-  minSizes?: number | number[]
-): number => {
+export const getMinSize = (index: number, minSizes?: number | number[]): number => {
   if (typeof minSizes === 'number') {
     if (minSizes > 0) {
       return minSizes;
@@ -26,10 +25,7 @@ export const getMinSize = (
   return DEFAULT_MIN_SIZE;
 };
 
-export const getDefaultSize = (
-  index: number,
-  defaultSizes?: number[]
-): number => {
+export const getDefaultSize = (index: number, defaultSizes?: number[]): number => {
   if (defaultSizes) {
     const value = defaultSizes[index];
     if (value >= 0) {
@@ -75,3 +71,44 @@ export const move = (
 };
 
 export const mergeClasses = (classes: string[]) => classes.join(' ');
+
+const verticalCss = css`
+  left: 0;
+  right: 0;
+  flex-direction: row;
+`;
+const horizontalCss = css`
+  bottom: 0;
+  top: 0;
+  flex-direction: column;
+  min-height: 100%;
+  width: 100%;
+`;
+
+export const Wrapper = styled.div<{ split: SplitType }>`
+  display: flex;
+  flex: 1;
+  height: 100%;
+  position: absolute;
+  outline: none;
+  overflow: hidden;
+  ${props => (props.split === 'vertical' ? verticalCss : horizontalCss)}
+`;
+
+export const DragLayer = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+`;
+
+export const PlaceHolder = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 3rem;
+  background: grey;
+`;
