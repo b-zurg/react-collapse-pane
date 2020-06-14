@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { Direction, SplitType } from '.';
+import { CollapseOptions } from '../Resizer';
 
 const DEFAULT_MIN_SIZE = 50;
 
@@ -35,13 +36,21 @@ export const getDefaultSize = (index: number, defaultSizes?: number[]): number =
   return 1;
 };
 
-export const move = (
-  sizes: number[],
-  index: number,
-  offset: number,
-  minSizes: number | number[] | undefined,
-  direction: Direction
-): number => {
+export const move = ({
+  direction,
+  index,
+  minSizes,
+  offset,
+  collapsedIndices,
+  sizes,
+}: {
+  sizes: number[];
+  index: number;
+  offset: number;
+  minSizes: number | number[] | undefined;
+  direction: Direction;
+  collapsedIndices: number[];
+}): number => {
   if (!offset || index < 0 || index + 1 >= sizes.length) {
     return 0;
   }
@@ -55,16 +64,30 @@ export const move = (
   if (offset < 0 && firstSize < firstMinSize) {
     // offset is negative, so missing and pushed are, too
     const missing = firstSize - firstMinSize;
-    const pushed = move(sizes, index - 1, missing, minSizes, direction);
+    const pushed = move({
+      sizes,
+      index: index - 1,
+      offset: missing,
+      minSizes,
+      direction,
+      collapsedIndices,
+    });
 
     offset -= missing - pushed;
   } else if (offset > 0 && secondSize < secondMinSize) {
     const missing = secondMinSize - secondSize;
-    const pushed = move(sizes, index + 1, missing, minSizes, direction);
+    const pushed = move({
+      sizes,
+      index: index + 1,
+      offset: missing,
+      minSizes,
+      direction,
+      collapsedIndices,
+    });
 
     offset -= missing - pushed;
   }
-  if (['ltr', 'top-to-bottom'].includes(direction)) {
+  if (direction === 'ltr') {
     sizes[index] += offset;
     sizes[index + 1] -= offset;
   } else {
@@ -77,8 +100,12 @@ export const move = (
 
 export const mergeClasses = (classes: string[]) => classes.join(' ');
 
-export const getDirection = (direction: Direction | undefined, split: SplitType): Direction =>
-  direction || (split === 'vertical' ? 'ltr' : 'top-to-bottom');
+export const isCollapseDirectionReversed = (
+  collapseOptions: CollapseOptions | undefined
+): boolean =>
+  collapseOptions?.collapseDirection
+    ? ['right', 'up'].includes(collapseOptions.collapseDirection)
+    : false;
 
 const verticalCss = css`
   left: 0;

@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Pane } from '../Pane';
 import { CollapseOptions, Resizer, ResizerOptions } from '../Resizer';
-import { useSplitPaneResize } from '../hooks/useSplitPaneResize';
-import { getDirection, mergeClasses, Wrapper } from './helpers';
+import { useSplitPaneResize } from '../../hooks/useSplitPaneResize';
+import { isCollapseDirectionReversed, mergeClasses, Wrapper } from './helpers';
 
 export type SplitType = 'horizontal' | 'vertical';
-export type Direction = 'ltr' | 'rtl' | 'top-to-bottom' | 'bottom-to-top';
+export type Direction = 'ltr' | 'rtl';
 
 export type SplitPaneHooks = {
   onDragStarted?: () => void;
@@ -28,10 +28,7 @@ export interface SplitPaneProps {
 
 export const SplitPane = ({ className = '', ...props }: SplitPaneProps) => {
   const [collapsedIndices, setCollapsed] = useState<number[]>([]);
-  const direction = useMemo(() => getDirection(props.direction, props.split), [
-    props.direction,
-    props.split,
-  ]);
+  const direction = props.direction || 'ltr';
   const { childPanes, resizeState, handleDragStart } = useSplitPaneResize({
     ...props,
     direction,
@@ -50,9 +47,13 @@ export const SplitPane = ({ className = '', ...props }: SplitPaneProps) => {
     },
     [collapsedIndices]
   );
+  const isCollapseReversed = useMemo(() => isCollapseDirectionReversed(props.collapseOptions), [
+    props.collapseOptions,
+  ]);
 
   const entries: React.ReactNode[] = childPanes.map((pane, index) => {
     const resizerIndex = index - 1;
+    const paneIndex = isCollapseReversed ? index - 1 : index;
     const isCollapsed = (idx: number) =>
       collapsedIndices.length > 0 ? collapsedIndices.includes(idx) : false;
     const resizerClass =
@@ -79,7 +80,7 @@ export const SplitPane = ({ className = '', ...props }: SplitPaneProps) => {
           forwardRef={pane.ref}
           size={pane.size}
           collapsedSize={props.collapseOptions?.collapseSize ?? 0}
-          isCollapsed={isCollapsed(index)}
+          isCollapsed={isCollapsed(paneIndex)}
           minSize={pane.minSize}
           split={props.split}
           className={className}

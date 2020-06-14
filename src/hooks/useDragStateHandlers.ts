@@ -1,7 +1,7 @@
 import * as ReactDOM from 'react-dom';
 import { useEventListener } from './useEventListener';
 import { useCallback, useMemo, useState } from 'react';
-import { SplitType } from '../SplitPane';
+import { SplitType } from '../components/SplitPane';
 
 export interface ClientPosition {
   clientX: number;

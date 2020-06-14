@@ -70,6 +70,23 @@ storiesOf('Vertical', module)
       <div>This is a fourth div</div>
     </SplitPane>
   ))
+  .add('Collapsable, Left to Right, Reversed', () => (
+    <SplitPane
+      split="vertical"
+      collapseOptions={{
+        ...collapseLtrOptions,
+        collapseDirection: 'right',
+        beforeToggleButton: <Button>➡</Button>,
+        afterToggleButton: <Button>⬅</Button>,
+      }}
+      resizerOptions={resizerOptions}
+    >
+      <div>This is a div</div>
+      <div>This is a second div</div>
+      <div>This is a third div</div>
+      <div>This is a fourth div</div>
+    </SplitPane>
+  ))
   .add('Collapsable, Right to Left', () => (
     <RtlDiv>
       <SplitPane

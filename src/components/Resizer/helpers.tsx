@@ -21,8 +21,10 @@ export const ButtonWrapper = styled.div<OrientationProps>`
   position: absolute;
 `;
 
-type ButtonContainerProps = OrientationProps & { grabberSize: string | null; direction: Direction };
-
+interface ButtonContainerProps extends OrientationProps {
+  grabberSize: string | null;
+  direction: Direction;
+}
 export const ButtonContainer = styled.div<ButtonContainerProps>`
   position: absolute;
   ${props => (props.isVertical ? topBottomCss : leftRightCss)}

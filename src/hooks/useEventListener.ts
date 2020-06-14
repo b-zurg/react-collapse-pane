@@ -6,9 +6,7 @@ export function useEventListener<K extends keyof DocumentEventMap>(
 ): void {
   useEffect(() => {
     if (!listener) return;
-
     document.addEventListener(type, listener);
-
     return (): void => {
       document.removeEventListener(type, listener);
     };

@@ -1,17 +1,18 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Fade } from '@material-ui/core';
-import { ClientPosition } from '../hooks/useDragStateHandlers';
+import { ClientPosition } from '../../hooks/useDragStateHandlers';
 import { getSizeWithUnit, getTransition } from './helpers';
 import { mergeClasses } from '../SplitPane/helpers';
 import { ButtonContainer, ButtonWrapper, ResizeGrabber, ResizePresentation } from './helpers';
 import { Direction } from '../SplitPane';
 
 export type TransitionType = 'fade' | 'grow' | 'zoom';
-
+export type CollapseDirection = 'left' | 'right' | 'up' | 'down';
 export interface CollapseOptions {
   beforeToggleButton: React.ReactElement;
   afterToggleButton: React.ReactElement;
   transition?: TransitionType;
+  collapseDirection?: CollapseDirection;
   timeout?: number;
   collapseSize: number;
   overlayCss?: React.CSSProperties;
