@@ -19,6 +19,8 @@ export interface ChildPane {
   node: React.ReactNode;
   ref: React.RefObject<HTMLDivElement>;
   size: number;
+  // isCollapsed: boolean;
+  // prevSize: Nullable<number>;
   minSize: number;
 }
 interface SplitPaneResizeReturns {
@@ -46,9 +48,11 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
     collapseOptions,
     direction,
   } = options;
+  const isReversed = useMemo(() => isCollapseDirectionReversed(collapseOptions), [collapseOptions]);
 
   // a map keeping track of all of the pane sizes e.g. {"index.0" => 324.671875, "index.1" => 262.671875, "index.2" => 167.671875}
   const [sizes, setSizes] = useState(new Map<string, number>());
+  // const [collapsedSizes, setCollapsedSizes] = useState(new Map<number, number>());
   const paneRefs = useRef(new Map<string, React.RefObject<HTMLDivElement>>());
   const getMovedSizes = useCallback(
     (dragState: DragState<ResizeState> | null): number[] => {
@@ -66,7 +70,6 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
     },
     [children, collapsedIndices, defaultSizes, direction, minSizes, sizes]
   );
-
   // called at the end of a drag, sets the final size as well as runs the callback hook
   const handleDragFinished = useCallback(
     (dragState: DragState<ResizeState>) => {
@@ -114,23 +117,16 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
   const childPanesWithSizes = useMemo(
     () =>
       childPanes.map((child, index) => {
-        const shouldCollapsePrev = !isCollapseDirectionReversed(collapseOptions);
-        const isPrevCollapsed = collapsedIndices.includes(index - 1);
-        const isNextCollapsed = collapsedIndices.includes(index);
-        const sizesToAdd = shouldCollapsePrev
-          ? movedSizes.slice(0, index)
-          : movedSizes.slice(index - 1);
-        const addedSizes = sizesToAdd.reduce((prev, size, idx) => {
-          const adjustedSize = size - (collapseOptions?.collapseSize ?? 0);
-          const shouldAddThisSize = collapsedIndices.includes(idx);
-          return shouldAddThisSize ? adjustedSize + prev : prev;
-        }, 0);
-
-        const shouldAddSizes = shouldCollapsePrev ? isPrevCollapsed : isNextCollapsed;
-        const size = (shouldAddSizes ? addedSizes : 0) + movedSizes[index];
+        const prevIndex = isReversed ? index + 1 : index - 1;
+        const isPrevCollapsed = collapsedIndices.includes(prevIndex);
+        const isCurCollapsed = collapsedIndices.includes(index);
+        const collapseSize = collapseOptions?.collapseSize ?? 0;
+        const prevSize = isPrevCollapsed ? movedSizes[prevIndex] - collapseSize : 0;
+        const curSize = isCurCollapsed ? collapseSize : movedSizes[index];
+        const size = prevSize + curSize;
         return { ...child, size };
       }),
-    [childPanes, collapseOptions, collapsedIndices, movedSizes]
+    [childPanes, collapseOptions, collapsedIndices, isReversed, movedSizes]
   );
 
   const handleDragStart = useCallback(
@@ -139,16 +135,17 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
 
       const clientSizes = new Map(
         childPanes.map(({ key, ref }): [string, number] => {
-          const size = ref.current ? ref.current.getBoundingClientRect()[sizeAttr] : 0;
+          const calculatedSize = ref.current?.getBoundingClientRect()[sizeAttr] ?? 0;
+          const size = calculatedSize;
           return [key, size];
         })
       );
 
       hooks?.onDragStarted?.();
-      beginDrag(pos, { index });
+      beginDrag(pos, { index: isReversed ? index - 1 : index });
       setSizes(clientSizes);
     },
-    [beginDrag, childPanes, hooks, split]
+    [beginDrag, childPanes, hooks, isReversed, split]
   );
 
   return { childPanes: childPanesWithSizes, resizeState, handleDragStart };

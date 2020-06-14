@@ -35,6 +35,7 @@ export const SplitPane = ({ className = '', direction = 'ltr', ...props }: Split
     collapsedIndices,
   });
 
+  // console.log(childPanes);
   const splitPaneClass = useMergeClasses(['SplitPane', props.split, className]);
   const resizingClass = useMergeClasses(['resizing', className]);
 
@@ -56,9 +57,8 @@ export const SplitPane = ({ className = '', direction = 'ltr', ...props }: Split
   ]);
 
   // stacks the children and places a resizer in between each of them. Each resizer has the same index as the pane that it controls.
-  const entries = childPanes.map((pane, index) => {
-    const paneIndex = isCollapseReversed ? index - 1 : index;
-    const resizerPaneIndex = index - 1;
+  const entries = childPanes.map((pane, paneIndex) => {
+    const resizerPaneIndex = isCollapseReversed ? paneIndex : paneIndex - 1;
     return (
       <>
         {resizerPaneIndex >= 0 ? (

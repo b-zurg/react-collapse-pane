@@ -5,7 +5,7 @@ import { CollapseOptions } from '../Resizer';
 
 const DEFAULT_MIN_SIZE = 50;
 
-export const getNodeKey = (node: React.ReactChild, index: number): string => {
+export const getNodeKey = (node: React.ReactNode, index: number): string => {
   if (typeof node === 'object' && node && node.key != null) {
     return 'key.' + node.key;
   }
@@ -88,6 +88,8 @@ export const move = ({
     offset -= missing - pushed;
   }
   if (direction === 'ltr') {
+    // console.log('index', sizes[index], 'offsett', offset);
+    // console.log('index', sizes[index + 1], 'offset', offset);
     sizes[index] += offset;
     sizes[index + 1] -= offset;
   } else {
