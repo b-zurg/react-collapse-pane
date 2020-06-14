@@ -1,51 +1,50 @@
 import React, { useCallback, useMemo, useState } from 'react';
-
 import { Pane } from '../Pane';
-import { Resizer, CollapseOptions } from '../Resizer';
+import { CollapseOptions, Resizer, ResizerOptions } from '../Resizer';
 import { useSplitPaneResize } from '../hooks/useSplitPaneResize';
-import { mergeClasses, Wrapper } from './helpers';
+import { getDirection, mergeClasses, Wrapper } from './helpers';
 
 export type SplitType = 'horizontal' | 'vertical';
+export type Direction = 'ltr' | 'rtl' | 'top-to-bottom' | 'bottom-to-top';
 
-export interface SplitPaneProps {
-  split?: SplitType;
-  className?: string;
-  children: React.ReactChild[];
-
-  collapseOptions?: CollapseOptions;
-  resizerCss?: React.CSSProperties;
-  resizerHoverCss?: React.CSSProperties;
-  grabberSize?: number | string;
-
-  defaultSizes?: number[];
-  minSize?: number | number[];
-
+export type SplitPaneHooks = {
   onDragStarted?: () => void;
   onChange?: (sizes: number[]) => void;
   onDragFinished?: (sizes: number[]) => void;
-}
-
-const defaultProps = {
-  split: 'vertical' as const,
-  className: '',
 };
 
-export const SplitPane = (props: SplitPaneProps) => {
-  const options = { ...defaultProps, ...props };
-  const { split, className } = options;
+export interface SplitPaneProps {
+  split: SplitType;
+  direction?: Direction;
+  defaultSizes?: number[];
+  minSizes?: number | number[];
+  className?: string;
 
+  collapseOptions?: CollapseOptions;
+  resizerOptions?: Partial<ResizerOptions>;
+  hooks?: SplitPaneHooks;
+  children: React.ReactChild[];
+}
+
+export const SplitPane = ({ className = '', ...props }: SplitPaneProps) => {
   const [collapsedIndices, setCollapsed] = useState<number[]>([]);
+  const direction = useMemo(() => getDirection(props.direction, props.split), [
+    props.direction,
+    props.split,
+  ]);
   const { childPanes, resizeState, handleDragStart } = useSplitPaneResize({
-    ...options,
+    ...props,
+    direction,
     collapsedIndices,
   });
+  const classes = useMemo(() => mergeClasses(['SplitPane', props.split, className]), [
+    props.split,
+    className,
+  ]);
 
-  const classes = useMemo(() => mergeClasses(['SplitPane', split, className]), [split, className]);
-
-  const onCollapse = useCallback(
+  const toggleCollapse = useCallback(
     (index: number) => {
-      const isCollapsed = collapsedIndices.includes(index);
-      isCollapsed
+      collapsedIndices.includes(index)
         ? setCollapsed(collapsedIndices.filter(i => i !== index))
         : setCollapsed([...collapsedIndices, index]);
     },
@@ -61,16 +60,15 @@ export const SplitPane = (props: SplitPaneProps) => {
     const resizer = (
       <Resizer
         key={`resizer.${index}`}
-        split={split}
+        isCollapsed={isCollapsed(resizerIndex)}
+        split={props.split}
+        direction={direction}
         className={resizerClass}
         index={resizerIndex}
-        grabberSize={props.grabberSize}
-        resizerCss={props.resizerCss}
-        resizerHoverCss={props.resizerHoverCss}
+        resizerOptions={props.resizerOptions}
         collapseOptions={props.collapseOptions}
         onDragStarted={handleDragStart}
-        isCollapsed={isCollapsed(resizerIndex)}
-        onCollapseToggle={onCollapse}
+        onCollapseToggle={toggleCollapse}
       />
     );
     return (
@@ -83,8 +81,9 @@ export const SplitPane = (props: SplitPaneProps) => {
           collapsedSize={props.collapseOptions?.collapseSize ?? 0}
           isCollapsed={isCollapsed(index)}
           minSize={pane.minSize}
-          split={split}
+          split={props.split}
           className={className}
+          collapseOverlayCss={props.collapseOptions?.overlayCss}
         >
           {pane.node}
         </Pane>
@@ -93,7 +92,7 @@ export const SplitPane = (props: SplitPaneProps) => {
   });
 
   return (
-    <Wrapper className={classes} split={split}>
+    <Wrapper className={classes} split={props.split}>
       {entries}
     </Wrapper>
   );

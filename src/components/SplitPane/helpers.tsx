@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { SplitType } from '.';
+import { Direction, SplitType } from '.';
 
 const DEFAULT_MIN_SIZE = 50;
 
@@ -39,7 +39,8 @@ export const move = (
   sizes: number[],
   index: number,
   offset: number,
-  minSizes: number | number[] | undefined
+  minSizes: number | number[] | undefined,
+  direction: Direction
 ): number => {
   if (!offset || index < 0 || index + 1 >= sizes.length) {
     return 0;
@@ -54,23 +55,30 @@ export const move = (
   if (offset < 0 && firstSize < firstMinSize) {
     // offset is negative, so missing and pushed are, too
     const missing = firstSize - firstMinSize;
-    const pushed = move(sizes, index - 1, missing, minSizes);
+    const pushed = move(sizes, index - 1, missing, minSizes, direction);
 
     offset -= missing - pushed;
   } else if (offset > 0 && secondSize < secondMinSize) {
     const missing = secondMinSize - secondSize;
-    const pushed = move(sizes, index + 1, missing, minSizes);
+    const pushed = move(sizes, index + 1, missing, minSizes, direction);
 
     offset -= missing - pushed;
   }
-
-  sizes[index] += offset;
-  sizes[index + 1] -= offset;
+  if (['ltr', 'top-to-bottom'].includes(direction)) {
+    sizes[index] += offset;
+    sizes[index + 1] -= offset;
+  } else {
+    sizes[index] -= offset;
+    sizes[index + 1] += offset;
+  }
 
   return offset;
 };
 
 export const mergeClasses = (classes: string[]) => classes.join(' ');
+
+export const getDirection = (direction: Direction | undefined, split: SplitType): Direction =>
+  direction || (split === 'vertical' ? 'ltr' : 'top-to-bottom');
 
 const verticalCss = css`
   left: 0;
@@ -93,22 +101,4 @@ export const Wrapper = styled.div<{ split: SplitType }>`
   outline: none;
   overflow: hidden;
   ${props => (props.split === 'vertical' ? verticalCss : horizontalCss)}
-`;
-
-export const DragLayer = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-`;
-
-export const PlaceHolder = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 3rem;
-  background: grey;
 `;

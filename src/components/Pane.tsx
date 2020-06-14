@@ -13,6 +13,7 @@ export interface PaneProps {
   isCollapsed: boolean;
   collapsedSize: number;
   forwardRef: React.Ref<HTMLDivElement>;
+  collapseOverlayCss?: React.CSSProperties;
 
   children: React.ReactNode;
 }
@@ -35,6 +36,14 @@ const StyledDiv = styled.div<{ isVertical: boolean }>`
   flex-shrink: 1;
   ${props => (props.isVertical ? verticalCss : horizontalCss)}
 `;
+const CollapseOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  user-select: none;
+`;
 
 export const Pane = React.memo(
   ({
@@ -42,6 +51,7 @@ export const Pane = React.memo(
     minSize,
     collapsedSize,
     isCollapsed,
+    collapseOverlayCss = { background: 'rgba(0, 0, 0, 0.03)' },
     split,
     className,
     forwardRef,
@@ -62,7 +72,11 @@ export const Pane = React.memo(
         ref={forwardRef}
         style={{ flexBasis, ...(isCollapsed ? maxSizeStyle : {}) }}
       >
-        {children}
+        {isCollapsed ? (
+          <CollapseOverlay style={collapseOverlayCss}>{children}</CollapseOverlay>
+        ) : (
+          children
+        )}
       </StyledDiv>
     );
   }

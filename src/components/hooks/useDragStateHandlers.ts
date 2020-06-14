@@ -1,5 +1,5 @@
 import * as ReactDOM from 'react-dom';
-import { useEventListener } from '../hooks/useEventListener';
+import { useEventListener } from './useEventListener';
 import { useCallback, useMemo, useState } from 'react';
 import { SplitType } from '../SplitPane';
 

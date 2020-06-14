@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 import { Fade, Grow, Zoom } from '@material-ui/core';
 import { TransitionType } from '.';
 import { CollapseOptions } from './index';
+import { Direction } from '../SplitPane';
 
 type OrientationProps = {
   isVertical: boolean;
@@ -20,17 +21,24 @@ export const ButtonWrapper = styled.div<OrientationProps>`
   position: absolute;
 `;
 
-type ButtonContainerProps = OrientationProps & { grabberSize: string };
+type ButtonContainerProps = OrientationProps & { grabberSize: string | null; direction: Direction };
+
 export const ButtonContainer = styled.div<ButtonContainerProps>`
   position: absolute;
   ${props => (props.isVertical ? topBottomCss : leftRightCss)}
-  ${props => (props.isVertical ? 'width: 6rem' : 'height: 6rem')};
+  ${props => (props.isVertical ? 'width: 5rem' : 'height: 5rem')};
   transform: ${props =>
     props.isVertical
-      ? `translateX(-50%) translateX(calc(${props.grabberSize} / 2))`
-      : `translateY(-50%) translateY(calc(${props.grabberSize} / 2))`};
+      ? `translateX(${props.direction === 'ltr' ? '-' : ''}50%) ${
+          props.grabberSize ? `translateX(calc(${props.grabberSize} / 2))` : ''
+        }`
+      : `translateY(-50%) ${
+          props.grabberSize ? `translateY(calc(${props.grabberSize} / 2))` : ''
+        }`};
   display: flex;
   align-items: center;
+  overflow: hidden;
+  z-index: 3;
   justify-content: center;
 `;
 

@@ -1,9 +1,10 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Fade } from '@material-ui/core';
 import { ClientPosition } from '../hooks/useDragStateHandlers';
-import { getTransition, getSizeWithUnit } from '../Resizer/helpers';
+import { getSizeWithUnit, getTransition } from './helpers';
 import { mergeClasses } from '../SplitPane/helpers';
 import { ButtonContainer, ButtonWrapper, ResizeGrabber, ResizePresentation } from './helpers';
+import { Direction } from '../SplitPane';
 
 export type TransitionType = 'fade' | 'grow' | 'zoom';
 
@@ -13,35 +14,43 @@ export interface CollapseOptions {
   transition?: TransitionType;
   timeout?: number;
   collapseSize: number;
+  overlayCss?: React.CSSProperties;
 }
+export interface ResizerOptions {
+  css: React.CSSProperties;
+  hoverCss: React.CSSProperties;
+  grabberSize: number | string;
+}
+const defaultResizerOptions: ResizerOptions = {
+  grabberSize: '1rem',
+  css: { backgroundColor: 'silver' },
+  hoverCss: { backgroundColor: 'grey' },
+};
 
 export interface ResizerProps {
   split: 'horizontal' | 'vertical';
+  direction: Direction;
   className: string;
   index: number;
   collapseOptions?: CollapseOptions;
-  resizerCss?: React.CSSProperties;
-  resizerHoverCss?: React.CSSProperties;
-  grabberSize?: string | number;
+  resizerOptions?: Partial<ResizerOptions>;
   onDragStarted: (index: number, pos: ClientPosition) => void;
   onCollapseToggle: (index: number) => void;
   isCollapsed: boolean;
 }
-
 export const Resizer = ({
   split,
   className,
   index,
   onDragStarted,
-  grabberSize = '1rem',
-  resizerCss = { backgroundColor: 'silver' },
-  resizerHoverCss = { backgroundColor: 'grey' },
+  resizerOptions,
   collapseOptions,
   onCollapseToggle,
+  direction,
   isCollapsed,
 }: ResizerProps) => {
   const [isHovered, setIsHovered] = useState(false);
-
+  const { grabberSize, css, hoverCss } = { ...defaultResizerOptions, ...resizerOptions };
   const handleMouseDown = useCallback(
     (event: React.MouseEvent) => {
       event.preventDefault();
@@ -80,9 +89,12 @@ export const Resizer = ({
   const classes = useMemo(() => mergeClasses(['Resizer', split, className]), [split, className]);
   const grabberSizeWithUnit = useMemo(() => getSizeWithUnit(grabberSize), [grabberSize]);
   const Transition = useMemo(() => getTransition(collapseOptions), [collapseOptions]);
-
   const collapseButton = collapseOptions ? (
-    <ButtonContainer isVertical={isVertical} grabberSize={grabberSizeWithUnit}>
+    <ButtonContainer
+      isVertical={isVertical}
+      grabberSize={isCollapsed ? null : grabberSizeWithUnit}
+      direction={direction}
+    >
       <Transition in={isHovered} timeout={collapseOptions.timeout}>
         <ButtonWrapper
           isVertical={isVertical}
@@ -104,28 +116,29 @@ export const Resizer = ({
 
   return (
     <div style={{ position: 'relative' }}>
-      <ResizeGrabber
-        isVertical={isVertical}
-        style={getWidthOrHeight(grabberSize)}
-        role="presentation"
-        className={classes}
-        onMouseDown={handleMouseDown}
-        onTouchStart={handleTouchStart}
-        onMouseEnter={handleMouseEnterGrabber}
-        onMouseLeave={handleMouseLeaveGrabber}
-      >
-        {collapseButton}
-      </ResizeGrabber>
-      <Fade in={!isHovered}>
-        <ResizePresentation
+      {isCollapsed ? (
+        collapseButton
+      ) : (
+        <ResizeGrabber
           isVertical={isVertical}
-          style={{ ...getWidthOrHeight(1), ...resizerCss }}
-        />
+          style={getWidthOrHeight(grabberSize)}
+          role="presentation"
+          className={classes}
+          onMouseDown={handleMouseDown}
+          onTouchStart={handleTouchStart}
+          onMouseEnter={handleMouseEnterGrabber}
+          onMouseLeave={handleMouseLeaveGrabber}
+        >
+          {collapseButton}
+        </ResizeGrabber>
+      )}
+      <Fade in={!isHovered}>
+        <ResizePresentation isVertical={isVertical} style={{ ...getWidthOrHeight(1), ...css }} />
       </Fade>
       <Fade in={isHovered}>
         <ResizePresentation
           isVertical={isVertical}
-          style={{ ...getWidthOrHeight(1), ...resizerHoverCss }}
+          style={{ ...getWidthOrHeight(1), ...hoverCss }}
         />
       </Fade>
     </div>
