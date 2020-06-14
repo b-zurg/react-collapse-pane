@@ -26,7 +26,13 @@ export const getMinSize = (index: number, minSizes?: number | number[]): number 
   return DEFAULT_MIN_SIZE;
 };
 
-export const getDefaultSize = (index: number, defaultSizes?: number[]): number => {
+export const getDefaultSize = ({
+  index,
+  defaultSizes,
+}: {
+  index: number;
+  defaultSizes?: number[];
+}): number => {
   if (defaultSizes) {
     const value = defaultSizes[index];
     if (value >= 0) {
@@ -34,6 +40,17 @@ export const getDefaultSize = (index: number, defaultSizes?: number[]): number =
     }
   }
   return 1;
+};
+
+export const getRefSize = ({
+  ref,
+  split,
+}: {
+  split: SplitType;
+  ref: React.RefObject<HTMLDivElement>;
+}) => {
+  const sizeAttr = split === 'vertical' ? 'width' : 'height';
+  return ref.current?.getBoundingClientRect()[sizeAttr] ?? 0;
 };
 
 export const move = ({

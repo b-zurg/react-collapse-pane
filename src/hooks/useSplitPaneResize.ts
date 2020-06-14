@@ -5,6 +5,7 @@ import {
   getNodeKey,
   isCollapseDirectionReversed,
   move,
+  getRefSize,
 } from '../components/SplitPane/helpers';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Direction, SplitPaneProps } from '../components/SplitPane';
@@ -16,11 +17,9 @@ interface ResizeState {
 
 export interface ChildPane {
   key: string;
-  node: React.ReactNode;
+  node: React.ReactChild;
   ref: React.RefObject<HTMLDivElement>;
   size: number;
-  // isCollapsed: boolean;
-  // prevSize: Nullable<number>;
   minSize: number;
 }
 interface SplitPaneResizeReturns {
@@ -54,11 +53,14 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
   const [sizes, setSizes] = useState(new Map<string, number>());
   // const [collapsedSizes, setCollapsedSizes] = useState(new Map<number, number>());
   const paneRefs = useRef(new Map<string, React.RefObject<HTMLDivElement>>());
+  const getNodeSize = useCallback(
+    (node: React.ReactChild, index: number) =>
+      sizes.get(getNodeKey(node, index)) || getDefaultSize({ index, defaultSizes }),
+    [defaultSizes, sizes]
+  );
   const getMovedSizes = useCallback(
     (dragState: DragState<ResizeState> | null): number[] => {
-      const collectedSizes = children.map(
-        (node, index) => sizes.get(getNodeKey(node, index)) || getDefaultSize(index, defaultSizes)
-      );
+      const collectedSizes = children.map((node, index) => getNodeSize(node, index));
       if (dragState) {
         const {
           offset,
@@ -68,7 +70,7 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
       }
       return collectedSizes;
     },
-    [children, collapsedIndices, defaultSizes, direction, minSizes, sizes]
+    [children, collapsedIndices, direction, getNodeSize, minSizes]
   );
   // called at the end of a drag, sets the final size as well as runs the callback hook
   const handleDragFinished = useCallback(
@@ -131,11 +133,9 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
 
   const handleDragStart = useCallback(
     (index: number, pos: ClientPosition): void => {
-      const sizeAttr = split === 'vertical' ? 'width' : 'height';
-
       const clientSizes = new Map(
         childPanes.map(({ key, ref }): [string, number] => {
-          const calculatedSize = ref.current?.getBoundingClientRect()[sizeAttr] ?? 0;
+          const calculatedSize = getRefSize({ split, ref });
           const size = calculatedSize;
           return [key, size];
         })
