@@ -66,9 +66,6 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
     },
     [children, collapsedIndices, defaultSizes, direction, minSizes, sizes]
   );
-  useEffect(() => {
-    collapsedIndices.forEach(index => console.log(sizes.get(`index.${index}`)));
-  }, [collapsedIndices, sizes]);
 
   // called at the end of a drag, sets the final size as well as runs the callback hook
   const handleDragFinished = useCallback(
@@ -82,41 +79,35 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
           ])
         )
       );
-      if (hooks?.onDragFinished) {
-        hooks?.onDragFinished(movedSizes);
-      }
+      hooks?.onDragFinished?.(movedSizes);
     },
     [children, getMovedSizes, hooks]
   );
 
-  // the dragstate contains which pane is dragging and what the offset is
+  // the dragstate contains which pane is dragging and what the offset is.  Is null if not dragging
   const [dragState, beginDrag] = useDragState<ResizeState>(split, handleDragFinished);
   const movedSizes = useMemo(() => getMovedSizes(dragState), [dragState, getMovedSizes]);
 
-  const resizeState = dragState ? dragState.extraState : null;
+  const resizeState = dragState?.extraState ?? null;
 
   useEffect(() => {
-    if (hooks?.onChange && dragState) {
-      hooks?.onChange(movedSizes);
-    }
+    if (dragState !== null) hooks?.onChange?.(movedSizes);
   }, [dragState, movedSizes, hooks]);
 
   // converts all children nodes into 'childPane' objects that has its ref, key, but not the size yet
-  const childPanes = useMemo(() => {
+  const childPanes: Omit<ChildPane, 'size'>[] = useMemo(() => {
     const prevPaneRefs = paneRefs.current;
     paneRefs.current = new Map<string, React.RefObject<HTMLDivElement>>();
-    return children.map(
-      (node, index): Omit<ChildPane, 'size'> => {
-        const key = getNodeKey(node, index);
+    return children.map((node, index) => {
+      const key = getNodeKey(node, index);
 
-        const ref = prevPaneRefs.get(key) || React.createRef();
-        paneRefs.current.set(key, ref);
+      const ref = prevPaneRefs.get(key) || React.createRef();
+      paneRefs.current.set(key, ref);
 
-        const minSize = getMinSize(index, minSizes);
+      const minSize = getMinSize(index, minSizes);
 
-        return { key, node, ref, minSize };
-      }
-    );
+      return { key, node, ref, minSize };
+    });
   }, [children, minSizes]);
 
   //populates the sizes of all the initially populated childPanes, adjust sizes based on collapsed state
@@ -153,10 +144,7 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
         })
       );
 
-      if (hooks?.onDragStarted) {
-        hooks?.onDragStarted();
-      }
-
+      hooks?.onDragStarted?.();
       beginDrag(pos, { index });
       setSizes(clientSizes);
     },
