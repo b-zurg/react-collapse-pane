@@ -2,9 +2,9 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Fade } from '@material-ui/core';
 import { ClientPosition } from '../../hooks/useDragStateHandlers';
 import { getSizeWithUnit, getTransition } from './helpers';
-import { mergeClasses } from '../SplitPane/helpers';
 import { ButtonContainer, ButtonWrapper, ResizeGrabber, ResizePresentation } from './helpers';
 import { Direction } from '../SplitPane';
+import { useMergeClasses } from '../../hooks/useMergeClasses';
 
 export type TransitionType = 'fade' | 'grow' | 'zoom';
 export type CollapseDirection = 'left' | 'right' | 'up' | 'down';
@@ -32,17 +32,17 @@ export interface ResizerProps {
   split: 'horizontal' | 'vertical';
   direction: Direction;
   className: string;
-  index: number;
+  paneIndex: number;
   collapseOptions?: CollapseOptions;
   resizerOptions?: Partial<ResizerOptions>;
-  onDragStarted: (index: number, pos: ClientPosition) => void;
-  onCollapseToggle: (index: number) => void;
+  onDragStarted: (paneIndex: number, pos: ClientPosition) => void;
+  onCollapseToggle: (paneIndex: number) => void;
   isCollapsed: boolean;
 }
 export const Resizer = ({
   split,
   className,
-  index,
+  paneIndex,
   onDragStarted,
   resizerOptions,
   collapseOptions,
@@ -56,28 +56,28 @@ export const Resizer = ({
     (event: React.MouseEvent) => {
       event.preventDefault();
       if (!isCollapsed) {
-        onDragStarted(index, event);
+        onDragStarted(paneIndex, event);
       }
     },
-    [index, isCollapsed, onDragStarted]
+    [paneIndex, isCollapsed, onDragStarted]
   );
 
   const handleTouchStart = useCallback(
     (event: React.TouchEvent) => {
       event.preventDefault();
       if (!isCollapsed) {
-        onDragStarted(index, event.touches[0]);
+        onDragStarted(paneIndex, event.touches[0]);
       }
     },
-    [index, isCollapsed, onDragStarted]
+    [paneIndex, isCollapsed, onDragStarted]
   );
 
   const handleButtonClick = useCallback(
     (event: React.MouseEvent) => {
       event.stopPropagation();
-      onCollapseToggle(index);
+      onCollapseToggle(paneIndex);
     },
-    [index, onCollapseToggle]
+    [paneIndex, onCollapseToggle]
   );
   const handleButtonMousedown = useCallback((event: React.MouseEvent) => {
     event.stopPropagation();
@@ -87,7 +87,7 @@ export const Resizer = ({
     isVertical ? { width: size } : { height: size };
 
   const isVertical = split === 'vertical';
-  const classes = useMemo(() => mergeClasses(['Resizer', split, className]), [split, className]);
+  const classes = useMergeClasses(['Resizer', split, className]);
   const grabberSizeWithUnit = useMemo(() => getSizeWithUnit(grabberSize), [grabberSize]);
   const Transition = useMemo(() => getTransition(collapseOptions), [collapseOptions]);
   const collapseButton = collapseOptions ? (

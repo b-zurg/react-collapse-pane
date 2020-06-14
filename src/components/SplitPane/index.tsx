@@ -2,7 +2,8 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Pane } from '../Pane';
 import { CollapseOptions, Resizer, ResizerOptions } from '../Resizer';
 import { useSplitPaneResize } from '../../hooks/useSplitPaneResize';
-import { isCollapseDirectionReversed, mergeClasses, Wrapper } from './helpers';
+import { isCollapseDirectionReversed, Wrapper } from './helpers';
+import { useMergeClasses } from '../../hooks/useMergeClasses';
 
 export type SplitType = 'horizontal' | 'vertical';
 export type Direction = 'ltr' | 'rtl';
@@ -26,18 +27,16 @@ export interface SplitPaneProps {
   children: React.ReactChild[];
 }
 
-export const SplitPane = ({ className = '', ...props }: SplitPaneProps) => {
+export const SplitPane = ({ className = '', direction = 'ltr', ...props }: SplitPaneProps) => {
   const [collapsedIndices, setCollapsed] = useState<number[]>([]);
-  const direction = props.direction || 'ltr';
   const { childPanes, resizeState, handleDragStart } = useSplitPaneResize({
     ...props,
     direction,
     collapsedIndices,
   });
-  const classes = useMemo(() => mergeClasses(['SplitPane', props.split, className]), [
-    props.split,
-    className,
-  ]);
+
+  const splitPaneClass = useMergeClasses(['SplitPane', props.split, className]);
+  const resizingClass = useMergeClasses(['resizing', className]);
 
   const toggleCollapse = useCallback(
     (index: number) => {
@@ -47,40 +46,41 @@ export const SplitPane = ({ className = '', ...props }: SplitPaneProps) => {
     },
     [collapsedIndices]
   );
+  const isPaneCollapsed = useCallback(
+    (paneIndex: number) =>
+      collapsedIndices.length > 0 ? collapsedIndices.includes(paneIndex) : false,
+    [collapsedIndices]
+  );
   const isCollapseReversed = useMemo(() => isCollapseDirectionReversed(props.collapseOptions), [
     props.collapseOptions,
   ]);
 
-  const entries: React.ReactNode[] = childPanes.map((pane, index) => {
-    const resizerIndex = index - 1;
+  // stacks the children and places a resizer in between each of them. Each resizer has the same index as the pane that it controls.
+  const entries = childPanes.map((pane, index) => {
     const paneIndex = isCollapseReversed ? index - 1 : index;
-    const isCollapsed = (idx: number) =>
-      collapsedIndices.length > 0 ? collapsedIndices.includes(idx) : false;
-    const resizerClass =
-      resizeState?.index === resizerIndex ? mergeClasses([className, 'resizing']) : className;
-    const resizer = (
-      <Resizer
-        key={`resizer.${index}`}
-        isCollapsed={isCollapsed(resizerIndex)}
-        split={props.split}
-        direction={direction}
-        className={resizerClass}
-        index={resizerIndex}
-        resizerOptions={props.resizerOptions}
-        collapseOptions={props.collapseOptions}
-        onDragStarted={handleDragStart}
-        onCollapseToggle={toggleCollapse}
-      />
-    );
+    const resizerPaneIndex = index - 1;
     return (
       <>
-        {resizerIndex >= 0 ? resizer : null}
+        {resizerPaneIndex >= 0 ? (
+          <Resizer
+            key={`resizer.${resizerPaneIndex}`}
+            isCollapsed={isPaneCollapsed(resizerPaneIndex)}
+            split={props.split}
+            direction={direction}
+            className={resizeState?.index === resizerPaneIndex ? resizingClass : className}
+            paneIndex={resizerPaneIndex}
+            resizerOptions={props.resizerOptions}
+            collapseOptions={props.collapseOptions}
+            onDragStarted={handleDragStart}
+            onCollapseToggle={toggleCollapse}
+          />
+        ) : null}
         <Pane
           key={`pane.${pane.key}`}
           forwardRef={pane.ref}
           size={pane.size}
           collapsedSize={props.collapseOptions?.collapseSize ?? 0}
-          isCollapsed={isCollapsed(paneIndex)}
+          isCollapsed={isPaneCollapsed(paneIndex)}
           minSize={pane.minSize}
           split={props.split}
           className={className}
@@ -93,7 +93,7 @@ export const SplitPane = ({ className = '', ...props }: SplitPaneProps) => {
   });
 
   return (
-    <Wrapper className={classes} split={props.split}>
+    <Wrapper className={splitPaneClass} split={props.split}>
       {entries}
     </Wrapper>
   );

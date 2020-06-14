@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { SplitType } from './SplitPane';
 import styled, { css } from 'styled-components';
-import { mergeClasses } from './SplitPane/helpers';
-import { useMemo } from 'react';
+import { useMergeClasses } from '../hooks/useMergeClasses';
 
 export interface PaneProps {
   size: number;
@@ -57,7 +56,7 @@ export const Pane = React.memo(
     forwardRef,
     children,
   }: PaneProps) => {
-    const classes = useMemo(() => mergeClasses(['Pane', split, className]), [split, className]);
+    const classes = useMergeClasses(['Pane', split, className]);
 
     const isVertical = split === 'vertical';
     const flexBasis = isCollapsed ? collapsedSize : Math.max(size, minSize);

@@ -98,8 +98,6 @@ export const move = ({
   return offset;
 };
 
-export const mergeClasses = (classes: string[]) => classes.join(' ');
-
 export const isCollapseDirectionReversed = (
   collapseOptions: CollapseOptions | undefined
 ): boolean =>
