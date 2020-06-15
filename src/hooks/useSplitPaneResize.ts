@@ -4,7 +4,7 @@ import {
   getMinSize,
   getNodeKey,
   isCollapseDirectionReversed,
-  move,
+  moveSizes,
   getRefSize,
 } from '../components/SplitPane/helpers';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -58,19 +58,26 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
       sizes.get(getNodeKey(node, index)) || getDefaultSize({ index, defaultSizes }),
     [defaultSizes, sizes]
   );
+  const minSizesMapped = useMemo(() => children.map((_child, idx) => getMinSize(idx, minSizes)), [
+    children,
+    minSizes,
+  ]);
+
+  const isLtr = useMemo(() => direction === 'ltr', [direction]);
   const getMovedSizes = useCallback(
     (dragState: DragState<ResizeState> | null): number[] => {
       const collectedSizes = children.map((node, index) => getNodeSize(node, index));
-      if (dragState) {
-        const {
-          offset,
-          extraState: { index },
-        } = dragState;
-        move({ sizes: collectedSizes, index, offset, minSizes, direction, collapsedIndices });
-      }
-      return collectedSizes;
+      if (!dragState) return collectedSizes;
+      return moveSizes({
+        sizes: collectedSizes,
+        index: dragState.extraState.index,
+        offset: dragState.offset,
+        minSizes: minSizesMapped,
+        isLtr,
+        collapsedIndices,
+      });
     },
-    [children, collapsedIndices, direction, getNodeSize, minSizes]
+    [children, collapsedIndices, getNodeSize, isLtr, minSizesMapped]
   );
   // called at the end of a drag, sets the final size as well as runs the callback hook
   const handleDragFinished = useCallback(
