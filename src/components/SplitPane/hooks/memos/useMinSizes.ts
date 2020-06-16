@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import { DEFAULT_MIN_SIZE, getMinSize } from '../helpers';
-import { CollapseOptions } from '../../Resizer';
+import { DEFAULT_MIN_SIZE, getMinSize } from '../../helpers';
+import { CollapseOptions } from '../../../Resizer';
 
-export function useGetMinSizes({
+export function useMinSizes({
   minSizes,
   children,
   collapsedIndices,

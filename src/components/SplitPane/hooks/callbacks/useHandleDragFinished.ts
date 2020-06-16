@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
-import { DragState } from './useDragState';
-import { ResizeState } from './useSplitPaneResize';
+import { DragState } from '../effects/useDragState';
+import { ResizeState } from '../useSplitPaneResize';
 import { useGetMovedSizes } from './useGetMovedSizes';
-import { SplitPaneHooks } from '../index';
+import { SplitPaneHooks } from '../..';
 
 /**
  * called at the end of a drag, sets the final size as well as runs the callback hook

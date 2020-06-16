@@ -91,8 +91,14 @@ export const isCollapseDirectionReversed = (
   collapseOptions: CollapseOptions | undefined
 ): boolean =>
   collapseOptions?.collapseDirection
-    ? ['right', 'up'].includes(collapseOptions.collapseDirection)
+    ? ['right', 'down'].includes(collapseOptions.collapseDirection)
     : false;
+
+/**
+ * Infers the indices of the collapsed panels from an array of nullable collapse sizes.  If the index is null then it's not collapsed.
+ */
+export const convertCollapseSizesToIndices = (sizes?: Nullable<number>[]) =>
+  sizes?.reduce((prev, cur) => (cur !== null ? [...prev, cur] : [...prev]), [] as number[]) ?? [];
 
 const verticalCss = css`
   left: 0;

@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { useCollapseSize } from './useCollapseSize';
 import { useUncollapseSize } from './useUncollapseSize';
+import { SplitPaneHooks } from '../..';
 
 export function useUpdateCollapsedSizes({
   movedSizes,
@@ -8,6 +9,7 @@ export function useUpdateCollapsedSizes({
   collapsedSizes,
   collapseSize,
   sizes,
+  hooks,
   unCollapseSize,
 }: {
   movedSizes: number[];
@@ -16,6 +18,7 @@ export function useUpdateCollapsedSizes({
   collapseSize: ReturnType<typeof useCollapseSize>;
   unCollapseSize: ReturnType<typeof useUncollapseSize>;
   setCollapsedSizes: React.Dispatch<React.SetStateAction<Nullable<number>[]>>;
+  hooks?: SplitPaneHooks;
 }) {
   return useCallback(
     (indices: number[]) => {
@@ -24,10 +27,12 @@ export function useUpdateCollapsedSizes({
           const isCollapsed = indices.includes(idx);
           if (isCollapsed && size === null) {
             collapseSize({ size: sizes[idx], idx });
+            hooks?.onChange?.(sizes);
             return movedSizes[idx]; // when collapsed store current size
           }
           if (!isCollapsed && size !== null) {
             unCollapseSize({ idx, size }); // when un-collapsed clear size
+            hooks?.onChange?.(sizes);
             return null;
           }
           return size;

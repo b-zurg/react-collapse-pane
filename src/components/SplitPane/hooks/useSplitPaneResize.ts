@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Direction, SplitPaneProps } from '..';
-import { ClientPosition, useDragState } from './useDragState';
-import { useGetMinSizes } from './useMinSizes';
-import { useGetMovedSizes } from './useGetMovedSizes';
-import { useIsCollapseReversed } from './useIsCollapseReversed';
-import { useHandleDragFinished } from './useHandleDragFinished';
-import { useHandleDragStart } from './useHandleDragStart';
-import { useChildPanes } from './useChildPanes';
-import { useGetCurrentPaneSizes } from './useGetCurrentPaneSizes';
-import { useCollapseSize } from './useCollapseSize';
-import { useUncollapseSize } from './useUncollapseSize';
-import { useUpdateCollapsedSizes } from './useUpdateCollapsedSizes';
+import { ClientPosition, useDragState } from './effects/useDragState';
+import { useMinSizes } from './memos/useMinSizes';
+import { useGetMovedSizes } from './callbacks/useGetMovedSizes';
+import { useIsCollapseReversed } from './memos/useIsCollapseReversed';
+import { useHandleDragFinished } from './callbacks/useHandleDragFinished';
+import { useHandleDragStart } from './callbacks/useHandleDragStart';
+import { useChildPanes } from './memos/useChildPanes';
+import { useGetCurrentPaneSizes } from './callbacks/useGetCurrentPaneSizes';
+import { useCollapseSize } from './callbacks/useCollapseSize';
+import { useUncollapseSize } from './callbacks/useUncollapseSize';
+import { useUpdateCollapsedSizes } from './callbacks/useUpdateCollapsedSizes';
 
 export interface ResizeState {
   index: number;
@@ -56,7 +56,7 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
 
   // VALUES: const values used throughout the different logic
   const paneRefs = useRef(new Map<string, React.RefObject<HTMLDivElement>>());
-  const minSizes = useGetMinSizes({
+  const minSizes = useMinSizes({
     minSizes: originalMinSizes,
     children,
     collapseOptions,
@@ -74,7 +74,7 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
   const [sizes, setSizes] = useState<number[]>(defaultSizes);
   const [movedSizes, setMovedSizes] = useState<number[]>(sizes);
   const [collapsedSizes, setCollapsedSizes] = useState<Nullable<number>[]>(
-    new Array(children.length).fill(null)
+    collapseOptions?.collapsedSizes ?? new Array(children.length).fill(null)
   );
   // CALLBACKS  callback functions used throughout. all functions are memoized by useCallback
   const getMovedSizes = useGetMovedSizes({ minSizes, sizes, isLtr });
@@ -88,12 +88,19 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
 
   const collapseSize = useCollapseSize({
     setMovedSizes,
+    setSizes,
     minSizes,
     movedSizes,
     isReversed,
     collapsedIndices,
   });
-  const unCollapseSize = useUncollapseSize({ isReversed, movedSizes, minSizes, setMovedSizes });
+  const unCollapseSize = useUncollapseSize({
+    isReversed,
+    movedSizes,
+    minSizes,
+    setMovedSizes,
+    setSizes,
+  });
   const updateCollapsedSizes = useUpdateCollapsedSizes({
     sizes,
     collapsedSizes,
@@ -101,6 +108,7 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
     movedSizes,
     collapseSize,
     unCollapseSize,
+    hooks,
   });
 
   // EFFECTS: manage updates and calculations based on dependency changes for states that are interacted with by multiple functions
@@ -112,8 +120,14 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
   }, [dragState, movedSizes, hooks]);
   useEffect(() => {
     updateCollapsedSizes(collapsedIndices);
+    hooks?.onCollapse?.(collapsedSizes);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collapsedIndices]);
+  useEffect(() => {
+    const curSizes = getCurrentPaneSizes();
+    setMovedSizes(curSizes);
+    setSizes(curSizes);
+  }, [getCurrentPaneSizes]);
 
   //populates the sizes of all the initially populated childPanes, adjust sizes based on collapsed state
   const childPanesWithSizes = useMemo(

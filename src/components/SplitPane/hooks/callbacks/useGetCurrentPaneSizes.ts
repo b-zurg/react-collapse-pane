@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
-import { getRefSize } from '../helpers';
-import { ChildPane } from './useSplitPaneResize';
-import { SplitType } from '../index';
+import { getRefSize } from '../../helpers';
+import { ChildPane } from '../useSplitPaneResize';
+import { SplitType } from '../..';
 
 export function useGetCurrentPaneSizes({
   childPanes,

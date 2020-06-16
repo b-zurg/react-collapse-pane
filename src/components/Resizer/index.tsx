@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Fade } from '@material-ui/core';
-import { ClientPosition } from '../SplitPane/hooks/useDragState';
+import { ClientPosition } from '../SplitPane/hooks/effects/useDragState';
 import { getSizeWithUnit, getTransition } from './helpers';
 import { ButtonContainer, ButtonWrapper, ResizeGrabber, ResizePresentation } from './helpers';
 import { Direction } from '../SplitPane';
@@ -13,6 +13,7 @@ export interface CollapseOptions {
   afterToggleButton: React.ReactElement;
   transition?: TransitionType;
   collapseDirection?: CollapseDirection;
+  collapsedSizes?: Nullable<number>[];
   timeout?: number;
   collapseSize: number;
   overlayCss?: React.CSSProperties;

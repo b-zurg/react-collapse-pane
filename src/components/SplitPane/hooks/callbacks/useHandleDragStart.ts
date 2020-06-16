@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
-import { BeginDragCallback, ClientPosition } from './useDragState';
-import { ChildPane } from './useSplitPaneResize';
-import { SplitPaneHooks, SplitType } from '../index';
+import { BeginDragCallback, ClientPosition } from '../effects/useDragState';
+import { ChildPane } from '../useSplitPaneResize';
+import { SplitPaneHooks, SplitType } from '../..';
 import { useGetCurrentPaneSizes } from './useGetCurrentPaneSizes';
 
 /**

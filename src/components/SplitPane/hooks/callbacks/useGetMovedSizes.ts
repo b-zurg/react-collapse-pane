@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
-import { DragState } from './useDragState';
-import { moveSizes } from '../helpers';
-import { ResizeState } from './useSplitPaneResize';
+import { DragState } from '../effects/useDragState';
+import { moveSizes } from '../../helpers';
+import { ResizeState } from '../useSplitPaneResize';
 
 export function useGetMovedSizes({
   sizes: originalSizes,

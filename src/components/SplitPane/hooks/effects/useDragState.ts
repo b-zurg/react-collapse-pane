@@ -1,7 +1,7 @@
 import * as ReactDOM from 'react-dom';
-import { useEventListener } from './useEventListener';
+import { useEventListener } from '../../../../hooks/useEventListener';
 import { useCallback, useMemo, useState } from 'react';
-import { SplitType } from '..';
+import { SplitType } from '../..';
 
 export interface ClientPosition {
   clientX: number;

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import * as React from 'react';
-import { ChildPane } from './useSplitPaneResize';
+import { ChildPane } from '../useSplitPaneResize';
 
 // converts all children nodes into 'childPane' objects that has its ref, key, but not the size yet
 export function useChildPanes({
@@ -21,6 +21,6 @@ export function useChildPanes({
       paneRefs.current.set(key, ref);
       return { key, node, ref, minSize: minSizes[index] };
     });
-  }, [children, minSizes]);
+  }, [children, minSizes, paneRefs]);
   return childPanes;
 }

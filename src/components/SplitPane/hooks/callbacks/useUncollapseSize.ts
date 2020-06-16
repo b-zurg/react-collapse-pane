@@ -1,15 +1,17 @@
 import React, { useCallback } from 'react';
-import { moveSizes } from '../helpers';
+import { moveSizes } from '../../helpers';
 
 export function useUncollapseSize({
   isReversed,
   movedSizes,
   minSizes,
   setMovedSizes,
+  setSizes,
 }: {
   isReversed: boolean;
   movedSizes: number[];
   minSizes: number[];
+  setSizes: React.Dispatch<React.SetStateAction<number[]>>;
   setMovedSizes: React.Dispatch<React.SetStateAction<number[]>>;
 }) {
   return useCallback(
@@ -19,6 +21,7 @@ export function useUncollapseSize({
       const newSizes = [...movedSizes];
       moveSizes({ sizes: newSizes, index, offset, minSizes });
       setMovedSizes(newSizes);
+      setSizes(newSizes);
     },
     [isReversed, minSizes, movedSizes, setMovedSizes]
   );
