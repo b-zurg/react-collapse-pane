@@ -16,10 +16,9 @@ jobs:
           node-version: 12
           registry-url: https://npm.pkg.github.com/
 
-      - name: Build
+      - name: Deploy Storybook
         run: |
           npm ci
-          npm run build
           npm run deploy-storybook -- --ci
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
