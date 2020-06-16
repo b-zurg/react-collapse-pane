@@ -61,6 +61,7 @@ storiesOf('Vertical', module)
   .add('Collapsable, Left to Right', () => (
     <SplitPane
       split="vertical"
+      defaultSizes={[340.75, 816.75, 273.75, 251.75]}
       collapseOptions={collapseLtrOptions}
       resizerOptions={resizerOptions}
     >
