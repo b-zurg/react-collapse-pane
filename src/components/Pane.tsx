@@ -46,7 +46,7 @@ export const Pane = React.memo(
     size,
     minSize,
     isCollapsed,
-    collapseOverlayCss = { background: 'rgba(0, 0, 0, 0.03)' },
+    collapseOverlayCss = { background: 'rgba(220,220,220, 0.1)' },
     split,
     className,
     forwardRef,
