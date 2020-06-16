@@ -5,10 +5,7 @@ import { CollapseOptions } from '../Resizer';
 
 export const DEFAULT_MIN_SIZE = 50;
 
-export const getNodeKey = (node: React.ReactChild, index: number): string => {
-  if (typeof node === 'object' && node && node.key != null) {
-    return 'key.' + node.key;
-  }
+export const getNodeKey = (index: number): string => {
   return 'index.' + index;
 };
 

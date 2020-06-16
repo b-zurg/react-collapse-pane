@@ -3,20 +3,6 @@ import { SplitType } from './SplitPane';
 import styled, { css } from 'styled-components';
 import { useMergeClasses } from '../hooks/useMergeClasses';
 
-export interface PaneProps {
-  size: number;
-  minSize: number;
-
-  split: SplitType;
-  className: string;
-  isCollapsed: boolean;
-  collapsedSize: number;
-  forwardRef: React.Ref<HTMLDivElement>;
-  collapseOverlayCss?: React.CSSProperties;
-
-  children: React.ReactNode;
-}
-
 const verticalCss = css`
   width: 0;
   height: 100%;
@@ -43,12 +29,22 @@ const CollapseOverlay = styled.div`
   right: 0;
   user-select: none;
 `;
+export interface PaneProps {
+  size: number;
+  minSize: number;
 
+  split: SplitType;
+  className: string;
+  isCollapsed: boolean;
+  forwardRef: React.Ref<HTMLDivElement>;
+  collapseOverlayCss?: React.CSSProperties;
+
+  children: React.ReactNode;
+}
 export const Pane = React.memo(
   ({
     size,
     minSize,
-    collapsedSize,
     isCollapsed,
     collapseOverlayCss = { background: 'rgba(0, 0, 0, 0.03)' },
     split,
@@ -58,18 +54,14 @@ export const Pane = React.memo(
   }: PaneProps) => {
     const classes = useMergeClasses(['Pane', split, className]);
 
-    const isVertical = split === 'vertical';
-    const flexBasis = isCollapsed ? collapsedSize : Math.max(size, minSize);
-    const maxSizeStyle = isVertical
-      ? { maxWidth: collapsedSize, minWidth: collapsedSize }
-      : { maxHeight: collapsedSize, minHeight: collapsedSize };
+    const flexBasis = Math.max(size, minSize);
 
     return (
       <StyledDiv
         isVertical={split === 'vertical'}
         className={classes}
         ref={forwardRef}
-        style={{ flexBasis, ...(isCollapsed ? maxSizeStyle : {}) }}
+        style={{ flexBasis }}
       >
         {isCollapsed ? (
           <CollapseOverlay style={collapseOverlayCss}>{children}</CollapseOverlay>

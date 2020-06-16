@@ -2,31 +2,28 @@ import { useCallback } from 'react';
 import { DragState } from './useDragState';
 import { moveSizes } from '../helpers';
 import { ResizeState } from './useSplitPaneResize';
-import { useGetNodeSize } from './useGetNodeSize';
 
 export function useGetMovedSizes({
-  children,
-  getNodeSize,
+  sizes: originalSizes,
   isLtr,
   minSizes,
 }: {
-  children: React.ReactChild[];
-  getNodeSize: ReturnType<typeof useGetNodeSize>;
+  sizes: number[];
   isLtr: boolean;
   minSizes: number[];
 }) {
   return useCallback(
     (dragState: DragState<ResizeState> | null): number[] => {
-      const collectedSizes = children.map((node, index) => getNodeSize(node, index));
-      if (!dragState) return collectedSizes;
+      if (!dragState) return originalSizes;
+      const sizes = [...originalSizes];
       moveSizes({
-        sizes: collectedSizes,
+        sizes: sizes,
         index: dragState.extraState.index,
         offset: isLtr ? dragState.offset : -dragState.offset,
         minSizes,
       });
-      return collectedSizes;
+      return sizes;
     },
-    [children, getNodeSize, isLtr, minSizes]
+    [isLtr, minSizes, originalSizes]
   );
 }

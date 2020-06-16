@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Pane } from '../Pane';
 import { CollapseOptions, Resizer, ResizerOptions } from '../Resizer';
 import { useSplitPaneResize } from './hooks/useSplitPaneResize';
-import { DEFAULT_MIN_SIZE, isCollapseDirectionReversed, Wrapper } from './helpers';
+import { isCollapseDirectionReversed, Wrapper } from './helpers';
 import { useMergeClasses } from '../../hooks/useMergeClasses';
 
 export type SplitType = 'horizontal' | 'vertical';
@@ -35,7 +35,6 @@ export const SplitPane = ({ className = '', direction = 'ltr', ...props }: Split
     collapsedIndices,
   });
 
-  // console.log(childPanes);
   const splitPaneClass = useMergeClasses(['SplitPane', props.split, className]);
   const resizingClass = useMergeClasses(['resizing', className]);
 
@@ -79,7 +78,6 @@ export const SplitPane = ({ className = '', direction = 'ltr', ...props }: Split
           key={`pane.${paneIndex}`}
           forwardRef={pane.ref}
           size={pane.size}
-          collapsedSize={props.collapseOptions?.collapseSize ?? DEFAULT_MIN_SIZE}
           isCollapsed={isPaneCollapsed(paneIndex)}
           minSize={pane.minSize}
           split={props.split}
