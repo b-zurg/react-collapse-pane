@@ -1,7 +1,7 @@
 import * as ReactDOM from 'react-dom';
 import { useEventListener } from './useEventListener';
 import { useCallback, useMemo, useState } from 'react';
-import { SplitType } from '../components/SplitPane';
+import { SplitType } from '..';
 
 export interface ClientPosition {
   clientX: number;
@@ -12,9 +12,9 @@ export interface DragState<T> {
   offset: number;
   extraState: T;
 }
-
+export type BeginDragCallback<T> = (pos: ClientPosition, extraState: T) => void;
 interface DragStateHandlers<T> {
-  beginDrag: (pos: ClientPosition, extraState: T) => void;
+  beginDrag: BeginDragCallback<T>;
   dragState: DragState<T> | null;
   onMouseMove?: (event: ClientPosition) => void;
   onTouchMove?: (event: TouchEvent) => void;

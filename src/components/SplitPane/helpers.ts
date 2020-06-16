@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { SplitType } from '.';
 import { CollapseOptions } from '../Resizer';
 
-const DEFAULT_MIN_SIZE = 50;
+export const DEFAULT_MIN_SIZE = 50;
 
 export const getNodeKey = (node: React.ReactChild, index: number): string => {
   if (typeof node === 'object' && node && node.key != null) {
@@ -52,46 +52,42 @@ export const getRefSize = ({
   const sizeAttr = split === 'vertical' ? 'width' : 'height';
   return ref.current?.getBoundingClientRect()[sizeAttr] ?? 0;
 };
-
-const addFunc = (a: number, b: number) => (a += b);
-const subFunc = (a: number, b: number) => (a -= b);
-
 export type MoveDetails = {
   sizes: number[];
   index: number;
   offset: number;
   minSizes: number[];
-  isLtr: boolean;
-  collapsedIndices: number[];
 };
 
-export const moveSizes = (details: MoveDetails) => {
-  const { index, offset, sizes: originalSizes, isLtr } = details;
-  if (offset === 0) return originalSizes;
-  const isCurIdxMoved = (idx: number) => idx === index;
-  const isPrevIdxMoved = (idx: number) => idx - 1 === index;
+/**
+ * Mutates the original array in a recursive fashion, identifying the current sizes, whether they need to be changed, and whether they need to push the next or previous pane.
+ */
+export const moveSizes = ({ index, minSizes, offset, sizes }: MoveDetails): number => {
+  //recursion break points
+  if (!offset || index < 0 || index + 1 >= sizes.length) {
+    return 0;
+  }
 
-  //arithmetic must be reversed if rtl
-  const add = isLtr ? addFunc : subFunc;
-  const sub = isLtr ? subFunc : addFunc;
+  const firstMinSize = getMinSize(index, minSizes);
+  const secondMinSize = getMinSize(index + 1, minSizes);
+  const firstSize = sizes[index] + offset;
+  const secondSize = sizes[index + 1] - offset;
 
-  // originally apply size shift in a naive manner
-  const naiveMove = originalSizes.map((size, idx) => {
-    if (isCurIdxMoved(idx)) return add(size, offset);
-    if (isPrevIdxMoved(idx)) return sub(size, offset);
-    return size;
-  });
+  if (offset < 0 && firstSize < firstMinSize) {
+    const missing = firstSize - firstMinSize;
+    const pushedOffset = moveSizes({ sizes, index: index - 1, offset: missing, minSizes });
 
-  // ensure the minimum size of each panel is kept
-  const applyMinSizes = (sizes: number[]) =>
-    sizes.reduce((allPrev, size) => {
-      const prevSize = allPrev.pop();
-      if (!prevSize) return [size];
-      const diff = Math.max(DEFAULT_MIN_SIZE - prevSize, 0);
-      return [...allPrev, add(prevSize, diff), sub(size, diff)];
-    }, [] as number[]);
+    offset -= missing - pushedOffset;
+  } else if (offset > 0 && secondSize < secondMinSize) {
+    const missing = secondMinSize - secondSize;
+    const pushedOffset = moveSizes({ sizes, index: index + 1, offset: missing, minSizes });
 
-  return offset < 0 ? applyMinSizes(naiveMove.reverse()).reverse() : applyMinSizes(naiveMove);
+    offset -= missing - pushedOffset;
+  }
+  sizes[index] += offset;
+  sizes[index + 1] -= offset;
+
+  return offset;
 };
 
 export const isCollapseDirectionReversed = (

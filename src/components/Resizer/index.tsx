@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Fade } from '@material-ui/core';
-import { ClientPosition } from '../../hooks/useDragStateHandlers';
+import { ClientPosition } from '../SplitPane/hooks/useDragState';
 import { getSizeWithUnit, getTransition } from './helpers';
 import { ButtonContainer, ButtonWrapper, ResizeGrabber, ResizePresentation } from './helpers';
 import { Direction } from '../SplitPane';
