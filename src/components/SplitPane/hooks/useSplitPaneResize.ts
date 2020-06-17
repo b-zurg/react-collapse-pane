@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Direction, SplitPaneProps } from '..';
+import { SplitPaneProps } from '..';
 import { ClientPosition, useDragState } from './effects/useDragState';
 import { useMinSizes } from './memos/useMinSizes';
 import { useGetMovedSizes } from './callbacks/useGetMovedSizes';
@@ -12,6 +12,7 @@ import { useGetCurrentPaneSizes } from './callbacks/useGetCurrentPaneSizes';
 import { useCollapseSize } from './callbacks/useCollapseSize';
 import { useUncollapseSize } from './callbacks/useUncollapseSize';
 import { useUpdateCollapsedSizes } from './callbacks/useUpdateCollapsedSizes';
+import { useCollapsedSize } from './memos/useCollapsedSize';
 
 export interface ResizeState {
   index: number;
@@ -22,7 +23,6 @@ export interface ChildPane {
   ref: React.RefObject<HTMLDivElement>;
   key: string;
   size: number;
-  minSize: number;
 }
 interface SplitPaneResizeReturns {
   childPanes: ChildPane[];
@@ -33,10 +33,16 @@ interface SplitPaneResizeReturns {
 interface SplitPaneResizeOptions
   extends Pick<
     SplitPaneProps,
-    'children' | 'split' | 'defaultSizes' | 'minSizes' | 'hooks' | 'collapseOptions' | 'direction'
+    | 'children'
+    | 'split'
+    | 'initialSizes'
+    | 'minSizes'
+    | 'hooks'
+    | 'collapseOptions'
+    | 'collapsedSizes'
   > {
   collapsedIndices: number[];
-  direction: Direction;
+  isLtr: boolean;
 }
 
 /**
@@ -46,12 +52,13 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
   const {
     children,
     split,
-    defaultSizes: originalDefaults,
+    initialSizes: originalDefaults,
     minSizes: originalMinSizes,
     hooks,
     collapsedIndices,
+    collapsedSizes: originalCollapsedSizes,
     collapseOptions,
-    direction,
+    isLtr,
   } = options;
 
   // VALUES: const values used throughout the different logic
@@ -62,9 +69,9 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
     collapseOptions,
     collapsedIndices,
   });
+  const collapsedSize = useCollapsedSize({ collapseOptions });
   const childPanes = useChildPanes({ minSizes, children, paneRefs });
   const isReversed = useIsCollapseReversed(collapseOptions);
-  const isLtr = useMemo(() => direction === 'ltr', [direction]);
   const defaultSizes = useMemo(() => children.map((_c, idx) => originalDefaults?.[idx] ?? 1), [
     originalDefaults,
     children,
@@ -74,10 +81,16 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
   const [sizes, setSizes] = useState<number[]>(defaultSizes);
   const [movedSizes, setMovedSizes] = useState<number[]>(sizes);
   const [collapsedSizes, setCollapsedSizes] = useState<Nullable<number>[]>(
-    collapseOptions?.collapsedSizes ?? new Array(children.length).fill(null)
+    originalCollapsedSizes ?? new Array(children.length).fill(null)
   );
   // CALLBACKS  callback functions used throughout. all functions are memoized by useCallback
-  const getMovedSizes = useGetMovedSizes({ minSizes, sizes, isLtr });
+  const getMovedSizes = useGetMovedSizes({
+    minSizes,
+    sizes,
+    isLtr,
+    collapsedSize,
+    collapsedIndices,
+  });
   const getCurrentPaneSizes = useGetCurrentPaneSizes({ childPanes, split });
   const handleDragFinished = useHandleDragFinished({ getMovedSizes, children, hooks, setSizes });
 
@@ -93,6 +106,7 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
     movedSizes,
     isReversed,
     collapsedIndices,
+    collapsedSize,
   });
   const unCollapseSize = useUncollapseSize({
     isReversed,
@@ -100,6 +114,8 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
     minSizes,
     setMovedSizes,
     setSizes,
+    collapsedSize,
+    collapsedIndices,
   });
   const updateCollapsedSizes = useUpdateCollapsedSizes({
     sizes,
@@ -119,15 +135,29 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
     if (dragState !== null) hooks?.onChange?.(movedSizes);
   }, [dragState, movedSizes, hooks]);
   useEffect(() => {
-    updateCollapsedSizes(collapsedIndices);
     hooks?.onCollapse?.(collapsedSizes);
+  }, [collapsedSizes, hooks]);
+  useEffect(() => {
+    updateCollapsedSizes(collapsedIndices);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collapsedIndices]);
+
+  // populate initial sizes correctly
   useEffect(() => {
     const curSizes = getCurrentPaneSizes();
-    setMovedSizes(curSizes);
-    setSizes(curSizes);
-  }, [getCurrentPaneSizes]);
+    const adjustedSizes = curSizes.map((size, idx) => {
+      if (collapsedIndices.includes(idx)) {
+        return collapsedSize;
+      }
+      if (collapsedIndices.includes(idx - 1)) {
+        return size + curSizes[idx - 1] - collapsedSize;
+      }
+      return size;
+    });
+    setMovedSizes(adjustedSizes);
+    setSizes(adjustedSizes);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   //populates the sizes of all the initially populated childPanes, adjust sizes based on collapsed state
   const childPanesWithSizes = useMemo(

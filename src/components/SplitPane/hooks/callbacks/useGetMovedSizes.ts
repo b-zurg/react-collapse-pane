@@ -7,10 +7,14 @@ export function useGetMovedSizes({
   sizes: originalSizes,
   isLtr,
   minSizes,
+  collapsedIndices,
+  collapsedSize,
 }: {
   sizes: number[];
   isLtr: boolean;
   minSizes: number[];
+  collapsedIndices: number[];
+  collapsedSize: number;
 }) {
   return useCallback(
     (dragState: DragState<ResizeState> | null): number[] => {
@@ -21,9 +25,11 @@ export function useGetMovedSizes({
         index: dragState.extraState.index,
         offset: isLtr ? dragState.offset : -dragState.offset,
         minSizes,
+        collapsedIndices,
+        collapsedSize,
       });
       return sizes;
     },
-    [isLtr, minSizes, originalSizes]
+    [collapsedIndices, collapsedSize, isLtr, minSizes, originalSizes]
   );
 }

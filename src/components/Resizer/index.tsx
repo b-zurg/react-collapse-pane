@@ -3,7 +3,6 @@ import { Fade } from '@material-ui/core';
 import { ClientPosition } from '../SplitPane/hooks/effects/useDragState';
 import { getSizeWithUnit, getTransition } from './helpers';
 import { ButtonContainer, ButtonWrapper, ResizeGrabber, ResizePresentation } from './helpers';
-import { Direction } from '../SplitPane';
 import { useMergeClasses } from '../../hooks/useMergeClasses';
 
 export type TransitionType = 'fade' | 'grow' | 'zoom';
@@ -11,11 +10,11 @@ export type CollapseDirection = 'left' | 'right' | 'up' | 'down';
 export interface CollapseOptions {
   beforeToggleButton: React.ReactElement;
   afterToggleButton: React.ReactElement;
-  transition?: TransitionType;
+  buttonTransition?: TransitionType;
+  buttonTransitionTimeout?: number;
   collapseDirection?: CollapseDirection;
-  collapsedSizes?: Nullable<number>[];
-  timeout?: number;
-  collapseSize: number;
+  collapseTransitionTimeout?: number;
+  collapsedSize: number;
   overlayCss?: React.CSSProperties;
 }
 export interface ResizerOptions {
@@ -31,7 +30,7 @@ const defaultResizerOptions: ResizerOptions = {
 
 export interface ResizerProps {
   split: 'horizontal' | 'vertical';
-  direction: Direction;
+  isLtr: boolean;
   className: string;
   paneIndex: number;
   collapseOptions?: CollapseOptions;
@@ -48,7 +47,7 @@ export const Resizer = ({
   resizerOptions,
   collapseOptions,
   onCollapseToggle,
-  direction,
+  isLtr,
   isCollapsed,
 }: ResizerProps) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -92,12 +91,8 @@ export const Resizer = ({
   const grabberSizeWithUnit = useMemo(() => getSizeWithUnit(grabberSize), [grabberSize]);
   const Transition = useMemo(() => getTransition(collapseOptions), [collapseOptions]);
   const collapseButton = collapseOptions ? (
-    <ButtonContainer
-      isVertical={isVertical}
-      grabberSize={isCollapsed ? null : grabberSizeWithUnit}
-      direction={direction}
-    >
-      <Transition in={isHovered} timeout={collapseOptions.timeout}>
+    <ButtonContainer isVertical={isVertical} grabberSize={grabberSizeWithUnit} isLtr={isLtr}>
+      <Transition in={isHovered} timeout={collapseOptions.buttonTransitionTimeout}>
         <ButtonWrapper
           isVertical={isVertical}
           onClick={handleButtonClick}
@@ -118,22 +113,18 @@ export const Resizer = ({
 
   return (
     <div style={{ position: 'relative' }}>
-      {isCollapsed ? (
-        collapseButton
-      ) : (
-        <ResizeGrabber
-          isVertical={isVertical}
-          style={getWidthOrHeight(grabberSize)}
-          role="presentation"
-          className={classes}
-          onMouseDown={handleMouseDown}
-          onTouchStart={handleTouchStart}
-          onMouseEnter={handleMouseEnterGrabber}
-          onMouseLeave={handleMouseLeaveGrabber}
-        >
-          {collapseButton}
-        </ResizeGrabber>
-      )}
+      <ResizeGrabber
+        isVertical={isVertical}
+        style={getWidthOrHeight(grabberSize)}
+        role="presentation"
+        className={classes}
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
+        onMouseEnter={handleMouseEnterGrabber}
+        onMouseLeave={handleMouseLeaveGrabber}
+      >
+        {collapseButton}
+      </ResizeGrabber>
       <Fade in={!isHovered}>
         <ResizePresentation isVertical={isVertical} style={{ ...getWidthOrHeight(1), ...css }} />
       </Fade>

@@ -5,10 +5,6 @@ import { CollapseOptions } from '../Resizer';
 
 export const DEFAULT_MIN_SIZE = 50;
 
-export const getNodeKey = (index: number): string => {
-  return 'index.' + index;
-};
-
 export const getMinSize = (index: number, minSizes?: number | number[]): number => {
   if (typeof minSizes === 'number') {
     if (minSizes > 0) {
@@ -21,22 +17,6 @@ export const getMinSize = (index: number, minSizes?: number | number[]): number 
     }
   }
   return DEFAULT_MIN_SIZE;
-};
-
-export const getDefaultSize = ({
-  index,
-  defaultSizes,
-}: {
-  index: number;
-  defaultSizes?: number[];
-}): number => {
-  if (defaultSizes) {
-    const value = defaultSizes[index];
-    if (value >= 0) {
-      return value;
-    }
-  }
-  return 1;
 };
 
 export const getRefSize = ({
@@ -54,30 +34,53 @@ export type MoveDetails = {
   index: number;
   offset: number;
   minSizes: number[];
+  collapsedIndices: number[];
+  collapsedSize: number;
 };
 
 /**
  * Mutates the original array in a recursive fashion, identifying the current sizes, whether they need to be changed, and whether they need to push the next or previous pane.
  */
-export const moveSizes = ({ index, minSizes, offset, sizes }: MoveDetails): number => {
+export const moveSizes = ({
+  index,
+  minSizes,
+  offset,
+  sizes,
+  collapsedIndices,
+  collapsedSize,
+}: MoveDetails): number => {
   //recursion break points
   if (!offset || index < 0 || index + 1 >= sizes.length) {
     return 0;
   }
-
-  const firstMinSize = getMinSize(index, minSizes);
-  const secondMinSize = getMinSize(index + 1, minSizes);
+  const isCollapsed = (idx: number) => collapsedIndices.includes(idx);
+  const firstMinSize = isCollapsed(index) ? collapsedSize : getMinSize(index, minSizes);
+  const secondMinSize = isCollapsed(index + 1) ? collapsedSize : getMinSize(index + 1, minSizes);
   const firstSize = sizes[index] + offset;
   const secondSize = sizes[index + 1] - offset;
 
   if (offset < 0 && firstSize < firstMinSize) {
     const missing = firstSize - firstMinSize;
-    const pushedOffset = moveSizes({ sizes, index: index - 1, offset: missing, minSizes });
+    const pushedOffset = moveSizes({
+      sizes,
+      index: index - 1,
+      offset: missing,
+      minSizes,
+      collapsedIndices,
+      collapsedSize,
+    });
 
     offset -= missing - pushedOffset;
   } else if (offset > 0 && secondSize < secondMinSize) {
     const missing = secondMinSize - secondSize;
-    const pushedOffset = moveSizes({ sizes, index: index + 1, offset: missing, minSizes });
+    const pushedOffset = moveSizes({
+      sizes,
+      index: index + 1,
+      offset: missing,
+      minSizes,
+      collapsedIndices,
+      collapsedSize,
+    });
 
     offset -= missing - pushedOffset;
   }
@@ -98,7 +101,8 @@ export const isCollapseDirectionReversed = (
  * Infers the indices of the collapsed panels from an array of nullable collapse sizes.  If the index is null then it's not collapsed.
  */
 export const convertCollapseSizesToIndices = (sizes?: Nullable<number>[]) =>
-  sizes?.reduce((prev, cur) => (cur !== null ? [...prev, cur] : [...prev]), [] as number[]) ?? [];
+  sizes?.reduce((prev, cur, idx) => (cur !== null ? [...prev, idx] : [...prev]), [] as number[]) ??
+  [];
 
 const verticalCss = css`
   left: 0;

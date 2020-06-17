@@ -17,9 +17,9 @@ export function useMinSizes({
     () =>
       children.map((_child, idx) =>
         collapsedIndices.includes(idx)
-          ? collapseOptions?.collapseSize ?? DEFAULT_MIN_SIZE
+          ? collapseOptions?.collapsedSize ?? DEFAULT_MIN_SIZE
           : getMinSize(idx, minSizes)
       ),
-    [children, minSizes]
+    [children, collapseOptions, collapsedIndices, minSizes]
   );
 }

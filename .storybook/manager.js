@@ -1,5 +1,4 @@
 import { addons } from '@storybook/addons';
-import { themes } from '@storybook/theming';
 import { create } from '@storybook/theming/create';
 import { configureActions } from '@storybook/addon-actions';
 
@@ -18,12 +17,12 @@ addons.setConfig({
     brandTitle: 'react-collapse-pane',
     brandUrl: "https://github.com/b-zurg/react-collapse-pane",
     brandImage: "https://github.com/b-zurg/react-collapse-pane/raw/master/logo.svg?sanitize=true",
+    selectedPanel: "knobs"
   }),
 });
 
 
 configureActions({
   depth: 5,
-  // Limit the number of items logged into the actions panel
   limit: 5,
 });

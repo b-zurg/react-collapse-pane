@@ -22,8 +22,8 @@ export function useHandleDragFinished({
     (dragState: DragState<ResizeState>) => {
       const movedSizes = getMovedSizes(dragState);
       setSizes(movedSizes);
-      hooks?.onDragFinished?.(movedSizes);
+      hooks?.onSaveSizes?.(movedSizes);
     },
-    [children, getMovedSizes, hooks, setSizes]
+    [getMovedSizes, hooks, setSizes]
   );
 }

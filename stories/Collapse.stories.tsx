@@ -3,7 +3,7 @@ import { SplitPane } from '../src/components/SplitPane';
 import { storiesOf } from '@storybook/react';
 import { action, configureActions } from '@storybook/addon-actions';
 import React from 'react';
-import { select, withKnobs, object } from '@storybook/addon-knobs';
+import { select, withKnobs, object, number } from '@storybook/addon-knobs';
 
 configureActions({
   depth: 5,
@@ -18,7 +18,7 @@ const Button = styled.div`
   cursor: pointer;
   user-select: none;
   text-align: center;
-  color: lightskyblue;
+  color: white;
   border: 1px silver solid;
 `;
 
@@ -39,16 +39,21 @@ storiesOf('Collapsable Panes', module)
       backgroundRepeat: 'no-repeat',
       borderRight: '1px solid rgba(0, 0, 0, 0.1)',
     });
+    const minSizes = object('minimum sizes', [50, 50, 50, 50]);
+    const collapseTransition = number('Collapse Transition Speed (ms)', 500);
+
     return (
       <SplitPane
         split="vertical"
-        defaultSizes={[340.75, 816.75, 273.75, 251.75]}
+        initialSizes={[340.75, 816.75, 273.75, 251.75]}
         collapseOptions={{
           beforeToggleButton: <Button>{collapseDirection === 'left' ? '⬅' : '➡'}</Button>,
           afterToggleButton: <Button>{collapseDirection === 'left' ? '➡' : '⬅'}</Button>,
-          collapseSize: 40,
+          collapsedSize: 40,
+          collapseTransitionTimeout: collapseTransition,
           collapseDirection,
         }}
+        minSizes={minSizes}
         resizerOptions={{
           css: resizerCss,
           hoverCss: resizerHoverCss,
@@ -57,7 +62,7 @@ storiesOf('Collapsable Panes', module)
         hooks={{
           onCollapse: action(`collapsedSizes`),
           onDragStarted: action('onDragStarted'),
-          onDragFinished: action('onDragFinished'),
+          onSaveSizes: action('onDragFinished'),
         }}
       >
         <div>This is a div</div>
@@ -83,14 +88,16 @@ storiesOf('Collapsable Panes', module)
       backgroundRepeat: 'no-repeat',
       borderRight: '1px solid rgba(0, 0, 0, 0.1)',
     });
+    const minSizes = object('minimum sizes', [50, 50, 50, 50]);
     return (
       <SplitPane
         split="horizontal"
-        defaultSizes={[340.75, 816.75, 273.75, 251.75]}
+        initialSizes={[340.75, 816.75, 273.75, 251.75]}
+        minSizes={minSizes}
         collapseOptions={{
           beforeToggleButton: <Button>{collapseDirection === 'up' ? '⬆' : '⬇'}</Button>,
           afterToggleButton: <Button>{collapseDirection === 'up' ? '⬇' : '⬆'}</Button>,
-          collapseSize: 40,
+          collapsedSize: 40,
           collapseDirection,
         }}
         resizerOptions={{
@@ -101,7 +108,7 @@ storiesOf('Collapsable Panes', module)
         hooks={{
           onCollapse: action(`collapsedSizes`),
           onDragStarted: action('onDragStarted'),
-          onDragFinished: action('onDragFinished'),
+          onSaveSizes: action('onDragFinished'),
         }}
       >
         <div>This is a div</div>

@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components';
 import { Fade, Grow, Zoom } from '@material-ui/core';
 import { TransitionType } from '.';
 import { CollapseOptions } from './index';
-import { Direction } from '../SplitPane';
 
 type OrientationProps = {
   isVertical: boolean;
@@ -23,7 +22,7 @@ export const ButtonWrapper = styled.div<OrientationProps>`
 
 interface ButtonContainerProps extends OrientationProps {
   grabberSize: string | null;
-  direction: Direction;
+  isLtr: boolean;
 }
 export const ButtonContainer = styled.div<ButtonContainerProps>`
   position: absolute;
@@ -31,10 +30,10 @@ export const ButtonContainer = styled.div<ButtonContainerProps>`
   ${props => (props.isVertical ? 'width: 5rem' : 'height: 5rem')};
   transform: ${props =>
     props.isVertical
-      ? `translateX(${props.direction === 'ltr' ? '-' : ''}50%) ${
+      ? `translateX(${props.isLtr ? '-' : ''}50%) ${
           props.grabberSize ? `translateX(calc(${props.grabberSize} / 2))` : ''
         }`
-      : `translateY(-50%) ${
+      : `translateY(${props.isLtr ? '-' : ''}50%) ${
           props.grabberSize ? `translateY(calc(${props.grabberSize} / 2))` : ''
         }`};
   display: flex;
@@ -68,7 +67,7 @@ const transitionComponentMap: {
 };
 
 export const getTransition = (details: CollapseOptions | undefined): TransitionComponent =>
-  transitionComponentMap[details?.transition ?? 'fade'];
+  transitionComponentMap[details?.buttonTransition ?? 'fade'];
 
 export const getSizeWithUnit = (size: string | number): string =>
   isNaN(size as number) ? size.toString() : `${size}px`;

@@ -31,6 +31,7 @@ export function useUpdateCollapsedSizes({
             return movedSizes[idx]; // when collapsed store current size
           }
           if (!isCollapsed && size !== null) {
+            console.log(`uncollapsing index ${idx} with size ${size}`);
             unCollapseSize({ idx, size }); // when un-collapsed clear size
             hooks?.onChange?.(sizes);
             return null;
@@ -39,6 +40,6 @@ export function useUpdateCollapsedSizes({
         })
       );
     },
-    [collapseSize, collapsedSizes, movedSizes, setCollapsedSizes, sizes, unCollapseSize]
+    [collapseSize, collapsedSizes, hooks, movedSizes, setCollapsedSizes, sizes, unCollapseSize]
   );
 }
