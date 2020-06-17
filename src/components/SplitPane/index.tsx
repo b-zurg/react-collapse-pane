@@ -8,6 +8,7 @@ import { useIsCollapseReversed } from './hooks/memos/useIsCollapseReversed';
 import { useToggleCollapse } from './hooks/callbacks/useToggleCollapse';
 import { useGetIsPaneCollapsed } from './hooks/callbacks/useGetIsCollapsed';
 import { useIsLtr } from './hooks/memos/useIsLtr';
+import { useCollapsedSizes } from './hooks/memos/useCollapsedSizes';
 
 export type SplitType = 'horizontal' | 'vertical';
 export type Direction = 'ltr' | 'rtl';
@@ -37,8 +38,9 @@ export interface SplitPaneProps {
 }
 
 export const SplitPane = ({ className = '', direction = 'ltr', ...props }: SplitPaneProps) => {
+  const collapsedSizes = useCollapsedSizes(props);
   const [collapsedIndices, setCollapsed] = useState<number[]>(
-    convertCollapseSizesToIndices(props.collapsedSizes)
+    convertCollapseSizesToIndices(collapsedSizes)
   );
   const isLtr = useIsLtr({ split: props.split, direction });
 
@@ -46,7 +48,7 @@ export const SplitPane = ({ className = '', direction = 'ltr', ...props }: Split
     ...props,
     isLtr,
     collapsedIndices,
-    collapsedSizes: props.collapsedSizes,
+    collapsedSizes,
   });
 
   const splitPaneClass = useMergeClasses(['SplitPane', props.split, className]);
