@@ -38,20 +38,20 @@ storiesOf('Initial States', module)
         }
       : undefined;
     const VerticalSplitPane = (props: Omit<SplitPaneProps, 'split'>) => (
-      <SplitPane
-        split={'vertical'}
-        collapseOptions={verticalCollapseOptions}
-        collapsedSizes={[140, 500, null]}
-      >
+      <SplitPane split={'vertical'} collapseOptions={verticalCollapseOptions} {...props}>
         {props.children}
       </SplitPane>
     );
 
     return (
-      <VerticalSplitPane>
+      <VerticalSplitPane collapsedSizes={[140, 500, null]}>
         <div>This is a div</div>
         <div>This is a second div</div>
         <div>This is a third div</div>
+        <VerticalSplitPane collapsedSizes={[]}>
+          <div>one</div>
+          <div>two</div>
+        </VerticalSplitPane>
       </VerticalSplitPane>
     );
   })
