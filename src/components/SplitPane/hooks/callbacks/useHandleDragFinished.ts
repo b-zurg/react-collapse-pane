@@ -8,7 +8,6 @@ import { SplitPaneHooks } from '../..';
  * called at the end of a drag, sets the final size as well as runs the callback hook
  */
 export function useHandleDragFinished({
-  children,
   setSizes,
   hooks,
   getMovedSizes,
