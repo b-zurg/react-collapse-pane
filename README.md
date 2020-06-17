@@ -30,15 +30,12 @@ The only component you must interact with is `SplitPane`.  This serves as a wrap
 
 Here's a basic example:
 ```tsx
-
-  <SplitPane
-    split="vertical"
-  >
-    <div>This is the first div</div>
-    <div>This is the second div</div>
-    <div>This is the third div</div>
-    This is the fourth but not a div!
-  </SplitPane>
+<SplitPane split="vertical">
+  <div>This is the first div</div>
+  <div>This is the second div</div>
+  <div>This is the third div</div>
+  This is the fourth but not a div!
+</SplitPane>
 ```
 
 This will split the children.  The children can be any valid react child.  If a child is `null` it will be excluded from being split or displayed.
@@ -53,29 +50,29 @@ However this is easily replaceable by using the `css` and `hoverCss` options.  Y
 
 The sizer also has a grabbable surface that spans the length of the split and has a default grabbable surface of `1rem`. Thsiis changeable by the `grabberSize` option which can be set to any valid CSS size value for `width` or `height`.  
 
-**Note:** As per default react CSS, a number will be interpreted as a `px` value.
+**Note!** 🚨  As per default react CSS, a number will be interpreted as a `px` value.
 
 
 Here's an example:
 
 ```tsx
-  <SplitPane
-      split="vertical"
-      resizerOptions={{
-        css: {
-          width: '1px',
-          background: 'rgba(0, 0, 0, 0.1)',
-        },
-        hoverCss: {
-          width: '3px',
-          background: '1px solid rgba(102, 194, 255, 0.5)',
-        },
-        grabberSize: '1rem',
-    }}
-  >
-    <div>This is the first div</div>
-    <div>This is the second div</div>
-  </SplitPane>
+<SplitPane
+  split="vertical"
+  resizerOptions={{
+    css: {
+      width: '1px',
+      background: 'rgba(0, 0, 0, 0.1)',
+    },
+    hoverCss: {
+      width: '3px',
+      background: '1px solid rgba(102, 194, 255, 0.5)',
+    },
+    grabberSize: '1rem',
+  }}
+>
+  <div>This is the first div</div>
+  <div>This is the second div</div>
+</SplitPane>
 ```
 
 **Note** the css props must be valid `React.CSSProperties` objects.
@@ -108,7 +105,7 @@ Here's an example using a `Button` element made with `styled-components`
 </SplitPane>
 ```
 
-## State and Controlled Components 🌩
+## Hooks and Saving State 🌩
 
 The component manages its own state while resizing however also allows an initial state as well as callbacks to save state changes.
 
@@ -122,14 +119,25 @@ onCollapse?: (collapsedSizes: Nullable<number>[]) => void;
 * `onDragStarted` fires as soon as you click down on a resizer and begin moving
 * `onSaveSizes` fires when the movement of a resizer is finished and the mouse lifts **OR** when a panel is collapsed - as both of these trigger size changes.
 * `onChange` fires on every size change, which can be **quite** often
-* `onCollapse` fires
+* `onCollapse` fires whenever a panel is collapsed, and keeps track of the previously collapsed panes
+
+The initial state is passed in with these three props:
+
+```ts
+initialSizes?: number[];
+minSizes?: number | number[];
+collapsedSizes?: Nullable<number>[];
+```
+* `initialSizes` is the default flex-basis that's given to the panes
+* `minSizes` is either (1) a minimum size that's given to **all** the panes, or (2) an array of minimum sizes that's given to each pane in order.  Any missing sizes in the array will be assumed default.
+* `collapsedSizes` an array of nullable numbers. This keeps track of a pane's size before it was collapsed.  If not collapsed it's null. This will determine which panels are collapsed and what to do when they're uncollapsed.
 
 
-## RTL Support ( Arabic,Hebrew,Farsi ) 🕋
+## RTL Support ( Arabic, Hebrew, Farsi ) 🕋
 
 This library easily supports LTR languages by providing a `direction` prop.  This is only necessary if you're using RTL. 
 
-**Note** 😮 the `direction` is _only_ applicable if the split is `vertical` 
+**Note!** 🚨 the `direction` is _only_ applicable if the split is `vertical` 
 
 e.g.
 ```tsx
