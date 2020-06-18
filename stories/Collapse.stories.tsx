@@ -39,13 +39,12 @@ storiesOf('Collapsable Panes', module)
       backgroundRepeat: 'no-repeat',
       borderRight: '1px solid rgba(0, 0, 0, 0.1)',
     });
-    const minSizes = object('minimum sizes', [50, 50, 50, 50]);
+    const minSizes = object('minimum sizes', [300, 50, 50, 50]);
     const collapseTransition = number('Collapse Transition Speed (ms)', 500);
 
     return (
       <SplitPane
         split="vertical"
-        initialSizes={[340.75, 816.75, 273.75, 251.75]}
         collapseOptions={{
           beforeToggleButton: <Button>{collapseDirection === 'left' ? '⬅' : '➡'}</Button>,
           afterToggleButton: <Button>{collapseDirection === 'left' ? '➡' : '⬅'}</Button>,

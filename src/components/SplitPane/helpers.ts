@@ -104,6 +104,14 @@ export const convertCollapseSizesToIndices = (sizes?: Nullable<number>[]) =>
   sizes?.reduce((prev, cur, idx) => (cur !== null ? [...prev, idx] : [...prev]), [] as number[]) ??
   [];
 
+export const debounce = (callback: (...args: any[]) => void, wait = 250) => {
+  let timer: any;
+  return (...args: any[]) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => callback(...args), wait);
+  };
+};
+
 const verticalCss = css`
   left: 0;
   right: 0;

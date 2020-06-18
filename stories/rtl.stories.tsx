@@ -17,7 +17,7 @@ const Button = styled.div`
   cursor: pointer;
   user-select: none;
   text-align: center;
-  color: lightskyblue;
+  color: white;
   border: 1px silver solid;
 `;
 
