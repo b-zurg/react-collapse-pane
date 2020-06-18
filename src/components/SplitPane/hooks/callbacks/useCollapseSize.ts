@@ -24,16 +24,23 @@ export function useCollapseSize({
       const index = isReversed ? idx - 1 : idx;
       const newSizes = [...movedSizes];
       moveSizes({ sizes: newSizes, index, offset, minSizes, collapsedIndices, collapsedSize });
-      if (collapsedIndices.includes(isReversed ? idx - 1 : idx + 1)) {
-        // this should be a loop, right now only takes care of "left" pane to the current one
-        moveSizes({
-          sizes: newSizes,
-          index: isReversed ? idx - 2 : idx + 1,
-          offset: offset,
-          minSizes,
-          collapsedIndices,
-          collapsedSize,
-        });
+
+      //cascade move to collapsed siblings
+      for (
+        let i = isReversed ? idx : idx + 1;
+        isReversed ? i > 0 : i < movedSizes.length - 1;
+        isReversed ? i-- : i++
+      ) {
+        if (collapsedIndices.includes(i)) {
+          moveSizes({
+            sizes: newSizes,
+            index: isReversed ? i - 2 : i,
+            offset: offset,
+            minSizes,
+            collapsedIndices,
+            collapsedSize,
+          });
+        }
       }
       setMovedSizes(newSizes);
       setSizes(newSizes);
