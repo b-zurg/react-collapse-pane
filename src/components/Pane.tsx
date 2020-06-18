@@ -73,7 +73,7 @@ export const Pane = React.memo(
       () => (split === 'vertical' ? { minWidth: minSize } : { minHeight: minSize }),
       [minSize, split]
     );
-    const wrappedChildren = <div style={minStyle}>{children}</div>;
+    const collapseOverlayStyle = isCollapsed ? { ...collapseOverlayCss, ...minStyle } : minStyle;
     return (
       <StyledDiv
         isVertical={split === 'vertical'}
@@ -83,11 +83,7 @@ export const Pane = React.memo(
         shouldAnimate={timeout !== 0 && shouldAnimate}
         timeout={timeout}
       >
-        {isCollapsed ? (
-          <CollapseOverlay style={collapseOverlayCss}>{wrappedChildren}</CollapseOverlay>
-        ) : (
-          wrappedChildren
-        )}
+        <CollapseOverlay style={collapseOverlayStyle}>{children}</CollapseOverlay>
       </StyledDiv>
     );
   }
