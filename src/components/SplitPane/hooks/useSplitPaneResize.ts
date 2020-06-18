@@ -172,8 +172,6 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
     setSizes,
     isReversed,
     hooks,
-    split,
-    childPanes,
     beginDrag,
     getCurrentPaneSizes,
   });
