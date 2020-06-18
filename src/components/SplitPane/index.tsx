@@ -82,9 +82,7 @@ export const SplitPane = ({ className = '', direction = 'ltr', ...props }: Split
           forwardRef={pane.ref}
           size={pane.size}
           isCollapsed={getIsPaneCollapsed(paneIndex)}
-          isSiblingCollapsed={
-            getIsPaneCollapsed(paneIndex - 1) || getIsPaneCollapsed(paneIndex + 1)
-          }
+          collapsedIndices={collapsedIndices}
           split={props.split}
           className={className}
           transitionTimeout={props.collapseOptions?.collapseTransitionTimeout}
