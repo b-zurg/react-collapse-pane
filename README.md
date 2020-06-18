@@ -83,8 +83,13 @@ It's a common UX need to want to collapse the left or initial panel to give more
 
 * `beforeToggleButton` - the element displayed as the collapse button **before** the panel is collapsed.  This is a purely aesthetic component.
 * `afterToggleButton` - the element displayed as the collapse button **after** the panel is collapsed.  This is a purely aesthetic component.
+* `overlayCss` - the css applied to a div positioned on top of the content.
+* `buttonTransition` - the animation applied to the button appear/disappear.  Possible options are `zoom`, `grow`, or `fade`
+* `buttonTransitionTimeout` - the time (in millisecons) that the animation for the appear/disappear of the button will take place
+* `collapseSize` - the size of the collapsed panel after it has been collapsed
+* `collapseTransitionTimeout` - the duration within the collapse animation will take place
 
-Here's an example using a `Button` element made with `styled-components` 
+Here's an example using a `Button` element imported from elsewhere. 
 
 ```tsx
 <SplitPane
@@ -92,10 +97,10 @@ Here's an example using a `Button` element made with `styled-components`
   collapseOptions={{
     beforeToggleButton: <Button>⬅</Button>,
     afterToggleButton: <Button>➡</Button>,
-    overlayCss: { backgroundColor: 'rgb(0, 0, 0, 0.4)' },
-    timeout: 300,
-    transition: 'zoom',
-    collapseSize: 40,
+    overlayCss: { backgroundColor: "black" },
+    buttonTransition: "zoom",
+    collapsedSize: 50,
+    collapseTransitionTimeout: 350,
   }}
 >
   <div>This is a div</div>
