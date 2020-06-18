@@ -22,7 +22,7 @@ const Button = styled.div`
 `;
 
 storiesOf('Initial States', module)
-  .add('With collapsed Panes', () => {
+  .add('Ltr, First Pane Collapsed', () => {
     const verticalCollapseDirection = select(
       'Vertical Direction',
       { left: 'left', right: 'right' },
@@ -44,14 +44,10 @@ storiesOf('Initial States', module)
     );
 
     return (
-      <VerticalSplitPane collapsedSizes={[140, 500, null]}>
+      <VerticalSplitPane collapsedSizes={[200, null, null]}>
         <div>This is a div</div>
         <div>This is a second div</div>
         <div>This is a third div</div>
-        <VerticalSplitPane collapsedSizes={[]}>
-          <div>one</div>
-          <div>two</div>
-        </VerticalSplitPane>
       </VerticalSplitPane>
     );
   })
