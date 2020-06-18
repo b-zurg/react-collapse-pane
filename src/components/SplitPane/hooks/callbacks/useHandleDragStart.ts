@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { BeginDragCallback, ClientPosition } from '../effects/useDragState';
-import { ChildPane } from '../useSplitPaneResize';
-import { SplitPaneHooks, SplitType } from '../..';
+import { SplitPaneHooks } from '../..';
 import { useGetCurrentPaneSizes } from './useGetCurrentPaneSizes';
 
 /**
@@ -10,16 +9,12 @@ import { useGetCurrentPaneSizes } from './useGetCurrentPaneSizes';
 export function useHandleDragStart({
   isReversed,
   hooks,
-  childPanes,
-  split,
   beginDrag,
   setSizes,
   getCurrentPaneSizes,
 }: {
   isReversed: boolean;
-  childPanes: Omit<ChildPane, 'size'>[];
   hooks?: SplitPaneHooks;
-  split: SplitType;
   beginDrag: BeginDragCallback<any>;
   setSizes: React.Dispatch<React.SetStateAction<number[]>>;
   getCurrentPaneSizes: ReturnType<typeof useGetCurrentPaneSizes>;
@@ -31,6 +26,6 @@ export function useHandleDragStart({
       beginDrag(pos, { index: isReversed ? index - 1 : index });
       setSizes(clientSizes);
     },
-    [beginDrag, childPanes, hooks, isReversed, split]
+    [beginDrag, getCurrentPaneSizes, hooks, isReversed, setSizes]
   );
 }

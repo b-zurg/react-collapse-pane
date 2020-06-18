@@ -19,6 +19,7 @@ interface DragStateHandlers<T> {
   onMouseMove?: (event: ClientPosition) => void;
   onTouchMove?: (event: TouchEvent) => void;
   onMouseUp?: () => void;
+  onMouseEnter?: (event: MouseEvent) => void;
 }
 
 function useDragStateHandlers<T>(
@@ -55,7 +56,7 @@ function useDragStateHandlers<T>(
     return [dragState, onMouseUp];
   }, [current, dragging, onDragFinished]);
 
-  const [onMouseMove, onTouchMove] = useMemo(() => {
+  const [onMouseMove, onTouchMove, onMouseEnter] = useMemo(() => {
     if (!dragging) {
       return [undefined, undefined];
     }
@@ -68,25 +69,36 @@ function useDragStateHandlers<T>(
     const onTouchMove = (event: TouchEvent): void => {
       onMouseMove(event.touches[0]);
     };
+    const onMouseEnter = (event: MouseEvent): void => {
+      const isPrimaryPressed = (event.buttons & 1) === 1;
+      if (!isPrimaryPressed) {
+        onMouseUp?.();
+      }
+    };
 
-    return [onMouseMove, onTouchMove];
-  }, [dragging, split]);
+    return [onMouseMove, onTouchMove, onMouseEnter];
+  }, [dragging, onMouseUp, split]);
 
-  return { beginDrag, dragState, onMouseMove, onTouchMove, onMouseUp };
+  return { beginDrag, dragState, onMouseMove, onTouchMove, onMouseUp, onMouseEnter };
 }
 
 export function useDragState<T>(
   split: SplitType,
   onDragFinished: (dragState: DragState<T>) => void
 ): [DragState<T> | null, (pos: ClientPosition, extraState: T) => void] {
-  const { beginDrag, dragState, onMouseMove, onTouchMove, onMouseUp } = useDragStateHandlers<T>(
-    split,
-    onDragFinished
-  );
+  const {
+    beginDrag,
+    dragState,
+    onMouseMove,
+    onTouchMove,
+    onMouseUp,
+    onMouseEnter,
+  } = useDragStateHandlers<T>(split, onDragFinished);
 
   useEventListener('mousemove', onMouseMove);
   useEventListener('touchmove', onTouchMove);
   useEventListener('mouseup', onMouseUp);
+  useEventListener('mouseenter', onMouseEnter);
 
   return [dragState, beginDrag];
 }
