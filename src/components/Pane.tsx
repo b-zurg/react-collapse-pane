@@ -34,40 +34,46 @@ const CollapseOverlay = styled.div`
 `;
 export interface PaneProps {
   size: number;
-
+  minSize: number;
   split: SplitType;
   className: string;
   isCollapsed: boolean;
   forwardRef: React.Ref<HTMLDivElement>;
   collapseOverlayCss?: React.CSSProperties;
-  isSiblingCollapsed: boolean;
+  collapsedIndices: number[];
   children: React.ReactNode;
   transitionTimeout: number | undefined;
 }
 export const Pane = React.memo(
   ({
     size,
+    minSize,
     isCollapsed,
     collapseOverlayCss = { background: 'rgba(220,220,220, 0.1)' },
     split,
     className,
-    forwardRef,
     children,
-    isSiblingCollapsed,
+    forwardRef,
+    collapsedIndices,
     transitionTimeout,
   }: PaneProps) => {
     const classes = useMergeClasses(['Pane', split, className]);
     const timeout = useMemo(() => transitionTimeout ?? DEFAULT_COLLAPSE_TRANSITION_TIMEOUT, [
       transitionTimeout,
     ]);
-    const [shouldAnimate, setShouldAnimate] = useState<boolean>(isCollapsed || isSiblingCollapsed);
+    const [shouldAnimate, setShouldAnimate] = useState<boolean>(false);
     useEffect(() => {
       if (timeout !== 0) {
         setShouldAnimate(true);
         setTimeout(() => setShouldAnimate(false), 500);
       }
-    }, [setShouldAnimate, isCollapsed, isSiblingCollapsed, timeout]);
+    }, [setShouldAnimate, collapsedIndices, timeout]);
 
+    const minStyle = useMemo(
+      () => (split === 'vertical' ? { minWidth: minSize } : { minHeight: minSize }),
+      [minSize, split]
+    );
+    const wrappedChildren = <div style={minStyle}>{children}</div>;
     return (
       <StyledDiv
         isVertical={split === 'vertical'}
@@ -78,9 +84,9 @@ export const Pane = React.memo(
         timeout={timeout}
       >
         {isCollapsed ? (
-          <CollapseOverlay style={collapseOverlayCss}>{children}</CollapseOverlay>
+          <CollapseOverlay style={collapseOverlayCss}>{wrappedChildren}</CollapseOverlay>
         ) : (
-          children
+          wrappedChildren
         )}
       </StyledDiv>
     );
