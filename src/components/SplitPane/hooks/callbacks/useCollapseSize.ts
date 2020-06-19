@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { moveSizes } from '../../helpers';
+import * as ReactDOM from 'react-dom';
 
 export function useCollapseSize({
   isReversed,
@@ -42,8 +43,10 @@ export function useCollapseSize({
           });
         }
       }
-      setMovedSizes(newSizes);
-      setSizes(newSizes);
+      ReactDOM.unstable_batchedUpdates(() => {
+        setMovedSizes(newSizes);
+        setSizes(newSizes);
+      });
     },
     [isReversed, collapsedSize, movedSizes, minSizes, collapsedIndices, setMovedSizes, setSizes]
   );

@@ -43,7 +43,7 @@ storiesOf('Collapsable Panes', module)
       backgroundRepeat: 'no-repeat',
       borderRight: '1px solid rgba(0, 0, 0, 0.1)',
     });
-    const minSizes = object('Minimum Sizes', [300, 50, 50, 50]);
+    const minSizes = object('Minimum Sizes', [50, 50, 50, 50]);
     const collapseTransition = number('Collapse Transition Speed (ms)', 500);
 
     return (

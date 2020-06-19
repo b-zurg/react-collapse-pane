@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import * as ReactDOM from 'react-dom';
 import { moveSizes } from '../../helpers';
 
 export function useUncollapseSize({
@@ -24,8 +25,10 @@ export function useUncollapseSize({
       const index = isReversed ? idx - 1 : idx;
       const newSizes = [...movedSizes];
       moveSizes({ sizes: newSizes, index, offset, minSizes, collapsedSize, collapsedIndices });
-      setMovedSizes(newSizes);
-      setSizes(newSizes);
+      ReactDOM.unstable_batchedUpdates(() => {
+        setMovedSizes(newSizes);
+        setSizes(newSizes);
+      });
     },
     [collapsedIndices, collapsedSize, isReversed, minSizes, movedSizes, setMovedSizes, setSizes]
   );
