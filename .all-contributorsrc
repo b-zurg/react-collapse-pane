@@ -1,0 +1,29 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "b",
+      "name": "Benjamin Black",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/31712?v=4",
+      "profile": "http://blog.b3k.us",
+      "contributions": [
+        "test",
+        "doc",
+        "code",
+        "design",
+        "example",
+        "platform"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "react-collapse-pane",
+  "projectOwner": "b-zurg",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
