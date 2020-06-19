@@ -58,7 +58,7 @@ export interface SplitPaneProps {
   children: React.ReactChild[];
 }
 
-export const SplitPane = ({ className = '', direction = 'ltr', ...props }: SplitPaneProps) => {
+export const SplitPane = ({ className = '', ...props }: SplitPaneProps) => {
   const collapsedSizes = useCollapsedSizes(props);
   const isLtr = useIsLtr(props);
 
