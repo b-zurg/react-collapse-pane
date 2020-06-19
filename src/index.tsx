@@ -1,1 +1,7 @@
-export { SplitPane, SplitPaneProps } from './components/SplitPane';
+export {
+  SplitPane,
+  SplitPaneProps,
+  ResizerOptions,
+  CollapseOptions,
+  SplitPaneHooks,
+} from './components/SplitPane';

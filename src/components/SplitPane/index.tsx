@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Pane } from '../Pane';
-import { CollapseOptions, Resizer, ResizerOptions } from '../Resizer';
+import { Resizer } from '../Resizer';
 import { useSplitPaneResize } from './hooks/useSplitPaneResize';
 import { convertCollapseSizesToIndices, getMinSize, Wrapper } from './helpers';
 import { useMergeClasses } from '../../hooks/useMergeClasses';
@@ -20,6 +20,27 @@ export type SplitPaneHooks = {
   onCollapse?: (collapsedSizes: Nullable<number>[]) => void;
 };
 
+export type TransitionType = 'fade' | 'grow' | 'zoom';
+export type CollapseDirection = 'left' | 'right' | 'up' | 'down';
+
+export interface CollapseOptions {
+  beforeToggleButton: React.ReactElement;
+  afterToggleButton: React.ReactElement;
+  buttonTransition?: TransitionType;
+  buttonTransitionTimeout?: number;
+  buttonPositionOffset?: number;
+  collapseDirection?: CollapseDirection;
+  collapseTransitionTimeout?: number;
+  collapsedSize: number;
+  overlayCss?: React.CSSProperties;
+}
+
+export interface ResizerOptions {
+  css?: React.CSSProperties;
+  hoverCss?: React.CSSProperties;
+  grabberSize?: number | string;
+}
+
 export interface SplitPaneProps {
   split: SplitType;
   direction?: Direction;
@@ -32,17 +53,18 @@ export interface SplitPaneProps {
   hooks?: SplitPaneHooks;
 
   collapseOptions?: CollapseOptions;
-  resizerOptions?: Partial<ResizerOptions>;
+  resizerOptions?: ResizerOptions;
 
   children: React.ReactChild[];
 }
 
 export const SplitPane = ({ className = '', direction = 'ltr', ...props }: SplitPaneProps) => {
   const collapsedSizes = useCollapsedSizes(props);
+  const isLtr = useIsLtr(props);
+
   const [collapsedIndices, setCollapsed] = useState<number[]>(
     convertCollapseSizesToIndices(collapsedSizes)
   );
-  const isLtr = useIsLtr({ split: props.split, direction });
 
   const { childPanes, handleDragStart, resizeState } = useSplitPaneResize({
     ...props,

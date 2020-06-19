@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { CollapseOptions } from '../../../Resizer';
+import { CollapseOptions } from '../../index';
 
 export function useCollapsedSizes({
   collapsedSizes,
@@ -15,6 +15,6 @@ export function useCollapsedSizes({
       collapsedSizes?.length === children.length && collapseOptions !== undefined
         ? collapsedSizes
         : new Array(children.length).fill(null),
-    [children, collapsedSizes]
+    [children.length, collapseOptions, collapsedSizes]
   );
 }

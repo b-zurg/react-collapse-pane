@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { DEFAULT_MIN_SIZE, getMinSize } from '../../helpers';
-import { CollapseOptions } from '../../../Resizer';
+import { CollapseOptions } from '../../index';
 
 /**
  * Returns the current actual minimum size of the panel.  This in some cases means the collapsed size.
