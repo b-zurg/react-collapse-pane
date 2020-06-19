@@ -118,7 +118,7 @@ export const SplitPane = ({ className = '', ...props }: SplitPaneProps) => {
   });
 
   return (
-    <Wrapper className={splitPaneClass} split={props.split}>
+    <Wrapper key="splitpanewrapper" className={splitPaneClass} split={props.split}>
       {entries}
     </Wrapper>
   );

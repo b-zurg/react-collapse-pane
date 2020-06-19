@@ -44,55 +44,55 @@ export interface PaneProps {
   children: React.ReactNode;
   transitionTimeout: number | undefined;
 }
-export const Pane = React.memo(
-  ({
-    size,
-    minSize,
-    isCollapsed,
-    collapseOverlayCss = { background: 'rgba(220,220,220, 0.1)' },
-    split,
-    className,
-    children,
-    forwardRef,
-    collapsedIndices,
+const UnMemoizedPane = ({
+  size,
+  minSize,
+  isCollapsed,
+  collapseOverlayCss = { background: 'rgba(220,220,220, 0.1)' },
+  split,
+  className,
+  children,
+  forwardRef,
+  collapsedIndices,
+  transitionTimeout,
+}: PaneProps) => {
+  const classes = useMergeClasses(['Pane', split, className]);
+  const timeout = useMemo(() => transitionTimeout ?? DEFAULT_COLLAPSE_TRANSITION_TIMEOUT, [
     transitionTimeout,
-  }: PaneProps) => {
-    const classes = useMergeClasses(['Pane', split, className]);
-    const timeout = useMemo(() => transitionTimeout ?? DEFAULT_COLLAPSE_TRANSITION_TIMEOUT, [
-      transitionTimeout,
-    ]);
-    const [shouldAnimate, setShouldAnimate] = useState<boolean>(false);
+  ]);
+  const [shouldAnimate, setShouldAnimate] = useState<boolean>(false);
 
-    const didMount = useRef(false);
+  const didMount = useRef(false);
 
-    useEffect(() => {
-      if (didMount.current) {
-        if (timeout !== 0) {
-          setShouldAnimate(true);
-          setTimeout(() => setShouldAnimate(false), 500);
-        }
-      } else {
-        didMount.current = true;
+  useEffect(() => {
+    if (didMount.current) {
+      if (timeout !== 0) {
+        setShouldAnimate(true);
+        setTimeout(() => setShouldAnimate(false), 500);
       }
-    }, [setShouldAnimate, collapsedIndices, timeout]);
+    } else {
+      didMount.current = true;
+    }
+  }, [setShouldAnimate, collapsedIndices, timeout]);
 
-    const minStyle = useMemo(
-      () => (split === 'vertical' ? { minWidth: minSize } : { minHeight: minSize }),
-      [minSize, split]
-    );
-    const collapseOverlayStyle = isCollapsed ? { ...collapseOverlayCss, ...minStyle } : minStyle;
-    return (
-      <StyledDiv
-        isVertical={split === 'vertical'}
-        className={classes}
-        ref={forwardRef}
-        style={{ flexBasis: size }}
-        shouldAnimate={timeout !== 0 && shouldAnimate}
-        timeout={timeout}
-      >
-        <CollapseOverlay style={collapseOverlayStyle}>{children}</CollapseOverlay>
-      </StyledDiv>
-    );
-  }
-);
-Pane.displayName = 'Pane';
+  const minStyle = useMemo(
+    () => (split === 'vertical' ? { minWidth: minSize } : { minHeight: minSize }),
+    [minSize, split]
+  );
+  const collapseOverlayStyle = isCollapsed ? { ...collapseOverlayCss, ...minStyle } : minStyle;
+  return (
+    <StyledDiv
+      isVertical={split === 'vertical'}
+      className={classes}
+      ref={forwardRef}
+      style={{ flexBasis: size }}
+      shouldAnimate={timeout !== 0 && shouldAnimate}
+      timeout={timeout}
+    >
+      <CollapseOverlay style={collapseOverlayStyle}>{children}</CollapseOverlay>
+    </StyledDiv>
+  );
+};
+
+UnMemoizedPane.displayName = 'Pane';
+export const Pane = React.memo(UnMemoizedPane);

@@ -29,7 +29,12 @@ export function useRecalculateSizes({
           return collapsedSize;
         }
         if (collapsedIndices.includes(idx - 1)) {
-          return size + curSizes[idx - 1] - collapsedSize;
+          const totalPrevSizeToAdd = addArray(
+            collapsedIndices
+              .filter((_collapsedIdx, index) => index <= idx)
+              .map((_i, index) => initialRatioSizes[index] - collapsedSize)
+          );
+          return size + totalPrevSizeToAdd;
         }
         return size;
       });
