@@ -11,6 +11,19 @@
     "dist",
     "src"
   ],
+  "keywords": [
+    "react",
+    "split",
+    "pane",
+    "layout",
+    "collapse",
+    "typescript",
+    "splitter",
+    "splittable",
+    "collapsable",
+    "panel",
+    "component"
+  ],
   "engines": {
     "node": ">=10"
   },
