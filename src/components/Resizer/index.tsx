@@ -103,7 +103,7 @@ export const Resizer = ({
     [collapseOptions]
   );
   const collapseButton = collapseOptions ? (
-    <ButtonContainer isVertical={isVertical} grabberSize={grabberSizeWithUnit} isLtr={isLtr}>
+    <ButtonContainer $isVertical={isVertical} grabberSize={grabberSizeWithUnit} isLtr={isLtr}>
       <ButtonPositionOffset style={{ flexBasis: preButtonFlex }} />
       <Transition
         in={isHovered}
@@ -111,7 +111,7 @@ export const Resizer = ({
         style={{ flex: '0 0 0', position: 'relative' }}
       >
         <ButtonWrapper
-          isVertical={isVertical}
+          $isVertical={isVertical}
           onClick={handleButtonClick}
           onMouseDown={handleButtonMousedown}
         >
@@ -125,7 +125,8 @@ export const Resizer = ({
   return (
     <div style={{ position: 'relative' }}>
       <ResizeGrabber
-        isVertical={isVertical}
+        $isVertical={isVertical}
+        $isCollapsed={isCollapsed}
         style={getWidthOrHeight(grabberSize)}
         role="presentation"
         className={classes}
@@ -137,11 +138,11 @@ export const Resizer = ({
         {collapseButton}
       </ResizeGrabber>
       <Fade in={!isHovered}>
-        <ResizePresentation isVertical={isVertical} style={{ ...getWidthOrHeight(1), ...css }} />
+        <ResizePresentation $isVertical={isVertical} style={{ ...getWidthOrHeight(1), ...css }} />
       </Fade>
       <Fade in={isHovered}>
         <ResizePresentation
-          isVertical={isVertical}
+          $isVertical={isVertical}
           style={{ ...getWidthOrHeight(1), ...hoverCss }}
         />
       </Fade>
