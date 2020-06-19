@@ -1,0 +1,29 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "b-zurg",
+      "name": "Buzurg Arjmandi",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/57298613?v=4",
+      "profile": "https://github.com/b-zurg",
+      "contributions": [
+        "test",
+        "doc",
+        "code",
+        "design",
+        "example",
+        "platform"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "react-collapse-pane",
+  "projectOwner": "b-zurg",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
