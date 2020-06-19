@@ -33,7 +33,6 @@ export function useRecalculateSizes({
         }
         return size;
       });
-      console.log('adjusted', adjustedSizes);
       curSizes.forEach((_size, idx) => {
         const offset = curSizes[idx] - getMinSize(idx, originalMinSizes);
         // if offset is negative this means the min size is greater and we need to move this guy
