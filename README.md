@@ -26,6 +26,9 @@ This is intended to be **the** simple, reliable, configurable, and elegant solut
   <a href="https://react-collapse-pane.zurg.dev/?path=/story/*">
     <img alt="storybook" src="https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg">
   </a>
+  <a href="https://opensource.org/licenses/MIT">
+    <img alt="storybook" src="https://img.shields.io/badge/License-MIT-yellow.svg">
+  </a>
 </p>
 
 
