@@ -2,7 +2,7 @@ import * as React from 'react';
 import { SplitType } from './SplitPane';
 import styled, { css } from 'styled-components';
 import { useMergeClasses } from '../hooks/useMergeClasses';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 const DEFAULT_COLLAPSE_TRANSITION_TIMEOUT = 500;
 const verticalCss = css`
@@ -62,10 +62,17 @@ export const Pane = React.memo(
       transitionTimeout,
     ]);
     const [shouldAnimate, setShouldAnimate] = useState<boolean>(false);
+
+    const didMount = useRef(false);
+
     useEffect(() => {
-      if (timeout !== 0) {
-        setShouldAnimate(true);
-        setTimeout(() => setShouldAnimate(false), 500);
+      if (didMount.current) {
+        if (timeout !== 0) {
+          setShouldAnimate(true);
+          setTimeout(() => setShouldAnimate(false), 500);
+        }
+      } else {
+        didMount.current = true;
       }
     }, [setShouldAnimate, collapsedIndices, timeout]);
 
