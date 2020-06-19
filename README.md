@@ -20,6 +20,9 @@ This is intended to be **the** simple, reliable, configurable, and elegant solut
   <a href="https://www.npmjs.com/package/react-collapse-pane/v/next">
     <img alt="npm next version" src="https://img.shields.io/npm/v/react-collapse-pane/next.svg">
   </a>
+  <a href="https://www.npmjs.com/package/react-collapse-pane/v/latest">
+    <img alt="npm downloads" src="https://img.shields.io/npm/dw/react-collapse-pane">
+  </a>
 </p>
 
 
