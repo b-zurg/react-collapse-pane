@@ -94,6 +94,7 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
     isLtr,
     collapsedSize,
     collapsedIndices,
+    isReversed,
   });
   const getCurrentPaneSizes = useGetCurrentPaneSizes({ childPanes, split });
   const handleDragFinished = useHandleDragFinished({ getMovedSizes, children, hooks, setSizes });
