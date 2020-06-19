@@ -15,6 +15,7 @@ import { useUpdateCollapsedSizes } from './callbacks/useUpdateCollapsedSizes';
 import { useCollapsedSize } from './memos/useCollapsedSize';
 import { debounce } from '../helpers';
 import { useRecalculateSizes } from './callbacks/useRecalculateSizes';
+import { useEventListener } from '../../../hooks/useEventListener';
 
 export interface ResizeState {
   index: number;
@@ -156,7 +157,8 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
   // recalculate initial sizes on window size change to maintain min sizes
 
   const resetSizes = useMemo(() => debounce(() => recalculateSizes(), 50), [recalculateSizes]);
-  window.addEventListener('resize', () => resetSizes());
+  // window.addEventListener('resize', () => resetSizes());
+  useEventListener('resize', resetSizes);
   useEffect(
     () => recalculateSizes(initialSizes),
     // eslint-disable-next-line react-hooks/exhaustive-deps
