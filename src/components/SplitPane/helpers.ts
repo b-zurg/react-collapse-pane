@@ -103,6 +103,8 @@ export const convertCollapseSizesToIndices = (sizes?: Nullable<number>[]) =>
   sizes?.reduce((prev, cur, idx) => (cur !== null ? [...prev, idx] : [...prev]), [] as number[]) ??
   [];
 
+export const addArray = (arr: number[]) => arr.reduce((prev, cur) => prev + cur, 0);
+
 export const debounce = (callback: (...args: any[]) => void, wait = 250) => {
   let timer: any;
   return (...args: any[]) => {

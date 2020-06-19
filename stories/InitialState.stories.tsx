@@ -51,4 +51,13 @@ storiesOf('Initial States', module)
       </VerticalSplitPane>
     );
   })
+  .add('Initial Sizes as Flex-Basis proportions', () => {
+    return (
+      <SplitPane split="vertical" initialSizes={[1, 2, 1]}>
+        <div>This is a div</div>
+        <div>This is a second div</div>
+        <div>This is a third div</div>
+      </SplitPane>
+    );
+  })
   .addDecorator(withKnobs);
