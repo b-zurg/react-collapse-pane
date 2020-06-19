@@ -7,7 +7,6 @@ import { select, withKnobs, object, number } from '@storybook/addon-knobs';
 
 configureActions({
   depth: 5,
-  // Limit the number of items logged into the actions panel
   limit: 5,
 });
 const Button = styled.div`
@@ -24,6 +23,11 @@ const Button = styled.div`
 
 storiesOf('Collapsable Panes', module)
   .add('Vertical Split', () => {
+    const buttonPositionOffset = number('Button Position Offset', 0, {
+      min: -200,
+      max: 200,
+      range: true,
+    });
     const collapseDirection = select('Direction', { left: 'left', right: 'right' }, 'left');
     const resizerCss = object('Resizer CSS', {
       width: '1px',
@@ -39,7 +43,7 @@ storiesOf('Collapsable Panes', module)
       backgroundRepeat: 'no-repeat',
       borderRight: '1px solid rgba(0, 0, 0, 0.1)',
     });
-    const minSizes = object('minimum sizes', [300, 50, 50, 50]);
+    const minSizes = object('Minimum Sizes', [300, 50, 50, 50]);
     const collapseTransition = number('Collapse Transition Speed (ms)', 500);
 
     return (
@@ -51,6 +55,7 @@ storiesOf('Collapsable Panes', module)
           collapsedSize: 40,
           collapseTransitionTimeout: collapseTransition,
           collapseDirection,
+          buttonPositionOffset,
         }}
         minSizes={minSizes}
         resizerOptions={{

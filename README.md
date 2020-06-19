@@ -17,11 +17,16 @@ npm i --save-dev react-collapse-pane
 yarn add --dev react-collapse-pane
 ```
 
-Once installed you can import the `SplitPane` component in your code.  If you're using Typescript the `SplitPaneProps` type is also available.
+Once installed you can import the `SplitPane` component in your code.
+
 ```ts
-import { SplitPane, SplitPaneProps } from "react-collapse-pane";
+import { SplitPane } from "react-collapse-pane";
 ```
 
+If you're using Typescript the `SplitPaneProps`, as well as a few other helper types type is also available.
+```ts
+import { SplitPane, SplitPaneProps, ResizerOptions, CollapseOptions, SplitPaneHooks } from "react-collapse-pane";
+```
 # Usage 🛠
 
 ## The Basics ⚙
@@ -86,6 +91,7 @@ It's a common UX need to want to collapse the left or initial panel to give more
 * `overlayCss` - the css applied to a div positioned on top of the content.
 * `buttonTransition` - the animation applied to the button appear/disappear.  Possible options are `zoom`, `grow`, or `fade`
 * `buttonTransitionTimeout` - the time (in millisecons) that the animation for the appear/disappear of the button will take place
+* `buttonPositionOffset` - a positive or negative number that will either add or subtract the flex-basis (starting at 100) of an invisible div before or after the button. e.g. 50 would make the "before" 150 and the "after" 50
 * `collapseSize` - the size of the collapsed panel after it has been collapsed
 * `collapseTransitionTimeout` - the duration within the collapse animation will take place
 
@@ -99,6 +105,7 @@ Here's an example using a `Button` element imported from elsewhere.
     afterToggleButton: <Button>➡</Button>,
     overlayCss: { backgroundColor: "black" },
     buttonTransition: "zoom",
+    buttonPositionOffset: -20,
     collapsedSize: 50,
     collapseTransitionTimeout: 350,
   }}
@@ -163,4 +170,4 @@ e.g.
 
 This project did not start off from scratch.  The foundation of the project was the excellently written [react-multi-split-pane](https://github.com/neoraider/react-multi-split-pane) library which is itself a typescript rewrite of the [react-split-pane](https://github.com/tomkp/react-split-pane) library.  
 
-Much gratitude to their authors, @NeoRaider and @tomkp 
+Much gratitude to their authors, [@NeoRaider](https://github.com/NeoRaider) and [@tomkp](https://github.com/tomkp) 

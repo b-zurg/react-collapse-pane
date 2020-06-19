@@ -1,7 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { SplitType } from '.';
-import { CollapseOptions } from '../Resizer';
+import { CollapseOptions, SplitType } from '.';
 
 export const DEFAULT_MIN_SIZE = 50;
 

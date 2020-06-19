@@ -1,7 +1,4 @@
 import styled, { css } from 'styled-components';
-import { Fade, Grow, Zoom } from '@material-ui/core';
-import { TransitionType } from '.';
-import { CollapseOptions } from './index';
 
 type OrientationProps = {
   isVertical: boolean;
@@ -37,6 +34,7 @@ export const ButtonContainer = styled.div<ButtonContainerProps>`
           props.grabberSize ? `translateY(calc(${props.grabberSize} / 2))` : ''
         }`};
   display: flex;
+  flex-direction: column;
   align-items: center;
   overflow: hidden;
   z-index: 3;
@@ -56,18 +54,6 @@ export const ResizePresentation = styled.div<{ isVertical: boolean }>`
   position: absolute;
   ${props => (props.isVertical ? topBottomCss : leftRightCss)}
 `;
-
-type TransitionComponent = typeof Fade | typeof Grow | typeof Zoom;
-const transitionComponentMap: {
-  [key in TransitionType]: TransitionComponent;
-} = {
-  fade: Fade,
-  grow: Grow,
-  zoom: Zoom,
-};
-
-export const getTransition = (details: CollapseOptions | undefined): TransitionComponent =>
-  transitionComponentMap[details?.buttonTransition ?? 'fade'];
 
 export const getSizeWithUnit = (size: string | number): string =>
   isNaN(size as number) ? size.toString() : `${size}px`;
