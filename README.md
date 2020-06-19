@@ -14,10 +14,10 @@ This is intended to be **the** simple, reliable, configurable, and elegant solut
   <a href="https://github.com/semantic-release/semantic-release">
     <img alt="semantic-release" src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg">
   </a>
-  <a href="https://www.npmjs.com/package/semantic-release">
+  <a href="https://www.npmjs.com/package/react-collapse-pane/v/latest">
     <img alt="npm latest version" src="https://img.shields.io/npm/v/react-collapse-pane/latest.svg">
   </a>
-  <a href="https://www.npmjs.com/package/semantic-release">
+  <a href="https://www.npmjs.com/package/react-collapse-pane/v/next">
     <img alt="npm next version" src="https://img.shields.io/npm/v/react-collapse-pane/next.svg">
   </a>
 </p>
