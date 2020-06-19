@@ -1,4 +1,7 @@
 # react-collapse-pane
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 This is intended to be **the** simple, reliable, configurable, and elegant solution to having collapsible panes in your react application. 
 
@@ -171,3 +174,22 @@ e.g.
 This project did not start off from scratch.  The foundation of the project was the excellently written [react-multi-split-pane](https://github.com/neoraider/react-multi-split-pane) library which is itself a typescript rewrite of the [react-split-pane](https://github.com/tomkp/react-split-pane) library.  
 
 Much gratitude to their authors, [@NeoRaider](https://github.com/NeoRaider) and [@tomkp](https://github.com/tomkp) 
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/b-zurg"><img src="https://avatars3.githubusercontent.com/u/57298613?v=4" width="100px;" alt=""/><br /><sub><b>Buzurg Arjmandi</b></sub></a><br /><a href="https://github.com/b-zurg/react-collapse-pane/commits?author=b-zurg" title="Tests">⚠️</a> <a href="https://github.com/b-zurg/react-collapse-pane/commits?author=b-zurg" title="Documentation">📖</a> <a href="https://github.com/b-zurg/react-collapse-pane/commits?author=b-zurg" title="Code">💻</a> <a href="#design-b-zurg" title="Design">🎨</a> <a href="#example-b-zurg" title="Examples">💡</a> <a href="#platform-b-zurg" title="Packaging/porting to new platform">📦</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
