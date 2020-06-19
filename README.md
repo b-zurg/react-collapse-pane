@@ -1,13 +1,27 @@
 # react-collapse-pane
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 This is intended to be **the** simple, reliable, configurable, and elegant solution to having collapsible panes in your React application. 
 
-
-
 <a href="https://react-collapse-pane.zurg.dev" target="_blank"><img src="logo.svg" alt="logo" style="width:100%"/></a>
+<p align="center">
+  <img alt="Release" src="https://github.com/b-zurg/react-collapse-pane/workflows/Release/badge.svg?branch=master">
+  <a href="#contributors">
+    <img alt="All Contributors" src="https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square">
+  </a>
+  <a href="https://github.com/prettier/prettier">
+    <img alt="styled with prettier" src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg">
+  </a>
+  <a href="https://github.com/semantic-release/semantic-release">
+    <img alt="semantic-release" src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg">
+  </a>
+  <a href="https://www.npmjs.com/package/semantic-release">
+    <img alt="npm latest version" src="https://img.shields.io/npm/v/react-collapse-pane/latest.svg">
+  </a>
+  <a href="https://www.npmjs.com/package/semantic-release">
+    <img alt="npm next version" src="https://img.shields.io/npm/v/react-collapse-pane/next.svg">
+  </a>
+</p>
+
 
 
 # Getting Started :rocket:
