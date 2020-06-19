@@ -3,7 +3,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-This is intended to be **the** simple, reliable, configurable, and elegant solution to having collapsible panes in your react application. 
+This is intended to be **the** simple, reliable, configurable, and elegant solution to having collapsible panes in your React application. 
 
 
 
@@ -46,19 +46,21 @@ Here's a basic example:
 </SplitPane>
 ```
 
-This will split the children.  The children can be any valid react child.  If a child is `null` it will be excluded from being split or displayed.
+This will split the children.  The children can be any valid React child.  If a child is `null` it will be excluded from being split or displayed.
 
-Notice that there is no limit to the number of divs you have inside here.  The library will split them all accordingly.
+**Note!** :eyes: There is no limit to the number of divs you have as children.  The `SplitPane` will split them all accordingly.
 
 ## Styling the Resizer 💅
 
-By default there is a 1px divider that starts out `silver` and transitions to `dimgrey` ([css colors](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value)) on hover.
+By default there is a 1px divider that starts out `rgba(120, 120, 120, 0.3)` and transitions to `rgba(120, 120, 120, 0.6)` on hover. Having a grey color with an alpha value means that it will look nice on both light and dark backgrounds.
 
-However this is easily replaceable by using the `css` and `hoverCss` options.  You do not have to worry about pseudo selectors, transitions, animations or anything.  You just have to indicate what the divider should look like **before** and **after**. This is accomplished by having two separate divs, one of which fades out and the other which fades in.
+This is easily replaceable with the `css` and `hoverCss` options.  No need to worry about pseudo selectors, transitions, animations or anything.  You just have to indicate what the divider should look like **before** and **after**. This is accomplished by having two separate divs, one of which fades out and the other which fades in.
 
-The sizer also has a grabbable surface that spans the length of the split and has a default grabbable surface of `1rem`. Thsiis changeable by the `grabberSize` option which can be set to any valid CSS size value for `width` or `height`.  
+**Note** 🚨 The css props must be valid `React.CSSProperties` objects.
 
-**Note!** 🚨  As per default react CSS, a number will be interpreted as a `px` value.
+The sizer also has a grabbable surface that spans the height (or length) of the split and has a default grabbable surface of `1rem`. This is changeable by the `grabberSize` option which can be set to any valid CSS size value for `width` or `height`.  
+
+**Note!** :eyes: As per default React CSS, a number will be interpreted as a `px` value.
 
 
 Here's an example:
@@ -83,20 +85,22 @@ Here's an example:
 </SplitPane>
 ```
 
-**Note** the css props must be valid `React.CSSProperties` objects.
 
 ## Using a Collapse Button 🤹‍♀️
 
+This is the killer feature of this library :eyes:
+
 It's a common UX need to want to collapse the left or initial panel to give more room for another part of a site or app. This is easily accomplished by including several `CollapseOptions` as a prop to the `SplitPane`.
 
-* `beforeToggleButton` - the element displayed as the collapse button **before** the panel is collapsed.  This is a purely aesthetic component.
-* `afterToggleButton` - the element displayed as the collapse button **after** the panel is collapsed.  This is a purely aesthetic component.
-* `overlayCss` - the css applied to a div positioned on top of the content.
+* `beforeToggleButton` - the element displayed as the collapse button **before** the panel is collapsed.  This is an purely aesthetic component.
+* `afterToggleButton` - the element displayed as the collapse button **after** the panel is collapsed.  This is an purely aesthetic component.
 * `buttonTransition` - the animation applied to the button appear/disappear.  Possible options are `zoom`, `grow`, or `fade`
 * `buttonTransitionTimeout` - the time (in millisecons) that the animation for the appear/disappear of the button will take place
 * `buttonPositionOffset` - a positive or negative number that will either add or subtract the flex-basis (starting at 100) of an invisible div before or after the button. e.g. 50 would make the "before" 150 and the "after" 50
+* `collapseDirection` - `'left' | 'right' | 'up' | 'down'` - this is used to indicate the direction that it should collapse.  By default collapsing happens left and up for the vertical and horizontal splits respectively.  Valid values for a vertical split are `left` or `right` and valid values for a horizontal split are `up` or `down`
 * `collapseSize` - the size of the collapsed panel after it has been collapsed
 * `collapseTransitionTimeout` - the duration within the collapse animation will take place
+* `overlayCss` - the css applied to a div positioned on top of the content.
 
 Here's an example using a `Button` element imported from elsewhere. 
 
@@ -120,6 +124,9 @@ Here's an example using a `Button` element imported from elsewhere.
 </SplitPane>
 ```
 
+**Note!** :eyes: When collapsing a panel, the `minSize` value is used to freeze the width of the collapsed panel to its minimum size and hides the rest of the content.  This allows for a smooth collapse animation and is something to keep in mind. Until the animation reaches the min size it will shrink the panel as normal. Try it out for yourself!
+
+
 ## Hooks and Saving State 🌩
 
 The component manages its own state while resizing however also allows an initial state as well as callbacks to save state changes.
@@ -128,7 +135,7 @@ These callbacks are in the `hooks` prop:
 ```ts
 onDragStarted?: () => void;
 onChange?: (sizes: number[]) => void;
-onDragFinished?: (sizes: number[]) => void;
+onSaveSizes?: (sizes: number[]) => void;
 onCollapse?: (collapsedSizes: Nullable<number>[]) => void;
 ```
 * `onDragStarted` fires as soon as you click down on a resizer and begin moving
@@ -143,14 +150,16 @@ initialSizes?: number[];
 minSizes?: number | number[];
 collapsedSizes?: Nullable<number>[];
 ```
-* `initialSizes` is the default flex-basis that's given to the panes
+* `initialSizes` is the default flex-basis that's given to the panes.  This can be a simple ratio if it's the first time the render will happen and there's no saved sizes.  e.g.  `[1, 2, 1]` would make the second panel twice as big as its siblings.  If you're saving state this should be the saved size value on a second render.
 * `minSizes` is either (1) a minimum size that's given to **all** the panes, or (2) an array of minimum sizes that's given to each pane in order.  Any missing sizes in the array will be assumed default.
 * `collapsedSizes` an array of nullable numbers. This keeps track of a pane's size before it was collapsed.  If not collapsed it's null. This will determine which panels are collapsed and what to do when they're uncollapsed.
+
+Typically if this is a controlled component you would have state variables for `initialSizes` and `collapsedSizes` and have callbacks on `onSaveSizes` and `onCollapse` that would save the two data points and pass them back into the `SplitPane` on a remount. The `minSizes` would typically never change.
 
 
 ## RTL Support ( Arabic, Hebrew, Farsi ) 🕋
 
-This library easily supports LTR languages by providing a `direction` prop.  This is only necessary if you're using RTL. 
+This library easily supports RTL languages by providing a `direction` prop.  This is only necessary if you're using RTL and can be left out.
 
 **Note!** 🚨 the `direction` is _only_ applicable if the split is `vertical` 
 

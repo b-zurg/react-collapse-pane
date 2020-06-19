@@ -14,14 +14,13 @@ import styled from 'styled-components';
 import { useTransition } from './hooks/useTransition';
 
 const ButtonPositionOffset = styled.div`
-  flex-grow: 1;
-  flex-shrink: 1;
+  flex: 1 1 auto;
 `;
 
 const defaultResizerOptions: Required<ResizerOptions> = {
   grabberSize: '1rem',
-  css: { backgroundColor: 'silver' },
-  hoverCss: { backgroundColor: 'grey' },
+  css: { backgroundColor: 'rgba(120, 120, 120, 0.3)' },
+  hoverCss: { backgroundColor: 'rgba(120, 120, 120, 0.6)' },
 };
 
 export interface ResizerProps {

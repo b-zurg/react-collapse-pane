@@ -158,7 +158,7 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
   const resetSizes = useMemo(() => debounce(() => recalculateSizes(), 50), [recalculateSizes]);
   window.addEventListener('resize', () => resetSizes());
   useEffect(
-    () => recalculateSizes(),
+    () => recalculateSizes(initialSizes),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
