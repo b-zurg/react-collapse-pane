@@ -89,6 +89,43 @@ export const moveSizes = ({
   return offset;
 };
 
+export const moveCollapsedSiblings = ({
+  offset,
+  isReversed,
+  collapsedIndices,
+  minSizes,
+  sizes,
+  index,
+  collapsedSize,
+}: {
+  offset: number;
+  isReversed: boolean;
+  index: number;
+  sizes: number[];
+  collapsedIndices: number[];
+  minSizes: number[];
+  collapsedSize: number;
+}) => {
+  if (isReversed ? offset > 0 : offset < 0) {
+    for (
+      let i = isReversed ? index : index + 1;
+      isReversed ? i > 0 : i < sizes.length - 1;
+      isReversed ? i-- : i++
+    ) {
+      if (collapsedIndices.includes(i)) {
+        moveSizes({
+          sizes,
+          index: isReversed ? i - 1 : i,
+          offset,
+          minSizes,
+          collapsedIndices,
+          collapsedSize,
+        });
+      }
+    }
+  }
+};
+
 export const isCollapseDirectionReversed = (
   collapseOptions: CollapseOptions | undefined
 ): boolean =>

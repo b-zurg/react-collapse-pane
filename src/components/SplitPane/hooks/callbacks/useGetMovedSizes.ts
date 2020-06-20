@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { DragState } from '../effects/useDragState';
-import { moveSizes } from '../../helpers';
+import { moveCollapsedSiblings, moveSizes } from '../../helpers';
 import { ResizeState } from '../useSplitPaneResize';
 
 export function useGetMovedSizes({
@@ -25,32 +25,22 @@ export function useGetMovedSizes({
       const index = dragState.extraState.index;
       const offset = isLtr ? dragState.offset : -dragState.offset;
       moveSizes({
-        sizes: sizes,
+        sizes,
         index,
         offset,
         minSizes,
         collapsedIndices,
         collapsedSize,
       });
-      // must move all previously collapsed panes as well, slightly different to what happens when collapsing, though mostly identical
-      if (isReversed ? offset > 0 : offset < 0) {
-        for (
-          let i = isReversed ? index : index + 1;
-          isReversed ? i > 0 : i < sizes.length - 1;
-          isReversed ? i-- : i++
-        ) {
-          if (collapsedIndices.includes(i)) {
-            moveSizes({
-              sizes,
-              index: isReversed ? i - 1 : i,
-              offset,
-              minSizes,
-              collapsedIndices,
-              collapsedSize,
-            });
-          }
-        }
-      }
+      moveCollapsedSiblings({
+        collapsedSize,
+        sizes,
+        minSizes,
+        collapsedIndices,
+        isReversed,
+        index,
+        offset,
+      });
 
       return sizes;
     },
