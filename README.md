@@ -1,9 +1,12 @@
 # react-collapse-pane
 
-This is intended to be **the** simple, reliable, configurable, and elegant solution to having collapsible panes in your React application. 
+This is intended to be **the** simple, reliable, configurable, and elegant solution to having splittable, draggable and collapsible panes in your React application. 
 
 <a href="https://react-collapse-pane.zurg.dev" target="_blank"><img src="logo.svg" alt="logo" style="width:100%"/></a>
 <p align="center">
+  <a href="https://github.com/b-zurg/react-collapse-pane/pulls">
+    <img alt="prs welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg">
+  </a>
   <img alt="Release" src="https://github.com/b-zurg/react-collapse-pane/workflows/Release/badge.svg?branch=master">
   <a href="#contributors">
     <img alt="All Contributors" src="https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square">
@@ -29,9 +32,10 @@ This is intended to be **the** simple, reliable, configurable, and elegant solut
   <a href="https://opensource.org/licenses/MIT">
     <img alt="storybook" src="https://img.shields.io/badge/License-MIT-yellow.svg">
   </a>
+
 </p>
 
-
+## [[click for storybook demo]](https://react-collapse-pane.zurg.dev/)
 
 # Getting Started :rocket:
 
@@ -53,9 +57,9 @@ If you're using Typescript the `SplitPaneProps`, as well as a few other helper t
 ```ts
 import { SplitPane, SplitPaneProps, ResizerOptions, CollapseOptions, SplitPaneHooks } from "react-collapse-pane";
 ```
-# Usage 🛠
+# Usage 🗻
 
-## The Basics ⚙
+## The Basics 📘
 
 The only component you must interact with is `SplitPane`.  This serves as a wrapper for the children you wish to layout in a panel form.
 
@@ -150,7 +154,7 @@ Here's an example using a `Button` element imported from elsewhere.
 **Note!** :eyes: When collapsing a panel, the `minSize` value is used to freeze the width of the collapsed panel to its minimum size and hides the rest of the content.  This allows for a smooth collapse animation and is something to keep in mind. Until the animation reaches the min size it will shrink the panel as normal. Try it out for yourself!
 
 
-## Hooks and Saving State 🌩
+## Hooks and Saving State ⚡
 
 The component manages its own state while resizing however also allows an initial state as well as callbacks to save state changes.
 
@@ -200,6 +204,14 @@ e.g.
         </SplitPane>
       </div>
 ```
+
+# Contributing and PRs 💖
+
+If you would like to contribute please check out the [contributor guide](/CONTRIBUTING.md)
+
+All contributions are welcome! All issues and feature requests are welcome!
+
+
 
 # Credit and Attribution 🙏
 

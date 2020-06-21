@@ -1,22 +1,20 @@
 # Thanks!
 
-It's great that you want to contribute to this lib and make things better.
+It's great that you want to contribute to this library and make things better.
 
 Below you'll find a general outline of how to use TSDX, which handles the boilerplate around managing a react component lib.
 
-# TSDX React User Guide
+# Developer User Guide
 
-Congrats! You just saved yourself hours of work by bootstrapping this project with TSDX. Let’s get you oriented with what’s here and how to use it.
-
-> This TSDX setup is meant for developing React components (not apps!) that can be published to NPM. If you’re looking to build an app, you should use `create-react-app`, `razzle`, `nextjs`, `gatsby`, or `react-static`.
+Let’s get you oriented with what’s here and how to use it.
 
 > If you’re new to TypeScript and React, checkout [this handy cheatsheet](https://github.com/sw-yx/react-typescript-cheatsheet/)
 
 ## Commands
 
-TSDX scaffolds your new library inside `/src`, and also sets up a [Parcel-based](https://parceljs.org) playground for it inside `/example`.
+[TSDX](https://github.com/jaredpalmer/tsdx) scaffolds the library inside `/src`, and also sets up a [Parcel-based](https://parceljs.org) playground for it inside `/example`.
 
-The recommended workflow is to run TSDX in one terminal:
+The recommended workflow is to run [TSDX](https://github.com/jaredpalmer/tsdx) in one terminal:
 
 ```
 npm start # or yarn start
@@ -26,7 +24,7 @@ This builds to `/dist` and runs the project in watch mode so any edits you save 
 
 Then run either example playground or storybook:
 
-### Storybook
+### [Storybook](https://storybook.js.org/)
 
 Run inside another terminal:
 
@@ -58,33 +56,32 @@ To run tests, use `npm test` or `yarn test`.
 
 Code quality is [set up for you](https://github.com/palmerhq/tsdx/pull/45/files) with `prettier`, `husky`, and `lint-staged`. Adjust the respective fields in `package.json` accordingly.
 
-### Jest
+### [Jest](https://jestjs.io/) Testing
 
 Jest tests are set up to run with `npm test` or `yarn test`. This runs the test watcher (Jest) in an interactive mode. By default, runs tests related to files changed since the last commit.
 
-#### Setup Files
+### Setup Files
 
 This is the folder structure we set up for you:
 
 ```
 /example
   index.html
-  index.tsx       # test your component here in a demo app
+  index.tsx            # test the component here in a demo app
   package.json
   tsconfig.json
 /src
-  index.tsx       # EDIT THIS
+  components/           # the source files for the SplitPane and supporting components
+  hooks/                # hooks used across components
+  types/                # global and other general type definitions
+  index.tsx             # the export point for the SplitPane component
 /test
-  blah.test.tsx   # EDIT THIS
+  splitpane.test.tsx    # High level tests for the exported copmonent
 .gitignore
 package.json
-README.md         # EDIT THIS
+README.md 
 tsconfig.json
 ```
-
-#### React Testing Library
-
-We do not set up `react-testing-library` for you yet, we welcome contributions and documentation on this.
 
 ### Rollup
 
@@ -96,13 +93,15 @@ TSDX uses [Rollup v1.x](https://rollupjs.org) as a bundler and generates multipl
 
 ## Continuous Integration
 
-### Travis
+### Github Actions
+A github actions workflow is set up to automatically release changes based on [semantic-release](https://github.com/semantic-release/semantic-release). This is only something to note, but releases and publishes to npm are fully automated based on commmit messages.
 
-_to be completed_
+### Conventional Commits
 
-### Circle
+This repo follows the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) specification.
 
-_to be completed_
+Please use it in your commit messages.
+
 
 ## Optimizations
 
@@ -136,35 +135,10 @@ npm start # or yarn start
 
 The default example imports and live reloads whatever is in `/dist`, so if you are seeing an out of date component, make sure TSDX is running in watch mode like we recommend above. **No symlinking required**!
 
-## Deploying the Playground
-
-The Playground is just a simple [Parcel](https://parceljs.org) app, you can deploy it anywhere you would normally deploy that. Here are some guidelines for **manually** deploying with the Netlify CLI (`npm i -g netlify-cli`):
-
-```bash
-cd example # if not already in the example folder
-npm run build # builds to dist
-netlify deploy # deploy the dist folder
-```
-
-Alternatively, if you already have a git repo connected, you can set up continuous deployment with Netlify:
-
-```bash
-netlify init
-# build command: yarn build && cd example && yarn && yarn build
-# directory to deploy: example/dist
-# pick yes for netlify.toml
-```
-
 ## Named Exports
 
-Per Palmer Group guidelines, [always use named exports.](https://github.com/palmerhq/typescript#exports) Code split inside your React app instead of your React library.
+[always use named exports.](https://github.com/palmerhq/typescript#exports) Code split inside your React app instead of your React library.
 
 ## Including Styles
 
-There are many ways to ship styles, including with CSS-in-JS. TSDX has no opinion on this, configure how you like.
-
-For vanilla CSS, you can include it at the root directory and add it to the `files` section in your `package.json`, so that it can be imported separately by your users and run through their bundler's loader.
-
-## Publishing to NPM
-
-We recommend using https://github.com/sindresorhus/np.
+For styling the components we're using a mixture of react's inline styles (for rapidly changing styles) and [styled-components](https://styled-components.com/)
