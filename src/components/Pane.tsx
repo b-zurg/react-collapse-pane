@@ -30,7 +30,6 @@ const CollapseOverlay = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
-  user-select: none;
 `;
 export interface PaneProps {
   size: number;
@@ -79,7 +78,10 @@ const UnMemoizedPane = ({
     () => (split === 'vertical' ? { minWidth: minSize } : { minHeight: minSize }),
     [minSize, split]
   );
-  const collapseOverlayStyle = isCollapsed ? { ...collapseOverlayCss, ...minStyle } : minStyle;
+  const userSelect: React.CSSProperties = { userSelect: 'none' };
+  const collapseOverlayStyle: React.CSSProperties = isCollapsed
+    ? { ...collapseOverlayCss, ...minStyle, ...userSelect }
+    : minStyle;
   return (
     <StyledDiv
       isVertical={split === 'vertical'}
