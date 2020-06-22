@@ -3,15 +3,15 @@
 This is intended to be **the** simple, reliable, configurable, and elegant solution to having splittable, draggable and collapsible panes in your React application. 
 
 
-## [[click for storybook demo]](https://react-collapse-pane.zurg.dev/)
+## [[click for storybook demo]](https://storybook.collapse-pane.zurg.dev/)
 
-# Getting Started :rocket:
+# Getting Started 🚀
 
 Install react-collapse-pane:
-```bash
+```sh
 npm i --save-dev react-collapse-pane
 ```
-```bash
+```sh
 yarn add --dev react-collapse-pane
 ```
 
@@ -25,7 +25,7 @@ If you're using Typescript the `SplitPaneProps`, as well as a few other helper t
 ```ts
 import { SplitPane, SplitPaneProps, ResizerOptions, CollapseOptions, SplitPaneHooks } from "react-collapse-pane";
 ```
-# Usage 🗻
+# Usage 👓
 
 ## The Basics 📘
 
@@ -45,7 +45,7 @@ Here's a basic example:
 
 This will split the children.  The children can be any valid React child.  If a child is `null` it will be excluded from being split or displayed.
 
-**Note!** :eyes: There is no limit to the number of divs you have as children.  The `SplitPane` will split them all accordingly.
+?> **Note** there is no limit to the number of divs you have as children.  The `SplitPane` will split them all accordingly.
 
 ## Styling the Resizer 💅
 
@@ -53,11 +53,11 @@ By default there is a 1px divider that starts out `rgba(120, 120, 120, 0.3)` and
 
 This is easily replaceable with the `css` and `hoverCss` options.  No need to worry about pseudo selectors, transitions, animations or anything.  You just have to indicate what the divider should look like **before** and **after**. This is accomplished by having two separate divs, one of which fades out and the other which fades in.
 
-**Note** 🚨 The css props must be valid `React.CSSProperties` objects.
+!> **Note!** The css props must be valid `React.CSSProperties` objects.
 
 The sizer also has a grabbable surface that spans the height (or length) of the split and has a default grabbable surface of `1rem`. This is changeable by the `grabberSize` option which can be set to any valid CSS size value for `width` or `height`.  
 
-**Note!** :eyes: As per default React CSS, a number will be interpreted as a `px` value.
+?> As per default React CSS, a number will be interpreted as a `px` value.
 
 
 Here's an example:
@@ -85,7 +85,7 @@ Here's an example:
 
 ## Using a Collapse Button 🤹‍♀️
 
-This is the killer feature of this library :eyes:
+!> This is the killer feature of this library :eyes:
 
 It's a common UX need to want to collapse the left or initial panel to give more room for another part of a site or app. This is easily accomplished by including several `CollapseOptions` as a prop to the `SplitPane`.
 
@@ -121,7 +121,7 @@ Here's an example using a `Button` element imported from elsewhere.
 </SplitPane>
 ```
 
-**Note!** :eyes: When collapsing a panel, the `minSize` value is used to freeze the width of the collapsed panel to its minimum size and hides the rest of the content.  This allows for a smooth collapse animation and is something to keep in mind. Until the animation reaches the min size it will shrink the panel as normal. Try it out for yourself!
+?> **Note!** :eyes: When collapsing a panel, the `minSize` value is used to freeze the width of the collapsed panel to its minimum size and hides the rest of the content.  This allows for a smooth collapse animation and is something to keep in mind. Until the animation reaches the min size it will shrink the panel as normal. Try it out for yourself!
 
 
 ## Hooks and Saving State ⚡
@@ -156,11 +156,10 @@ Typically if this is a controlled component you would have state variables for `
 
 ## RTL Support ( Arabic, Hebrew, Farsi ) 🕋
 
-This library easily supports RTL languages by providing a `direction` prop.  This is only necessary if you're using RTL and can be left out.
+This library easily supports RTL languages by providing a `direction` prop.  This is only necessary if you're using RTL.
 
 **Note!** 🚨 the `direction` is _only_ applicable if the split is `vertical` 
 
-e.g.
 ```tsx
       <div style={{ direction: 'rtl' }}>
         <SplitPane
