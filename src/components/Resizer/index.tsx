@@ -122,8 +122,9 @@ export const Resizer = ({
   ) : null;
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div key="grabber.root" style={{ position: 'relative' }}>
       <ResizeGrabber
+        key="grabber"
         $isVertical={isVertical}
         $isCollapsed={isCollapsed}
         style={getWidthOrHeight(grabberSize)}
@@ -136,10 +137,10 @@ export const Resizer = ({
       >
         {collapseButton}
       </ResizeGrabber>
-      <Fade in={!isHovered}>
+      <Fade key="resize.presentation.fadein" in={!isHovered}>
         <ResizePresentation $isVertical={isVertical} style={{ ...getWidthOrHeight(1), ...css }} />
       </Fade>
-      <Fade in={isHovered}>
+      <Fade key="resize.presentation.fadeout" in={isHovered}>
         <ResizePresentation
           $isVertical={isVertical}
           style={{ ...getWidthOrHeight(1), ...hoverCss }}

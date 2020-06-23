@@ -84,7 +84,7 @@ export const SplitPane = ({ className = '', ...props }: SplitPaneProps) => {
   const entries = childPanes.map((pane, paneIndex) => {
     const resizerPaneIndex = isCollapseReversed ? paneIndex : paneIndex - 1;
     return (
-      <>
+      <React.Fragment key={paneIndex}>
         {paneIndex - 1 >= 0 ? (
           <Resizer
             key={`resizer.${resizerPaneIndex}`}
@@ -113,7 +113,7 @@ export const SplitPane = ({ className = '', ...props }: SplitPaneProps) => {
         >
           {pane.node}
         </Pane>
-      </>
+      </React.Fragment>
     );
   });
 
@@ -124,3 +124,4 @@ export const SplitPane = ({ className = '', ...props }: SplitPaneProps) => {
   );
 };
 SplitPane.displayName = 'SplitPane';
+SplitPane.key = 'SplitPane';
