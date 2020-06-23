@@ -13,7 +13,20 @@ const horizontalCss = css`
   width: 100%;
   height: 0;
 `;
-const StyledDiv = styled.div<{ isVertical: boolean; shouldAnimate: boolean; timeout: number }>`
+const coverCss = css`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+`;
+
+interface PaneRootProps {
+  $isVertical: boolean;
+  $shouldAnimate: boolean;
+  $timeout: number;
+}
+const PaneRoot = styled.div<PaneRootProps>`
   position: relative;
   outline: none;
   border: 0;
@@ -21,16 +34,32 @@ const StyledDiv = styled.div<{ isVertical: boolean; shouldAnimate: boolean; time
   display: flex;
   flex-grow: 1;
   flex-shrink: 1;
-  ${props => (props.isVertical ? verticalCss : horizontalCss)}
-  ${props => props.shouldAnimate && `transition: flex-basis ${props.timeout}ms ease-in-out`}
+  ${props => (props.$isVertical ? verticalCss : horizontalCss)}
+  ${props => props.$shouldAnimate && `transition: flex-basis ${props.$timeout}ms ease-in-out`}
 `;
-const CollapseOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+const WidthPreserver = styled.div<{ $isCollapsed: boolean }>`
+  ${coverCss}
+  ${props =>
+    props.$isCollapsed &&
+    css`
+      * {
+        z-index: 0;
+      }
+      z-index: 0;
+    `}
 `;
+
+const CollapseOverlay = styled.div<{ $timeout: number; $isCollapsed: boolean }>`
+  ${props => props.$isCollapsed && coverCss}
+  ${props =>
+    props.$isCollapsed &&
+    css`
+      z-index: 1;
+    `};
+  opacity: ${props => (props.$isCollapsed ? 1 : 0)};
+  transition: opacity ${props => props.$timeout}ms ease-in-out;
+`;
+
 export interface PaneProps {
   size: number;
   minSize: number;
@@ -59,7 +88,7 @@ const UnMemoizedPane = ({
   const timeout = useMemo(() => transitionTimeout ?? DEFAULT_COLLAPSE_TRANSITION_TIMEOUT, [
     transitionTimeout,
   ]);
-  const [shouldAnimate, setShouldAnimate] = useState<boolean>(false);
+  const [shouldAnimate, setShouldAnimate] = useState(false);
 
   const didMount = useRef(false);
 
@@ -78,21 +107,23 @@ const UnMemoizedPane = ({
     () => (split === 'vertical' ? { minWidth: minSize } : { minHeight: minSize }),
     [minSize, split]
   );
-  const userSelect: React.CSSProperties = { userSelect: 'none' };
-  const collapseOverlayStyle: React.CSSProperties = isCollapsed
-    ? { ...collapseOverlayCss, ...minStyle, ...userSelect }
+  const widthPreserverStyle: React.CSSProperties = isCollapsed
+    ? { ...minStyle, userSelect: 'none' }
     : minStyle;
   return (
-    <StyledDiv
-      isVertical={split === 'vertical'}
+    <PaneRoot
+      $isVertical={split === 'vertical'}
+      $shouldAnimate={timeout !== 0 && shouldAnimate}
+      $timeout={timeout}
       className={classes}
       ref={forwardRef}
       style={{ flexBasis: size }}
-      shouldAnimate={timeout !== 0 && shouldAnimate}
-      timeout={timeout}
     >
-      <CollapseOverlay style={collapseOverlayStyle}>{children}</CollapseOverlay>
-    </StyledDiv>
+      <CollapseOverlay $isCollapsed={isCollapsed} $timeout={timeout} style={collapseOverlayCss} />
+      <WidthPreserver $isCollapsed={isCollapsed} style={widthPreserverStyle}>
+        {children}
+      </WidthPreserver>
+    </PaneRoot>
   );
 };
 

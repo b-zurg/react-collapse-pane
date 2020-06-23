@@ -3,13 +3,15 @@
   "license": "MIT",
   "name": "react-collapse-pane",
   "repository": "https://github.com/b-zurg/react-collapse-pane",
+  "homepage": "https://collapse-pane.zurg.dev",
+  "bugs": "https://github.com/b-zurg/react-collapse-pane/issues",
+  "description": "The splittable, draggable and collapsible react layout library.",
   "author": "Buzurgmehr Arjmandi",
   "module": "dist/react-collapse-pane.esm.js",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "keywords": [
     "react",
