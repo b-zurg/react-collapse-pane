@@ -15,23 +15,23 @@ npm i --save-dev react-collapse-pane
 yarn add --dev react-collapse-pane
 ```
 
-Once installed you can import the `SplitPane` component in your code.
+Once installed you can import the `SplitPane` component.
 
 ```ts
 import { SplitPane } from "react-collapse-pane";
 ```
 
-If you're using Typescript the `SplitPaneProps`, as well as a few other helper types type is also available.
+If you're using Typescript the `SplitPaneProps`, and a few other helper types are also available.
 ```ts
 import { SplitPane, SplitPaneProps, ResizerOptions, CollapseOptions, SplitPaneHooks } from "react-collapse-pane";
 ```
 # Usage 👓
 
-## The Basics 📘
+## The Basics - Laying Things Out 📘
 
-The only component you must interact with is `SplitPane`.  This serves as a wrapper for the children you wish to layout in a panel form.
+The only component you use is `SplitPane`.  This is a wrapper for the children you wish to lay out in a panel form.
 
-All you're required to give is a `split` prop which can be either `"horizontal"` or `"vertical"`.  This identifies what the orientation of the split panel will be.
+There is only 1 required prop, `split`,  which can be either `"horizontal"` or `"vertical"`.  This identifies what the orientation of the split panel will be.
 
 Here's a basic example:
 ```tsx
@@ -43,15 +43,15 @@ Here's a basic example:
 </SplitPane>
 ```
 
-This will split the children.  The children can be any valid React child.  If a child is `null` it will be excluded from being split or displayed.
+?> **Note** There is no limit to the number of divs you have as children.  The `SplitPane` will split them all accordingly.
 
-?> **Note** there is no limit to the number of divs you have as children.  The `SplitPane` will split them all accordingly.
+!>  The children can be any valid React child, but if a child is `null` it will be excluded from being split or displayed. 
 
 ## Styling the Resizer 💅
 
-By default there is a 1px divider that starts out `rgba(120, 120, 120, 0.3)` and transitions to `rgba(120, 120, 120, 0.6)` on hover. Having a grey color with an alpha value means that it will look nice on both light and dark backgrounds.
+By default there is a 1px divider with some basic CSS.
 
-This is easily replaceable with the `css` and `hoverCss` options.  No need to worry about pseudo selectors, transitions, animations or anything.  You just have to indicate what the divider should look like **before** and **after**. This is accomplished by having two separate divs, one of which fades out and the other which fades in.
+This is replaceable with the `css` and `hoverCss` options.  No need to worry about pseudo selectors, transitions, animations or anything.  You just have to indicate what the divider should look like **before** and **after**. This is accomplished by having two separate divs, one of which fades out and the other which fades in.
 
 !> **Note!** The css props must be valid `React.CSSProperties` objects.
 
@@ -87,7 +87,7 @@ Here's an example:
 
 !> This is the killer feature of this library :eyes:
 
-It's a common UX need to want to collapse the left or initial panel to give more room for another part of a site or app. This is easily accomplished by including several `CollapseOptions` as a prop to the `SplitPane`.
+It's a common need to want to collapse the left or initial panel to give more room for another part of a site or app. This is easily accomplished by including several `CollapseOptions` as a prop to the `SplitPane`.
 
 * `beforeToggleButton` - the element displayed as the collapse button **before** the panel is collapsed.  This is an purely aesthetic component.
 * `afterToggleButton` - the element displayed as the collapse button **after** the panel is collapsed.  This is an purely aesthetic component.
@@ -97,7 +97,7 @@ It's a common UX need to want to collapse the left or initial panel to give more
 * `collapseDirection` - `'left' | 'right' | 'up' | 'down'` - this is used to indicate the direction that it should collapse.  By default collapsing happens left and up for the vertical and horizontal splits respectively.  Valid values for a vertical split are `left` or `right` and valid values for a horizontal split are `up` or `down`
 * `collapseSize` - the size of the collapsed panel after it has been collapsed
 * `collapseTransitionTimeout` - the duration within the collapse animation will take place
-* `overlayCss` - the css applied to a div positioned on top of the content.
+* `overlayCss` - the css applied to a div positioned on top of the content.  The overlay div has an initial opacity of zero which transitions to 1 over the course of the collapse.
 
 Here's an example using a `Button` element imported from elsewhere. 
 
@@ -121,7 +121,7 @@ Here's an example using a `Button` element imported from elsewhere.
 </SplitPane>
 ```
 
-?> **Note!** :eyes: When collapsing a panel, the `minSize` value is used to freeze the width of the collapsed panel to its minimum size and hides the rest of the content.  This allows for a smooth collapse animation and is something to keep in mind. Until the animation reaches the min size it will shrink the panel as normal. Try it out for yourself!
+?> **Note!** When collapsing a panel, the `minSize` value is used to freeze the width of the collapsed panel to its minimum size and hides the rest of the content.  This allows for a smooth collapse animation and is something to keep in mind. Until the animation reaches the min size it will shrink the panel as normal. Try it out for yourself!
 
 
 ## Hooks and Saving State ⚡
