@@ -6,7 +6,7 @@
 
 > The splittable, draggable and collapsible react layout library.
 
-- Simple and lightweight (~98kB gzipped)
+- Simple and lightweight (~89kB gzipped)
 - Minimal Dependencies
 - Easy styling and configuration
 

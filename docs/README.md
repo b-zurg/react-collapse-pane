@@ -45,7 +45,9 @@ Here's a basic example:
 
 ?> **Note** There is no limit to the number of divs you have as children.  The `SplitPane` will split them all accordingly.
 
-!>  The children can be any valid React child, but if a child is `null` it will be excluded from being split or displayed. 
+!> The children can be any valid React child, but if a child is `null` it will be excluded from being split or displayed. 
+
+!> You must have **MORE** than one non-null child in the split-pane otherwise it will log an error and simply render the single child.
 
 ## Styling the Resizer 💅
 
