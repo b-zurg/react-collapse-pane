@@ -1,4 +1,6 @@
 name: Test & Lint
+
+on:
   pull_request:
     branches:
       - master
