@@ -89,4 +89,12 @@ storiesOf('Initial States', module)
       </SplitPane>
     );
   })
+  .add('Only one child skips splitpane layout', () => {
+    return (
+      //@ts-ignore
+      <SplitPane split="vertical" initialSizes={[1, 2, 1]}>
+        <div>This is only one div!</div>
+      </SplitPane>
+    );
+  })
   .addDecorator(withKnobs);
