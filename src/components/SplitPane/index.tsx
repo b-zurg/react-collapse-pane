@@ -9,6 +9,7 @@ import { useToggleCollapse } from './hooks/callbacks/useToggleCollapse';
 import { useGetIsPaneCollapsed } from './hooks/callbacks/useGetIsCollapsed';
 import { useIsLtr } from './hooks/memos/useIsLtr';
 import { useCollapsedSizes } from './hooks/memos/useCollapsedSizes';
+import { Nullable } from '../../types/utilities';
 
 export type SplitType = 'horizontal' | 'vertical';
 export type Direction = 'ltr' | 'rtl';

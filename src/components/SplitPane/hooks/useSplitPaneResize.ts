@@ -16,6 +16,7 @@ import { useCollapsedSize } from './memos/useCollapsedSize';
 import { debounce } from '../helpers';
 import { useRecalculateSizes } from './callbacks/useRecalculateSizes';
 import { useEventListener } from '../../../hooks/useEventListener';
+import { Nullable } from '../../../types/utilities';
 
 export interface ResizeState {
   index: number;
