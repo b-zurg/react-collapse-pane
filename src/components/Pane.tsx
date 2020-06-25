@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { SplitType } from './SplitPane';
-import styled, { css } from 'styled-components';
+import styled from '@emotion/styled';
+import { css } from '@emotion/core';
 import { useMergeClasses } from '../hooks/useMergeClasses';
 import { useEffect, useMemo, useRef, useState } from 'react';
 

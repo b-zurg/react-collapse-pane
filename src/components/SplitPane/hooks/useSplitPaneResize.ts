@@ -159,7 +159,6 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
   // recalculate initial sizes on window size change to maintain min sizes
 
   const resetSizes = useMemo(() => debounce(() => recalculateSizes(), 50), [recalculateSizes]);
-  // window.addEventListener('resize', () => resetSizes());
   useEventListener('resize', resetSizes);
   useEffect(
     () => recalculateSizes(initialSizes),
