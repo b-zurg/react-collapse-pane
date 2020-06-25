@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { CollapseOptions, SplitType } from '.';
+import { Nullable } from '../../types/utilities';
 
 export const DEFAULT_MIN_SIZE = 50;
 

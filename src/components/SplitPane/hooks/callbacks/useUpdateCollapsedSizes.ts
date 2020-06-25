@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { useCollapseSize } from './useCollapseSize';
 import { useUncollapseSize } from './useUncollapseSize';
 import { SplitPaneHooks } from '../..';
+import { Nullable } from '../../../../types/utilities';
 
 export function useUpdateCollapsedSizes({
   movedSizes,

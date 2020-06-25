@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { CollapseOptions } from '../../index';
+import { Nullable } from '../../../../types/utilities';
 
 export function useCollapsedSizes({
   collapsedSizes,
