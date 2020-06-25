@@ -9,7 +9,7 @@ This is intended to be **the** simple, reliable, configurable, and elegant solut
   </a>
   <img alt="Release" src="https://github.com/b-zurg/react-collapse-pane/workflows/Release/badge.svg?branch=master">
   <a href="#contributors">
-    <img alt="All Contributors" src="https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square">
+    <img alt="All Contributors" src="https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square">
   </a>
   <a href="https://github.com/prettier/prettier">
     <img alt="styled with prettier" src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg">
@@ -122,6 +122,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://github.com/b-zurg"><img src="https://avatars3.githubusercontent.com/u/57298613?v=4" width="100px;" alt=""/><br /><sub><b>Buzurg Arjmandi</b></sub></a><br /><a href="https://github.com/b-zurg/react-collapse-pane/commits?author=b-zurg" title="Tests">⚠️</a> <a href="https://github.com/b-zurg/react-collapse-pane/commits?author=b-zurg" title="Documentation">📖</a> <a href="https://github.com/b-zurg/react-collapse-pane/commits?author=b-zurg" title="Code">💻</a> <a href="#design-b-zurg" title="Design">🎨</a> <a href="#example-b-zurg" title="Examples">💡</a> <a href="#platform-b-zurg" title="Packaging/porting to new platform">📦</a></td>
+    <td align="center"><a href="https://github.com/hst44"><img src="https://avatars1.githubusercontent.com/u/54194733?v=4" width="100px;" alt=""/><br /><sub><b>hst44</b></sub></a><br /><a href="https://github.com/b-zurg/react-collapse-pane/issues?q=author%3Ahst44" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 

@@ -18,6 +18,15 @@
         "example",
         "platform"
       ]
+    },
+    {
+      "login": "hst44",
+      "name": "hst44",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/54194733?v=4",
+      "profile": "https://github.com/hst44",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
