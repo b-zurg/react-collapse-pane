@@ -81,6 +81,13 @@ export const SplitPane = ({ className = '', ...props }: SplitPaneProps) => {
   const getIsPaneCollapsed = useGetIsPaneCollapsed({ collapsedIndices });
   const isCollapseReversed = useIsCollapseReversed(props.collapseOptions);
 
+  if (childPanes.length <= 1) {
+    console.error(
+      '[react-collapse-pane] - You must have more than one non-null child inside the SplitPane component.  Even though SplitPane does not crash, you should resolve this error.'
+    );
+    return <>{props.children}</>;
+  }
+
   // stacks the children and places a resizer in between each of them. Each resizer has the same index as the pane that it controls.
   const entries = childPanes.map((pane, paneIndex) => {
     const resizerPaneIndex = isCollapseReversed ? paneIndex : paneIndex - 1;

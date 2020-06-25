@@ -54,7 +54,7 @@ interface SplitPaneResizeOptions
  */
 export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneResizeReturns {
   const {
-    children,
+    children: originalChildren,
     split,
     initialSizes: originalDefaults,
     minSizes: originalMinSizes,
@@ -64,7 +64,7 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
     collapseOptions,
     isLtr,
   } = options;
-
+  const children = !Array.isArray(originalChildren) ? [originalChildren] : originalChildren;
   // VALUES: const values used throughout the different logic
   const paneRefs = useRef(new Map<string, React.RefObject<HTMLDivElement>>());
 
