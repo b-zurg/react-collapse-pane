@@ -101,12 +101,13 @@ export const Resizer = ({
     () => Math.max(100 + (collapseOptions?.buttonPositionOffset ?? 0), 0),
     [collapseOptions]
   );
+  const isTransition = collapseOptions?.buttonTransition !== 'none';
   const collapseButton = collapseOptions ? (
     <ButtonContainer $isVertical={isVertical} grabberSize={grabberSizeWithUnit} isLtr={isLtr}>
       <ButtonPositionOffset style={{ flexBasis: preButtonFlex }} />
       <Transition
-        in={isHovered}
-        timeout={collapseOptions.buttonTransitionTimeout}
+        in={isTransition ? isHovered : true}
+        timeout={isTransition ? collapseOptions.buttonTransitionTimeout : 0}
         style={{ flex: '0 0 0', position: 'relative' }}
       >
         <ButtonWrapper

@@ -62,6 +62,16 @@ storiesOf('Collapsable Panes', module)
     const collapseDirection = select('Direction', { left: 'left', right: 'right' }, 'left');
     const minSizes = object('Minimum Sizes', [50, 50, 50, 50]);
     const collapseTransition = number('Collapse Transition Speed (ms)', 500);
+    const buttonTransition = select(
+      'Button Transition',
+      {
+        fade: 'fade',
+        zoom: 'zoom',
+        grow: 'grow',
+        none: 'none',
+      },
+      'grow'
+    );
 
     return (
       <Header>
@@ -70,8 +80,8 @@ storiesOf('Collapsable Panes', module)
           collapseOptions={{
             beforeToggleButton: <Button>{collapseDirection === 'left' ? '⬅' : '➡'}</Button>,
             afterToggleButton: <Button>{collapseDirection === 'left' ? '➡' : '⬅'}</Button>,
-            collapsedSize: 40,
             collapseTransitionTimeout: collapseTransition,
+            buttonTransition,
             collapseDirection,
             buttonPositionOffset,
           }}
@@ -119,7 +129,6 @@ storiesOf('Collapsable Panes', module)
         collapseOptions={{
           beforeToggleButton: <Button>{collapseDirection === 'up' ? '⬆' : '⬇'}</Button>,
           afterToggleButton: <Button>{collapseDirection === 'up' ? '⬇' : '⬆'}</Button>,
-          collapsedSize: 40,
           collapseDirection,
         }}
         resizerOptions={{
