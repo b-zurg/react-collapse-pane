@@ -93,7 +93,7 @@ It's a common need to want to collapse the left or initial panel to give more ro
 
 * `beforeToggleButton` - the element displayed as the collapse button **before** the panel is collapsed.  This is an purely aesthetic component.
 * `afterToggleButton` - the element displayed as the collapse button **after** the panel is collapsed.  This is an purely aesthetic component.
-* `buttonTransition` - the animation applied to the button appear/disappear.  Possible options are `zoom`, `grow`, or `fade`
+* `buttonTransition` - the animation applied to the button appear/disappear.  Possible options are `zoom`, `grow`, `fade`, or `none`.  You can try them out in the storybook.  `none` indicates to keep the button always visible.
 * `buttonTransitionTimeout` - the time (in millisecons) that the animation for the appear/disappear of the button will take place
 * `buttonPositionOffset` - a positive or negative number that will either add or subtract the flex-basis (starting at 100) of an invisible div before or after the button. e.g. 50 would make the "before" 150 and the "after" 50
 * `collapseDirection` - `'left' | 'right' | 'up' | 'down'` - this is used to indicate the direction that it should collapse.  By default collapsing happens left and up for the vertical and horizontal splits respectively.  Valid values for a vertical split are `left` or `right` and valid values for a horizontal split are `up` or `down`
