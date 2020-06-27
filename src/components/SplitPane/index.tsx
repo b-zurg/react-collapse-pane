@@ -21,7 +21,7 @@ export type SplitPaneHooks = {
   onCollapse?: (collapsedSizes: Nullable<number>[]) => void;
 };
 
-export type TransitionType = 'fade' | 'grow' | 'zoom';
+export type TransitionType = 'fade' | 'grow' | 'zoom' | 'none';
 export type CollapseDirection = 'left' | 'right' | 'up' | 'down';
 
 export interface CollapseOptions {
@@ -32,7 +32,7 @@ export interface CollapseOptions {
   buttonPositionOffset?: number;
   collapseDirection?: CollapseDirection;
   collapseTransitionTimeout?: number;
-  collapsedSize: number;
+  collapsedSize?: number;
   overlayCss?: React.CSSProperties;
 }
 

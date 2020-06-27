@@ -8,6 +8,7 @@ const transitionComponentMap: {
   fade: Fade,
   grow: Grow,
   zoom: Zoom,
+  none: Fade,
 };
 
 export function useTransition(collapseOptions?: CollapseOptions) {
