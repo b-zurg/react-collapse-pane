@@ -1,5 +1,4 @@
-import styled from '@emotion/styled';
-import { css } from '@emotion/core';
+import styled, { css } from 'styled-components';
 
 type OrientationProps = {
   $isVertical: boolean;

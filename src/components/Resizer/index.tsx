@@ -10,7 +10,7 @@ import {
 } from './helpers';
 import { useMergeClasses } from '../../hooks/useMergeClasses';
 import { CollapseOptions, ResizerOptions } from '../SplitPane';
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 import { useTransition } from './hooks/useTransition';
 
 const ButtonPositionOffset = styled.div`
