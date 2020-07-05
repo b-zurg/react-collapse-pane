@@ -27,7 +27,7 @@ export function useCollapseSize({
       moveSizes({ sizes, index, offset, minSizes, collapsedIndices, collapsedSize });
       moveCollapsedSiblings({
         offset,
-        index: idx,
+        index,
         isReversed,
         collapsedIndices,
         minSizes,
