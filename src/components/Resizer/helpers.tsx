@@ -19,27 +19,20 @@ export const ButtonWrapper = styled.div<OrientationProps>`
 `;
 
 interface ButtonContainerProps extends OrientationProps {
-  grabberSize: string | null;
-  isLtr: boolean;
+  $grabberSize: string | null;
+  $isLtr: boolean;
 }
 export const ButtonContainer = styled.div<ButtonContainerProps>`
+  z-index: 3;
   position: absolute;
-  ${props => (props.$isVertical ? topBottomCss : leftRightCss)}
-  ${props => (props.$isVertical ? 'width: 5rem' : 'height: 5rem')};
-  transform: ${props =>
-    props.$isVertical
-      ? `translateX(${props.isLtr ? '-' : ''}50%) ${
-          props.grabberSize ? `translateX(calc(${props.grabberSize} / 2))` : ''
-        }`
-      : `translateY(${props.isLtr ? '-' : ''}50%) ${
-          props.grabberSize ? `translateY(calc(${props.grabberSize} / 2))` : ''
-        }`};
+  overflow: initial;
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: hidden;
-  z-index: 3;
   justify-content: center;
+
+  ${props => `${props.$isVertical ? 'width' : 'height'}: ${props.$grabberSize}`};
+  ${props => (props.$isVertical ? topBottomCss : leftRightCss)}
 `;
 
 interface GrabberProps extends OrientationProps {

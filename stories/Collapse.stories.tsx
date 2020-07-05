@@ -62,6 +62,7 @@ storiesOf('Collapsable Panes', module)
     const collapseDirection = select('Direction', { left: 'left', right: 'right' }, 'left');
     const minSizes = object('Minimum Sizes', [50, 50, 50, 50]);
     const collapseTransition = number('Collapse Transition Speed (ms)', 500);
+    const grabberSize = number('Grabber Size (px)', 10, { min: 1, max: 100, range: true });
     const buttonTransition = select(
       'Button Transition',
       {
@@ -87,7 +88,7 @@ storiesOf('Collapsable Panes', module)
           }}
           minSizes={minSizes}
           resizerOptions={{
-            grabberSize: '1rem',
+            grabberSize,
           }}
           hooks={{
             onCollapse: action(`collapsedSizes`),

@@ -103,7 +103,7 @@ export const Resizer = ({
   );
   const isTransition = collapseOptions?.buttonTransition !== 'none';
   const collapseButton = collapseOptions ? (
-    <ButtonContainer $isVertical={isVertical} grabberSize={grabberSizeWithUnit} isLtr={isLtr}>
+    <ButtonContainer $isVertical={isVertical} $grabberSize={grabberSizeWithUnit} $isLtr={isLtr}>
       <ButtonPositionOffset style={{ flexBasis: preButtonFlex }} />
       <Transition
         in={isTransition ? isHovered : true}
