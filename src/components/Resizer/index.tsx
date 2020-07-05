@@ -10,7 +10,7 @@ import {
 } from './helpers';
 import { useMergeClasses } from '../../hooks/useMergeClasses';
 import { CollapseOptions, ResizerOptions } from '../SplitPane';
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 import { useTransition } from './hooks/useTransition';
 
 const ButtonPositionOffset = styled.div`
@@ -103,7 +103,7 @@ export const Resizer = ({
   );
   const isTransition = collapseOptions?.buttonTransition !== 'none';
   const collapseButton = collapseOptions ? (
-    <ButtonContainer $isVertical={isVertical} grabberSize={grabberSizeWithUnit} isLtr={isLtr}>
+    <ButtonContainer $isVertical={isVertical} $grabberSize={grabberSizeWithUnit} $isLtr={isLtr}>
       <ButtonPositionOffset style={{ flexBasis: preButtonFlex }} />
       <Transition
         in={isTransition ? isHovered : true}
