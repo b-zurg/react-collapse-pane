@@ -84,7 +84,7 @@ By default there is a 1px divider with a grabbable surface of 1rem width or heig
 
 There is also no limit to the number of divs you have as children.  The `SplitPane` will split them all accordingly.
 
-## But what about collapsing the panels, styling the resizer, or RTL support? :sob:
+## But what about *collapsing* the panels, *styling* the resizer, or *RTL* support? :sob:
 
 This library supports all of these things and more! 
 
@@ -96,15 +96,11 @@ Documentation can be found at https://collapse-pane.zurg.dev
 
 If you notice an issue then please make an issue or a PR!  All docs are generated from the `docs` folder in the master branch.
 
-
-
 # Contributing and PRs :sparkling_heart:
 
 If you would like to contribute please check out the [contributor guide](/CONTRIBUTING.md)
 
 All contributions are welcome! All issues and feature requests are welcome!
-
-
 
 # Credit and Attribution :pray:
 

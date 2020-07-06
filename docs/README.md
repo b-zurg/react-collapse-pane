@@ -2,17 +2,16 @@
 
 This is intended to be **the** simple, reliable, configurable, and elegant solution to having splittable, draggable and collapsible panes in your React application. 
 
-
-## [[click for storybook demo]](https://storybook.collapse-pane.zurg.dev/)
-
 # Getting Started 🚀
 
 Install react-collapse-pane:
 ```sh
-npm i --save-dev react-collapse-pane
-```
-```sh
-yarn add --dev react-collapse-pane
+npm i react-collapse-pane
+
+# or for yarn
+
+yarn add react-collapse-pane
+
 ```
 
 Once installed you can import the `SplitPane` component.

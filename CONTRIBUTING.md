@@ -4,6 +4,23 @@ It's great that you want to contribute to this library and make things better.
 
 Below you'll find a general outline of how to use TSDX, which handles the boilerplate around managing a react component lib.
 
+# Updating Documentation
+
+All documentation exists in the `./docs` subfolder and is powered by [docsify](https://docsify.js.org/#/quickstart). 
+
+Currently there is only one `README.md` file in the `docs` folder, but this can be expanded into more files if necessary (unlikely).
+
+To run the documentation site install docsify globally: 
+```sh
+npm i docsify-cli -g
+```
+
+Then you can run the following command and open the URL locally for the documentation site. 
+```sh
+docsify serve docs
+```
+
+
 # Developer User Guide
 
 Let’s get you oriented with what’s here and how to use it.
@@ -29,12 +46,10 @@ Then run either example playground or storybook:
 Run inside another terminal:
 
 ```
-yarn storybook
+npm run storybook
 ```
 
 This loads the stories from `./stories`.
-
-> NOTE: Stories should reference the components as if using the library, similar to the example playground. This means importing from the root project directory. This has been aliased in the tsconfig and the storybook webpack config as a helper.
 
 ### Example
 
@@ -42,27 +57,27 @@ Then run the example inside another:
 
 ```
 cd example
-npm i # or yarn to install dependencies
-npm start # or yarn start
+npm i
+npm start
 ```
 
 The default example imports and live reloads whatever is in `/dist`, so if you are seeing an out of date component, make sure TSDX is running in watch mode like we recommend above. **No symlinking required**, [we use Parcel's aliasing](https://github.com/palmerhq/tsdx/pull/88/files).
 
-To do a one-off build, use `npm run build` or `yarn build`.
+To do a one-off build, use `npm run build.
 
-To run tests, use `npm test` or `yarn test`.
+To run tests, use `npm test`.
 
 ## Configuration
 
-Code quality is [set up for you](https://github.com/palmerhq/tsdx/pull/45/files) with `prettier`, `husky`, and `lint-staged`. Adjust the respective fields in `package.json` accordingly.
+Static code checking is [set up ](https://github.com/palmerhq/tsdx/pull/45/files) with `prettier`, `eslint`, `husky`, and `lint-staged`. Adjust the respective fields in `package.json` accordingly.
 
 ### [Jest](https://jestjs.io/) Testing
 
-Jest tests are set up to run with `npm test` or `yarn test`. This runs the test watcher (Jest) in an interactive mode. By default, runs tests related to files changed since the last commit.
+Jest tests are set up to run with `npm test`. This runs the test watcher (Jest) in an interactive mode. By default, runs tests related to files changed since the last commit.
 
 ### Setup Files
 
-This is the folder structure we set up for you:
+This is the folder structure:
 
 ```
 /example
