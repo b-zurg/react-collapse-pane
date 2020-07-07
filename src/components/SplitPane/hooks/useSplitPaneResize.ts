@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SplitPaneProps } from '..';
 import { ClientPosition, useDragState } from './effects/useDragState';
 import { useMinSizes } from './memos/useMinSizes';
@@ -158,7 +158,10 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
   }, [collapsedIndices]);
   // recalculate initial sizes on window size change to maintain min sizes
 
-  const resetSizes = useMemo(() => debounce(() => recalculateSizes(), 50), [recalculateSizes]);
+  const resetSizes = useCallback(
+    debounce(() => recalculateSizes(), 100),
+    [recalculateSizes]
+  );
   useEventListener('resize', resetSizes);
   useEffect(
     () => recalculateSizes(initialSizes),
