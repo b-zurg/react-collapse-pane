@@ -143,14 +143,6 @@ export const convertCollapseSizesToIndices = (sizes?: Nullable<number>[]) =>
 
 export const addArray = (arr: number[]) => arr.reduce((prev, cur) => prev + cur, 0);
 
-export const debounce = (callback: (...args: any[]) => void, wait = 250) => {
-  let timer: any;
-  return (...args: any[]) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => callback(...args), wait);
-  };
-};
-
 const verticalCss = css`
   left: 0;
   right: 0;
@@ -173,3 +165,17 @@ export const Wrapper = styled.div<{ split: SplitType }>`
   overflow: hidden;
   ${props => (props.split === 'vertical' ? verticalCss : horizontalCss)}
 `;
+
+export const debounce = <F extends (...args: any[]) => any>(func: F, waitFor: number) => {
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+
+  const debounced = (...args: Parameters<F>) => {
+    if (timeout !== null) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+    timeout = setTimeout(() => func(...args), waitFor);
+  };
+
+  return debounced as (...args: Parameters<F>) => ReturnType<F>;
+};
