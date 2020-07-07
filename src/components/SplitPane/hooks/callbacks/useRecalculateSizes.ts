@@ -1,12 +1,10 @@
-import { addArray, getMinSize, moveSizes } from '../../helpers';
+import { addArray } from '../../helpers';
 import React, { useCallback } from 'react';
 
 export function useRecalculateSizes({
   getCurrentPaneSizes,
   collapsedSize,
   collapsedIndices,
-  originalMinSizes,
-  minSizes,
   setMovedSizes,
   setSizes,
 }: {
@@ -38,31 +36,9 @@ export function useRecalculateSizes({
         }
         return size;
       });
-      curSizes.forEach((_size, idx) => {
-        const offset = curSizes[idx] - getMinSize(idx, originalMinSizes);
-        // if offset is negative this means the min size is greater and we need to move this guy
-        if (offset < 0) {
-          moveSizes({
-            collapsedIndices,
-            collapsedSize,
-            sizes: adjustedSizes,
-            index: idx,
-            offset: -offset,
-            minSizes,
-          });
-        }
-      });
       setMovedSizes(adjustedSizes);
       setSizes(adjustedSizes);
     },
-    [
-      collapsedIndices,
-      collapsedSize,
-      getCurrentPaneSizes,
-      minSizes,
-      originalMinSizes,
-      setMovedSizes,
-      setSizes,
-    ]
+    [collapsedIndices, collapsedSize, getCurrentPaneSizes, setMovedSizes, setSizes]
   );
 }
