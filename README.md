@@ -42,10 +42,11 @@ This is intended to be **the** simple, reliable, configurable, and elegant solut
 
 Install react-collapse-pane:
 ```bash
-npm i --save-dev react-collapse-pane
-```
-```bash
-yarn add --dev react-collapse-pane
+npm i react-collapse-pane
+
+# or for yarn
+
+yarn add react-collapse-pane
 ```
 
 Once installed you can import the `SplitPane` component in your code.
