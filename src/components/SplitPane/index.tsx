@@ -59,7 +59,7 @@ export interface SplitPaneProps {
   children: React.ReactChild[];
 }
 
-export const SplitPane = ({ className = '', ...props }: SplitPaneProps) => {
+export const SplitPane: React.FC<SplitPaneProps> = props => {
   const collapsedSizes = useCollapsedSizes(props);
   const isLtr = useIsLtr(props);
 
@@ -74,8 +74,8 @@ export const SplitPane = ({ className = '', ...props }: SplitPaneProps) => {
     collapsedSizes,
   });
 
-  const splitPaneClass = useMergeClasses(['SplitPane', props.split, className]);
-  const resizingClass = useMergeClasses(['resizing', className]);
+  const splitPaneClass = useMergeClasses(['SplitPane', props.split, props.className]);
+  const resizingClass = useMergeClasses(['Resizing', props.className]);
 
   const toggleCollapse = useToggleCollapse({ setCollapsed, collapsedIndices });
   const getIsPaneCollapsed = useGetIsPaneCollapsed({ collapsedIndices });
