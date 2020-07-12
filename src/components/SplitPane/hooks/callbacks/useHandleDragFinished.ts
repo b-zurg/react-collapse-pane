@@ -1,7 +1,4 @@
 import React, { useCallback } from 'react';
-import { DragState } from '../effects/useDragState';
-import { ResizeState } from '../useSplitPaneResize';
-import { useGetMovedSizes } from './useGetMovedSizes';
 import { SplitPaneHooks } from '../..';
 
 /**
@@ -10,19 +7,15 @@ import { SplitPaneHooks } from '../..';
 export function useHandleDragFinished({
   setSizes,
   hooks,
-  getMovedSizes,
+  movedSizes,
 }: {
   children: React.ReactChild[];
   setSizes: React.Dispatch<React.SetStateAction<number[]>>;
-  getMovedSizes: ReturnType<typeof useGetMovedSizes>;
+  movedSizes: number[];
   hooks?: SplitPaneHooks;
 }) {
-  return useCallback(
-    (dragState: DragState<ResizeState>) => {
-      const movedSizes = getMovedSizes(dragState);
-      setSizes(movedSizes);
-      hooks?.onSaveSizes?.(movedSizes);
-    },
-    [getMovedSizes, hooks, setSizes]
-  );
+  return useCallback(() => {
+    setSizes(movedSizes);
+    hooks?.onSaveSizes?.(movedSizes);
+  }, [movedSizes, hooks, setSizes]);
 }

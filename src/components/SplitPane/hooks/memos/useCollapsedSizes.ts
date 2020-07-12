@@ -1,21 +1,16 @@
-import React, { useMemo } from 'react';
-import { CollapseOptions } from '../../index';
-import { Nullable } from '../../../../types/utilities';
+import { useMemo } from 'react';
+import { SplitPaneProps } from '../../index';
 
 export function useCollapsedSizes({
   collapsedSizes,
   children,
-  collapseOptions,
-}: {
-  children: React.ReactChild[];
-  collapsedSizes?: Nullable<number>[];
-  collapseOptions?: CollapseOptions;
-}) {
+  collapse,
+}: Pick<SplitPaneProps, 'collapsedSizes' | 'children' | 'collapse'>) {
   return useMemo(
     () =>
-      collapsedSizes?.length === children.length && collapseOptions !== undefined
+      collapsedSizes?.length === children.length && !!collapse
         ? collapsedSizes
         : new Array(children.length).fill(null),
-    [children.length, collapseOptions, collapsedSizes]
+    [children.length, collapse, collapsedSizes]
   );
 }

@@ -1,91 +1,105 @@
 import * as ReactDOM from 'react-dom';
 import { useEventListener } from '../../../../hooks/useEventListener';
 import { useCallback, useMemo, useState } from 'react';
-import { SplitType } from '../..';
 
 export interface ClientPosition {
   clientX: number;
   clientY: number;
 }
 
-export interface DragState<T> {
+export interface DragState {
   offset: number;
-  extraState: T;
+  index: number;
 }
-export type BeginDragCallback<T> = (pos: ClientPosition, extraState: T) => void;
-interface DragStateHandlers<T> {
-  beginDrag: BeginDragCallback<T>;
-  dragState: DragState<T> | null;
+export type BeginDragCallback = (props: { position: ClientPosition; index: number }) => void;
+interface DragStateHandlers {
+  beginDrag: BeginDragCallback;
+  dragState: DragState | null;
   onMouseMove?: (event: ClientPosition) => void;
   onTouchMove?: (event: TouchEvent) => void;
   onMouseUp?: () => void;
   onMouseEnter?: (event: MouseEvent) => void;
 }
 
-function useDragStateHandlers<T>(
-  split: SplitType,
-  onDragFinished: (dragState: DragState<T>) => void
-): DragStateHandlers<T> {
-  const [dragging, setDragging] = useState<[T, number] | null>(null);
-  const [current, setCurrent] = useState<number>(0);
+function useDragStateHandlers(
+  isVertical: boolean,
+  onDragFinished: (dragState: DragState) => void
+): DragStateHandlers {
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartPos, setDragStartPos] = useState<number | null>(null);
+  const [currentPos, setCurrentPos] = useState<number | null>(null);
+  const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
 
-  const beginDrag = useCallback(
-    (event: ClientPosition, extraState: T): void => {
-      const pos = split === 'vertical' ? event.clientX : event.clientY;
-      setDragging([extraState, pos]);
-      setCurrent(pos);
+  const beginDrag: BeginDragCallback = useCallback(
+    ({ position, index }: { position: ClientPosition; index: number }): void => {
+      const pos = isVertical ? position.clientX : position.clientY;
+      ReactDOM.unstable_batchedUpdates(() => {
+        setDraggingIndex(index);
+        setIsDragging(true);
+        setDragStartPos(pos);
+        setCurrentPos(pos);
+      });
     },
-    [split]
+    [isVertical]
   );
 
-  const [dragState, onMouseUp] = useMemo(() => {
-    if (!dragging) {
-      return [null, undefined];
-    }
+  const dragState: DragState | null = useMemo(() => {
+    if (isDragging && currentPos !== null && dragStartPos !== null && draggingIndex !== null) {
+      const offset = currentPos - dragStartPos;
+      return { offset, index: draggingIndex };
+    } else return null;
+  }, [currentPos, dragStartPos, draggingIndex, isDragging]);
 
-    const [extraState, origin] = dragging;
-    const dragState: DragState<T> = { offset: current - origin, extraState };
-
-    const onMouseUp = (): void => {
+  const onMouseUp = useCallback((): void => {
+    if (isDragging && dragState) {
       ReactDOM.unstable_batchedUpdates(() => {
-        setDragging(null);
+        setIsDragging(false);
         onDragFinished(dragState);
       });
-    };
-
-    return [dragState, onMouseUp];
-  }, [current, dragging, onDragFinished]);
-
-  const [onMouseMove, onTouchMove, onMouseEnter] = useMemo(() => {
-    if (!dragging) {
-      return [undefined, undefined];
     }
+  }, [isDragging, dragState, onDragFinished]);
 
-    const onMouseMove = (event: ClientPosition): void => {
-      const pos = split === 'vertical' ? event.clientX : event.clientY;
-      setCurrent(pos);
-    };
+  const onMouseMove = useCallback(
+    (event: ClientPosition): void => {
+      if (isDragging) {
+        const pos = isVertical ? event.clientX : event.clientY;
+        setCurrentPos(pos);
+      } else setCurrentPos(null);
+    },
+    [isDragging, isVertical]
+  );
 
-    const onTouchMove = (event: TouchEvent): void => {
-      onMouseMove(event.touches[0]);
-    };
-    const onMouseEnter = (event: MouseEvent): void => {
-      const isPrimaryPressed = (event.buttons & 1) === 1;
-      if (!isPrimaryPressed) {
-        onMouseUp?.();
+  const onTouchMove = useCallback(
+    (event: TouchEvent): void => {
+      if (isDragging) {
+        onMouseMove(event.touches[0]);
       }
-    };
-
-    return [onMouseMove, onTouchMove, onMouseEnter];
-  }, [dragging, onMouseUp, split]);
+    },
+    [isDragging, onMouseMove]
+  );
+  const onMouseEnter = useCallback(
+    (event: MouseEvent): void => {
+      if (isDragging) {
+        const isPrimaryPressed = (event.buttons & 1) === 1;
+        if (!isPrimaryPressed) {
+          onMouseUp();
+        }
+      }
+    },
+    [isDragging, onMouseUp]
+  );
 
   return { beginDrag, dragState, onMouseMove, onTouchMove, onMouseUp, onMouseEnter };
 }
 
-export function useDragState<T>(
-  split: SplitType,
-  onDragFinished: (dragState: DragState<T>) => void
-): [DragState<T> | null, (pos: ClientPosition, extraState: T) => void] {
+interface UseDragStateReturn {
+  dragState: DragState | null;
+  beginDrag: BeginDragCallback;
+}
+export function useDragState(
+  isVertical: boolean,
+  onDragFinished: (dragState: DragState) => void
+): UseDragStateReturn {
   const {
     beginDrag,
     dragState,
@@ -93,12 +107,12 @@ export function useDragState<T>(
     onTouchMove,
     onMouseUp,
     onMouseEnter,
-  } = useDragStateHandlers<T>(split, onDragFinished);
+  } = useDragStateHandlers(isVertical, onDragFinished);
 
   useEventListener('mousemove', onMouseMove);
   useEventListener('touchmove', onTouchMove);
   useEventListener('mouseup', onMouseUp);
   useEventListener('mouseenter', onMouseEnter);
 
-  return [dragState, beginDrag];
+  return { dragState, beginDrag };
 }

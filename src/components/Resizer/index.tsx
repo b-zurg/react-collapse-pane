@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Fade } from '@material-ui/core';
-import { ClientPosition } from '../SplitPane/hooks/effects/useDragState';
+import { BeginDragCallback } from '../SplitPane/hooks/effects/useDragState';
 import {
   ButtonContainer,
   ButtonWrapper,
@@ -10,12 +10,9 @@ import {
 } from './helpers';
 import { useMergeClasses } from '../../hooks/useMergeClasses';
 import { CollapseOptions, ResizerOptions } from '../SplitPane';
-import styled from 'styled-components';
 import { useTransition } from './hooks/useTransition';
-
-const ButtonPositionOffset = styled.div`
-  flex: 1 1 auto;
-`;
+import { SplitType } from '../SplitPane/index';
+import { debounce } from '../SplitPane/helpers';
 
 const defaultResizerOptions: Required<ResizerOptions> = {
   grabberSize: '1rem',
@@ -24,17 +21,19 @@ const defaultResizerOptions: Required<ResizerOptions> = {
 };
 
 export interface ResizerProps {
-  split: 'horizontal' | 'vertical';
+  isVertical: boolean;
   isLtr: boolean;
-  className: string;
+  split: SplitType;
+  className?: string;
   paneIndex: number;
   collapseOptions?: CollapseOptions;
   resizerOptions?: Partial<ResizerOptions>;
-  onDragStarted: (paneIndex: number, pos: ClientPosition) => void;
+  onDragStarted: BeginDragCallback;
   onCollapseToggle: (paneIndex: number) => void;
   isCollapsed: boolean;
 }
 export const Resizer = ({
+  isVertical,
   split,
   className,
   paneIndex,
@@ -47,7 +46,6 @@ export const Resizer = ({
 }: ResizerProps) => {
   const { grabberSize, css, hoverCss } = { ...defaultResizerOptions, ...resizerOptions };
 
-  const isVertical = split === 'vertical';
   const classes = useMergeClasses(['Resizer', split, className]);
   const grabberSizeWithUnit = useMemo(() => getSizeWithUnit(grabberSize), [grabberSize]);
   const Transition = useTransition(collapseOptions);
@@ -58,7 +56,7 @@ export const Resizer = ({
     (event: React.MouseEvent) => {
       event.preventDefault();
       if (!isCollapsed) {
-        onDragStarted(paneIndex, event);
+        onDragStarted({ index: paneIndex, position: event });
       }
     },
     [paneIndex, isCollapsed, onDragStarted]
@@ -67,7 +65,7 @@ export const Resizer = ({
     (event: React.TouchEvent) => {
       event.preventDefault();
       if (!isCollapsed) {
-        onDragStarted(paneIndex, event.touches[0]);
+        onDragStarted({ index: paneIndex, position: event.touches[0] });
       }
     },
     [paneIndex, isCollapsed, onDragStarted]
@@ -82,12 +80,22 @@ export const Resizer = ({
   const handleButtonMousedown = useCallback((event: React.MouseEvent) => {
     event.stopPropagation();
   }, []);
+
+  const debouncedSetHovered = useCallback(
+    debounce(() => setIsHovered(true), 50),
+    [setIsHovered]
+  );
   const handleMouseEnterGrabber = useCallback(() => {
-    setIsHovered(true);
-  }, [setIsHovered]);
+    debouncedSetHovered();
+  }, [debouncedSetHovered]);
+
+  const debouncedSetNotHovered = useCallback(
+    debounce(() => setIsHovered(false), 100),
+    [setIsHovered]
+  );
   const handleMouseLeaveGrabber = useCallback(() => {
-    setIsHovered(false);
-  }, [setIsHovered]);
+    debouncedSetNotHovered();
+  }, [debouncedSetNotHovered]);
 
   const getWidthOrHeight = useCallback(
     (size: string | number) => (isVertical ? { width: size } : { height: size }),
@@ -104,7 +112,7 @@ export const Resizer = ({
   const isTransition = collapseOptions?.buttonTransition !== 'none';
   const collapseButton = collapseOptions ? (
     <ButtonContainer $isVertical={isVertical} $grabberSize={grabberSizeWithUnit} $isLtr={isLtr}>
-      <ButtonPositionOffset style={{ flexBasis: preButtonFlex }} />
+      <div style={{ flex: `1 1 ${preButtonFlex}` }} />
       <Transition
         in={isTransition ? isHovered : true}
         timeout={isTransition ? collapseOptions.buttonTransitionTimeout : 0}
@@ -118,7 +126,7 @@ export const Resizer = ({
           {isCollapsed ? collapseOptions.afterToggleButton : collapseOptions.beforeToggleButton}
         </ButtonWrapper>
       </Transition>
-      <ButtonPositionOffset style={{ flexBasis: postButtonFlex }} />
+      <div style={{ flex: `1 1 ${postButtonFlex}` }} />
     </ButtonContainer>
   ) : null;
 
@@ -128,6 +136,7 @@ export const Resizer = ({
         key="grabber"
         $isVertical={isVertical}
         $isCollapsed={isCollapsed}
+        $isLtr={isLtr}
         style={getWidthOrHeight(grabberSize)}
         role="presentation"
         className={classes}

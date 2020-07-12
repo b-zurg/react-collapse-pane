@@ -7,22 +7,22 @@ import { CollapseOptions } from '../../index';
  */
 export function useMinSizes({
   minSizes,
-  children,
+  numSizes,
   collapsedIndices,
   collapseOptions,
 }: {
-  children: unknown[];
+  numSizes: number;
   minSizes?: number | number[];
   collapsedIndices: number[];
   collapseOptions?: CollapseOptions;
 }): number[] {
   return useMemo(
     () =>
-      children.map((_child, idx) =>
+      Array.from({ length: numSizes }).map((_child, idx) =>
         collapsedIndices.includes(idx)
           ? collapseOptions?.collapsedSize ?? DEFAULT_MIN_SIZE
           : getMinSize(idx, minSizes)
       ),
-    [children, collapseOptions, collapsedIndices, minSizes]
+    [numSizes, collapseOptions, collapsedIndices, minSizes]
   );
 }
