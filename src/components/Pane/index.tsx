@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { SplitType } from '../SplitPane';
 import { useMergeClasses } from '../../hooks/useMergeClasses';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
+import { SplitType } from '../SplitPane/index';
 
 const DEFAULT_COLLAPSE_TRANSITION_TIMEOUT = 500;
 const verticalCss = css`
@@ -63,8 +63,9 @@ const CollapseOverlay = styled.div<{ $timeout: number; $isCollapsed: boolean }>`
 export interface PaneProps {
   size: number;
   minSize: number;
+  isVertical: boolean;
   split: SplitType;
-  className: string;
+  className?: string;
   isCollapsed: boolean;
   forwardRef: React.Ref<HTMLDivElement>;
   collapseOverlayCss?: React.CSSProperties;
@@ -77,6 +78,7 @@ const UnMemoizedPane = ({
   minSize,
   isCollapsed,
   collapseOverlayCss = { background: 'rgba(220,220,220, 0.1)' },
+  isVertical,
   split,
   className,
   children,
@@ -103,16 +105,16 @@ const UnMemoizedPane = ({
     }
   }, [setShouldAnimate, collapsedIndices, timeout]);
 
-  const minStyle = useMemo(
-    () => (split === 'vertical' ? { minWidth: minSize } : { minHeight: minSize }),
-    [minSize, split]
-  );
+  const minStyle = useMemo(() => (isVertical ? { minWidth: minSize } : { minHeight: minSize }), [
+    minSize,
+    isVertical,
+  ]);
   const widthPreserverStyle: React.CSSProperties = isCollapsed
     ? { ...minStyle, userSelect: 'none' }
     : minStyle;
   return (
     <PaneRoot
-      $isVertical={split === 'vertical'}
+      $isVertical={isVertical}
       $shouldAnimate={timeout !== 0 && shouldAnimate}
       $timeout={timeout}
       className={classes}

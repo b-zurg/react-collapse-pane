@@ -36,11 +36,13 @@ export const ButtonContainer = styled.div<ButtonContainerProps>`
 
 interface GrabberProps extends OrientationProps {
   $isCollapsed: boolean;
+  $isLtr: boolean;
 }
 export const ResizeGrabber = styled.div<GrabberProps>`
   position: absolute;
   z-index: 3;
-  transform: ${props => (props.$isVertical ? 'translateX(-50%)' : 'translateY(-50%)')};
+  transform: ${props =>
+    props.$isVertical ? `translateX(${props.$isLtr ? '-' : ''}50%)` : 'translateY(-50%)'};
   cursor: ${props => !props.$isCollapsed && (props.$isVertical ? 'col-resize' : 'row-resize')};
   ${props => (props.$isVertical ? topBottomCss : leftRightCss)}
 `;

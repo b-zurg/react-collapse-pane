@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { SplitPaneProps } from '..';
-import { ClientPosition, useDragState } from './effects/useDragState';
+import { SplitPaneProps, CollapseOptions } from '..';
+import { useDragState, BeginDragCallback } from './effects/useDragState';
 import { useMinSizes } from './memos/useMinSizes';
 import { useGetMovedSizes } from './callbacks/useGetMovedSizes';
 import { useIsCollapseReversed } from './memos/useIsCollapseReversed';
@@ -18,10 +18,6 @@ import { useRecalculateSizes } from './callbacks/useRecalculateSizes';
 import { useEventListener } from '../../../hooks/useEventListener';
 import { Nullable } from '../../../types/utilities';
 
-export interface ResizeState {
-  index: number;
-}
-
 export interface ChildPane {
   node: React.ReactChild;
   ref: React.RefObject<HTMLDivElement>;
@@ -30,23 +26,17 @@ export interface ChildPane {
 }
 interface SplitPaneResizeReturns {
   childPanes: ChildPane[];
-  resizeState: Nullable<ResizeState>;
-  handleDragStart: (index: number, pos: ClientPosition) => void;
+  resizingIndex: Nullable<number>;
+  handleDragStart: BeginDragCallback;
 }
 
 interface SplitPaneResizeOptions
-  extends Pick<
-    SplitPaneProps,
-    | 'children'
-    | 'split'
-    | 'initialSizes'
-    | 'hooks'
-    | 'collapseOptions'
-    | 'collapsedSizes'
-    | 'minSizes'
-  > {
+  extends Pick<SplitPaneProps, 'split' | 'initialSizes' | 'hooks' | 'collapsedSizes' | 'minSizes'> {
   collapsedIndices: number[];
   isLtr: boolean;
+  collapseOptions?: CollapseOptions;
+  children: React.ReactChild[];
+  isVertical: boolean;
 }
 
 /**
@@ -62,16 +52,18 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
     collapsedIndices,
     collapsedSizes: originalCollapsedSizes,
     collapseOptions,
+    isVertical,
     isLtr,
   } = options;
+
   const children = !Array.isArray(originalChildren) ? [originalChildren] : originalChildren;
   // VALUES: const values used throughout the different logic
   const paneRefs = useRef(new Map<string, React.RefObject<HTMLDivElement>>());
 
   const minSizes = useMinSizes({
     minSizes: originalMinSizes,
-    children: children,
-    collapseOptions: collapseOptions,
+    numSizes: children.length,
+    collapseOptions,
     collapsedIndices,
   });
   const collapsedSize = useCollapsedSize({ collapseOptions });
@@ -98,7 +90,7 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
     isReversed,
   });
   const getCurrentPaneSizes = useGetCurrentPaneSizes({ childPanes, split });
-  const handleDragFinished = useHandleDragFinished({ getMovedSizes, children, hooks, setSizes });
+  const handleDragFinished = useHandleDragFinished({ movedSizes, children, hooks, setSizes });
   const recalculateSizes = useRecalculateSizes({
     setMovedSizes,
     minSizes,
@@ -110,9 +102,7 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
   });
 
   // STATE: if dragging, contains which pane is dragging and what the offset is.  If not dragging then null
-  const [dragState, beginDrag] = useDragState<ResizeState>(split, handleDragFinished);
-
-  const resizeState = dragState?.extraState ?? null;
+  const { dragState, beginDrag } = useDragState(isVertical, handleDragFinished);
 
   const collapseSize = useCollapseSize({
     setMovedSizes,
@@ -144,8 +134,8 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
 
   // EFFECTS: manage updates and calculations based on dependency changes for states that are interacted with by multiple functions
   useEffect(() => {
-    setMovedSizes(getMovedSizes(dragState));
-  }, [dragState, getMovedSizes]);
+    if (dragState !== null) setMovedSizes(getMovedSizes(dragState));
+  }, [dragState]);
   useEffect(() => {
     if (dragState !== null) hooks?.onChange?.(movedSizes);
   }, [dragState, movedSizes, hooks]);
@@ -177,12 +167,10 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
     [childPanes, movedSizes]
   );
 
-  const handleDragStart = useHandleDragStart({
-    setSizes,
-    isReversed,
-    hooks,
-    beginDrag,
-    getCurrentPaneSizes,
-  });
-  return { childPanes: childPanesWithSizes, resizeState, handleDragStart };
+  const handleDragStart = useHandleDragStart({ isReversed, hooks, beginDrag });
+  return {
+    childPanes: childPanesWithSizes,
+    resizingIndex: dragState?.index ?? null,
+    handleDragStart,
+  };
 }
