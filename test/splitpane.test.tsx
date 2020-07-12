@@ -4,11 +4,9 @@ import { SplitPaneProps, SplitPane } from '../src/components/SplitPane';
 
 const SplitPaneBase: React.FC<SplitPaneProps> = props => (
   <SplitPane
-    collapseOptions={{
-      beforeToggleButton: <div>{'⬆'}</div>,
-      afterToggleButton: <div>{'⬇'}</div>,
+    collapse={{
       collapsedSize: 40,
-      collapseDirection: 'up',
+      collapseDirection: 'right',
     }}
     {...props}
   >

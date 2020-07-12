@@ -42,11 +42,8 @@ storiesOf('Right to Left Support', module)
       <div style={{ direction: 'rtl' }}>
         <SplitPane
           split="vertical"
-          direction="rtl"
-          collapseOptions={{
-            beforeToggleButton: <Button>{collapseDirection === 'left' ? '➡' : '⬅'}</Button>,
-            afterToggleButton: <Button>{collapseDirection === 'left' ? '⬅' : '➡'}</Button>,
-            collapsedSize: 40,
+          dir="rtl"
+          collapse={{
             collapseDirection,
           }}
           resizerOptions={{
@@ -90,10 +87,7 @@ storiesOf('Right to Left Support', module)
           split="horizontal"
           initialSizes={[340.75, 816.75, 273.75, 251.75]}
           // direction="rtl"
-          collapseOptions={{
-            beforeToggleButton: <Button>{collapseDirection === 'up' ? '⬆' : '⬇'}</Button>,
-            afterToggleButton: <Button>{collapseDirection === 'up' ? '⬇' : '⬆'}</Button>,
-            collapsedSize: 40,
+          collapse={{
             collapseDirection,
           }}
           resizerOptions={{
