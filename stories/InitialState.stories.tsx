@@ -23,22 +23,9 @@ const Button = styled.div`
 
 storiesOf('Initial States', module)
   .add('Ltr, First Pane Collapsed', () => {
-    const verticalCollapseDirection = select(
-      'Vertical Direction',
-      { left: 'left', right: 'right' },
-      'left'
-    );
     const shouldCollapse = boolean('Collapsable?', true);
-    const verticalCollapseOptions = shouldCollapse
-      ? {
-          beforeToggleButton: <Button>{verticalCollapseDirection === 'left' ? '⬅' : '➡'}</Button>,
-          afterToggleButton: <Button>{verticalCollapseDirection === 'left' ? '➡' : '⬅'}</Button>,
-          collapsedSize: 40,
-          collapseDirection: verticalCollapseDirection,
-        }
-      : undefined;
     const VerticalSplitPane = (props: Omit<SplitPaneProps, 'split'>) => (
-      <SplitPane split={'vertical'} collapseOptions={verticalCollapseOptions} {...props}>
+      <SplitPane split={'vertical'} collapse={shouldCollapse} {...props}>
         {props.children}
       </SplitPane>
     );
@@ -52,22 +39,9 @@ storiesOf('Initial States', module)
     );
   })
   .add('Ltr, First Two Panes Collapsed', () => {
-    const verticalCollapseDirection = select(
-      'Vertical Direction',
-      { left: 'left', right: 'right' },
-      'left'
-    );
     const shouldCollapse = boolean('Collapsable?', true);
-    const verticalCollapseOptions = shouldCollapse
-      ? {
-          beforeToggleButton: <Button>{verticalCollapseDirection === 'left' ? '⬅' : '➡'}</Button>,
-          afterToggleButton: <Button>{verticalCollapseDirection === 'left' ? '➡' : '⬅'}</Button>,
-          collapsedSize: 40,
-          collapseDirection: verticalCollapseDirection,
-        }
-      : undefined;
     const VerticalSplitPane = (props: Omit<SplitPaneProps, 'split'>) => (
-      <SplitPane split={'vertical'} collapseOptions={verticalCollapseOptions} {...props}>
+      <SplitPane split={'vertical'} collapse={shouldCollapse} {...props}>
         {props.children}
       </SplitPane>
     );

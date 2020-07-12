@@ -10,9 +10,13 @@ import { useGetIsPaneCollapsed } from './hooks/callbacks/useGetIsCollapsed';
 import { useIsLtr } from './hooks/memos/useIsLtr';
 import { useCollapsedSizes } from './hooks/memos/useCollapsedSizes';
 import { Nullable } from '../../types/utilities';
+import { useCollapseOptions } from './hooks/memos/useCollapseOptions';
 
+// String Unions
 export type SplitType = 'horizontal' | 'vertical';
 export type Direction = 'ltr' | 'rtl';
+export type TransitionType = 'fade' | 'grow' | 'zoom' | 'none';
+export type CollapseDirection = 'left' | 'right' | 'up' | 'down';
 
 export type SplitPaneHooks = {
   onDragStarted?: () => void;
@@ -20,22 +24,17 @@ export type SplitPaneHooks = {
   onSaveSizes?: (sizes: number[]) => void;
   onCollapse?: (collapsedSizes: Nullable<number>[]) => void;
 };
-
-export type TransitionType = 'fade' | 'grow' | 'zoom' | 'none';
-export type CollapseDirection = 'left' | 'right' | 'up' | 'down';
-
 export interface CollapseOptions {
   beforeToggleButton: React.ReactElement;
   afterToggleButton: React.ReactElement;
-  buttonTransition?: TransitionType;
-  buttonTransitionTimeout?: number;
-  buttonPositionOffset?: number;
-  collapseDirection?: CollapseDirection;
-  collapseTransitionTimeout?: number;
-  collapsedSize?: number;
-  overlayCss?: React.CSSProperties;
+  buttonTransition: TransitionType;
+  buttonTransitionTimeout: number;
+  buttonPositionOffset: number;
+  collapseDirection: CollapseDirection;
+  collapseTransitionTimeout: number;
+  collapsedSize: number;
+  overlayCss: React.CSSProperties;
 }
-
 export interface ResizerOptions {
   css?: React.CSSProperties;
   hoverCss?: React.CSSProperties;
@@ -44,7 +43,9 @@ export interface ResizerOptions {
 
 export interface SplitPaneProps {
   split: SplitType;
-  direction?: Direction;
+  collapse?: boolean | Partial<CollapseOptions>;
+
+  dir?: Direction;
   className?: string;
 
   initialSizes?: number[];
@@ -52,8 +53,6 @@ export interface SplitPaneProps {
   collapsedSizes?: Nullable<number>[];
 
   hooks?: SplitPaneHooks;
-
-  collapseOptions?: CollapseOptions;
   resizerOptions?: ResizerOptions;
 
   children: React.ReactChild[];
@@ -62,16 +61,27 @@ export interface SplitPaneProps {
 export const SplitPane: React.FC<SplitPaneProps> = props => {
   const collapsedSizes = useCollapsedSizes(props);
   const isLtr = useIsLtr(props);
+  const isVertical = props.split === 'vertical';
+  const isReversed = useIsCollapseReversed(props.collapse);
+
+  const collapseOptions = useCollapseOptions({
+    isVertical,
+    isLtr,
+    originalValue: props.collapse,
+    isReversed,
+  });
 
   const [collapsedIndices, setCollapsed] = useState<number[]>(
     convertCollapseSizesToIndices(collapsedSizes)
   );
 
-  const { childPanes, handleDragStart, resizeState } = useSplitPaneResize({
+  const { childPanes, handleDragStart, resizingIndex } = useSplitPaneResize({
     ...props,
     isLtr,
+    isVertical,
     collapsedIndices,
     collapsedSizes,
+    collapseOptions,
   });
 
   const splitPaneClass = useMergeClasses(['SplitPane', props.split, props.className]);
@@ -79,30 +89,32 @@ export const SplitPane: React.FC<SplitPaneProps> = props => {
 
   const toggleCollapse = useToggleCollapse({ setCollapsed, collapsedIndices });
   const getIsPaneCollapsed = useGetIsPaneCollapsed({ collapsedIndices });
-  const isCollapseReversed = useIsCollapseReversed(props.collapseOptions);
 
   if (childPanes.length <= 1) {
-    console.error(
-      '[react-collapse-pane] - You must have more than one non-null child inside the SplitPane component.  Even though SplitPane does not crash, you should resolve this error.'
-    );
+    if (process.env.NODE_ENV !== 'production') {
+      console.error(
+        '[react-collapse-pane] - You must have more than one non-null child inside the SplitPane component.  Even though SplitPane does not crash, you should resolve this error.'
+      );
+    }
     return <>{props.children}</>;
   }
 
   // stacks the children and places a resizer in between each of them. Each resizer has the same index as the pane that it controls.
   const entries = childPanes.map((pane, paneIndex) => {
-    const resizerPaneIndex = isCollapseReversed ? paneIndex : paneIndex - 1;
+    const resizerPaneIndex = isReversed ? paneIndex : paneIndex - 1;
     return (
       <React.Fragment key={paneIndex}>
         {paneIndex - 1 >= 0 ? (
           <Resizer
             key={`resizer.${resizerPaneIndex}`}
             isCollapsed={getIsPaneCollapsed(resizerPaneIndex)}
-            split={props.split}
+            isVertical={isVertical}
             isLtr={isLtr}
-            className={resizeState?.index === resizerPaneIndex ? resizingClass : className}
+            split={props.split}
+            className={resizingIndex === resizerPaneIndex ? resizingClass : props.className}
             paneIndex={resizerPaneIndex}
             resizerOptions={props.resizerOptions}
-            collapseOptions={props.collapseOptions}
+            collapseOptions={collapseOptions}
             onDragStarted={handleDragStart}
             onCollapseToggle={toggleCollapse}
           />
@@ -114,10 +126,11 @@ export const SplitPane: React.FC<SplitPaneProps> = props => {
           isCollapsed={getIsPaneCollapsed(paneIndex)}
           collapsedIndices={collapsedIndices}
           split={props.split}
+          isVertical={isVertical}
           minSize={getMinSize(paneIndex, props.minSizes)}
-          className={className}
-          transitionTimeout={props.collapseOptions?.collapseTransitionTimeout}
-          collapseOverlayCss={props.collapseOptions?.overlayCss}
+          className={props.className}
+          transitionTimeout={collapseOptions?.collapseTransitionTimeout}
+          collapseOverlayCss={collapseOptions?.overlayCss}
         >
           {pane.node}
         </Pane>
@@ -132,4 +145,3 @@ export const SplitPane: React.FC<SplitPaneProps> = props => {
   );
 };
 SplitPane.displayName = 'SplitPane';
-SplitPane.key = 'SplitPane';

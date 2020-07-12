@@ -11,18 +11,7 @@ configureActions({
   depth: 5,
   limit: 5,
 });
-const Button = styled.div`
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 1000px;
-  background: grey;
-  font-size: 1.1rem;
-  cursor: pointer;
-  user-select: none;
-  text-align: center;
-  color: white;
-  border: 1px silver solid;
-`;
+
 const Logo = styled.img`
   @keyframes App-logo-spin {
     from {
@@ -78,9 +67,7 @@ storiesOf('Collapsable Panes', module)
       <Header>
         <SplitPane
           split="vertical"
-          collapseOptions={{
-            beforeToggleButton: <Button>{collapseDirection === 'left' ? '⬅' : '➡'}</Button>,
-            afterToggleButton: <Button>{collapseDirection === 'left' ? '➡' : '⬅'}</Button>,
+          collapse={{
             collapseTransitionTimeout: collapseTransition,
             buttonTransition,
             collapseDirection,
@@ -127,9 +114,7 @@ storiesOf('Collapsable Panes', module)
         split="horizontal"
         initialSizes={[340.75, 816.75, 273.75, 251.75]}
         minSizes={minSizes}
-        collapseOptions={{
-          beforeToggleButton: <Button>{collapseDirection === 'up' ? '⬆' : '⬇'}</Button>,
-          afterToggleButton: <Button>{collapseDirection === 'up' ? '⬇' : '⬆'}</Button>,
+        collapse={{
           collapseDirection,
         }}
         resizerOptions={{

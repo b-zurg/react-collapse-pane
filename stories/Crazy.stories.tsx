@@ -23,40 +23,14 @@ const Button = styled.div`
 
 storiesOf('Crazy Combo!', module)
   .add('Do the Splits!', () => {
-    const verticalCollapseDirection = select(
-      'Vertical Direction',
-      { left: 'left', right: 'right' },
-      'left'
-    );
-    const horizontalCollapseDirection = select(
-      'Horizontal Direction',
-      { up: 'up', down: 'down' },
-      'up'
-    );
     const shouldCollapse = boolean('Collapsable?', true);
-    const verticalCollapseOptions = shouldCollapse
-      ? {
-          beforeToggleButton: <Button>{verticalCollapseDirection === 'left' ? '⬅' : '➡'}</Button>,
-          afterToggleButton: <Button>{verticalCollapseDirection === 'left' ? '➡' : '⬅'}</Button>,
-          collapsedSize: 40,
-          collapseDirection: verticalCollapseDirection,
-        }
-      : undefined;
-    const horizontalCollapseOptions = shouldCollapse
-      ? {
-          beforeToggleButton: <Button>{horizontalCollapseDirection === 'up' ? '⬆' : '⬇'}</Button>,
-          afterToggleButton: <Button>{horizontalCollapseDirection === 'up' ? '⬇' : '⬆'}</Button>,
-          collapsedSize: 40,
-          collapseDirection: horizontalCollapseDirection,
-        }
-      : undefined;
     const VerticalSplitPane = (props: Omit<SplitPaneProps, 'split'>) => (
-      <SplitPane split={'vertical'} collapseOptions={verticalCollapseOptions}>
+      <SplitPane split={'vertical'} collapse={shouldCollapse}>
         {props.children}
       </SplitPane>
     );
     const HorizontalSplitpane = (props: Omit<SplitPaneProps, 'split'>) => (
-      <SplitPane split={'horizontal'} collapseOptions={horizontalCollapseOptions}>
+      <SplitPane split={'horizontal'} collapse={shouldCollapse}>
         {props.children}
       </SplitPane>
     );
