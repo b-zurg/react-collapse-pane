@@ -66,7 +66,7 @@ The only component you must interact with is `SplitPane`.  This serves as a wrap
 All you're required to give is a `split` prop which can be either `"horizontal"` or `"vertical"`.  This identifies what the orientation of the split panel will be.
 
 ```tsx
-<SplitPane split="vertical">
+<SplitPane split="vertical" collapse={true}>
   <div>This is the first div</div>
   <div>This is the second div</div>
   <div>This is the third div</div>
@@ -74,18 +74,17 @@ All you're required to give is a `split` prop which can be either `"horizontal"`
 </SplitPane>
 ```
 
-What you just did is make a splittable panel layout!
+What you just did is make a split collapsible panel layout!
 
 ## Congrats!  That was easy! :grin:
 
 This basically splits the children vertically (i.e. full-height split).  The children can be any valid React child.  If a child is `null` it will be excluded from being split or displayed.
 
-By default there is a 1px divider with a grabbable surface of 1rem width or height (depending on the split). 
+By default there is a 1px divider with a grabbable surface of 1rem width or height (depending on the split). If you hover over the divider a button will appear that you can use to collapse the panel.
 
+There is no limit to the number of elements you have as children.  The `SplitPane` will split them all accordingly.
 
-There is also no limit to the number of divs you have as children.  The `SplitPane` will split them all accordingly.
-
-## But what about *collapsing* the panels, *styling* the resizer, or *RTL* support? :sob:
+## But what about *styling* the resizer, the buttons, controlling the animations, or *RTL* support? :sob:
 
 This library supports all of these things and more! 
 
