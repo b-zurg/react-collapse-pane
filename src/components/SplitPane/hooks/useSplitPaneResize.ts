@@ -17,7 +17,6 @@ import { debounce } from '../helpers';
 import { useRecalculateSizes } from './callbacks/useRecalculateSizes';
 import { useEventListener } from '../../../hooks/useEventListener';
 import { Nullable } from '../../../types/utilities';
-import { useStoreState } from '../../../store/hooks';
 
 export interface ResizeState {
   index: number;
@@ -46,7 +45,7 @@ interface SplitPaneResizeOptions
     | 'collapsedSizes'
     | 'minSizes'
   > {
-  // collapsedIndices: number[];
+  collapsedIndices: number[];
   isLtr: boolean;
 }
 
@@ -60,12 +59,11 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
     initialSizes: originalDefaults,
     minSizes: originalMinSizes,
     hooks,
-    // collapsedIndices,
+    collapsedIndices,
     collapsedSizes: originalCollapsedSizes,
     collapseOptions,
     isLtr,
   } = options;
-  const collapsedIndices = useStoreState(state => state.baseStates.collapsedIndices);
   const children = !Array.isArray(originalChildren) ? [originalChildren] : originalChildren;
   // VALUES: const values used throughout the different logic
   const paneRefs = useRef(new Map<string, React.RefObject<HTMLDivElement>>());

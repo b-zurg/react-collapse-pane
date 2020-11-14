@@ -12,7 +12,6 @@ import { useMergeClasses } from '../../hooks/useMergeClasses';
 import { CollapseOptions, ResizerOptions } from '../SplitPane';
 import styled from 'styled-components';
 import { useTransition } from './hooks/useTransition';
-import { useStoreActions } from '../../store/hooks';
 
 const ButtonPositionOffset = styled.div`
   flex: 1 1 auto;
@@ -32,7 +31,7 @@ export interface ResizerProps {
   collapseOptions?: CollapseOptions;
   resizerOptions?: Partial<ResizerOptions>;
   onDragStarted: (paneIndex: number, pos: ClientPosition) => void;
-  // onCollapseToggle: (paneIndex: number) => void;
+  onCollapseToggle: (paneIndex: number) => void;
   isCollapsed: boolean;
 }
 export const Resizer = ({
@@ -42,12 +41,11 @@ export const Resizer = ({
   onDragStarted,
   resizerOptions,
   collapseOptions,
-  // onCollapseToggle,
+  onCollapseToggle,
   isLtr,
   isCollapsed,
 }: ResizerProps) => {
   const { grabberSize, css, hoverCss } = { ...defaultResizerOptions, ...resizerOptions };
-  const onCollapseToggle = useStoreActions(action => action.baseStates.toggleCollapse);
 
   const isVertical = split === 'vertical';
   const classes = useMergeClasses(['Resizer', split, className]);
