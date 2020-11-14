@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { SplitPane } from '../src/components/SplitPane';
+import { SplitPane } from '../src';
 import { storiesOf } from '@storybook/react';
 import { action, configureActions } from '@storybook/addon-actions';
 import React from 'react';

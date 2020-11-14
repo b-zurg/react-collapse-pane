@@ -3,6 +3,7 @@ import { SplitType } from './SplitPane';
 import { useMergeClasses } from '../hooks/useMergeClasses';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
+import { useStoreState } from '../store/hooks';
 
 const DEFAULT_COLLAPSE_TRANSITION_TIMEOUT = 500;
 const verticalCss = css`
@@ -68,7 +69,7 @@ export interface PaneProps {
   isCollapsed: boolean;
   forwardRef: React.Ref<HTMLDivElement>;
   collapseOverlayCss?: React.CSSProperties;
-  collapsedIndices: number[];
+  // collapsedIndices: number[];
   children: React.ReactNode;
   transitionTimeout: number | undefined;
 }
@@ -81,7 +82,7 @@ const UnMemoizedPane = ({
   className,
   children,
   forwardRef,
-  collapsedIndices,
+  // collapsedIndices,
   transitionTimeout,
 }: PaneProps) => {
   const classes = useMergeClasses(['Pane', split, className]);
@@ -91,6 +92,8 @@ const UnMemoizedPane = ({
   const [shouldAnimate, setShouldAnimate] = useState(false);
 
   const didMount = useRef(false);
+
+  const collapsedIndices = useStoreState(state => state.baseStates.collapsedIndices);
 
   useEffect(() => {
     if (didMount.current) {

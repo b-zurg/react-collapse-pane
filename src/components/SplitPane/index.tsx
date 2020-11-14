@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { Pane } from '../Pane';
 import { Resizer } from '../Resizer';
 import { useSplitPaneResize } from './hooks/useSplitPaneResize';
 import { convertCollapseSizesToIndices, getMinSize, Wrapper } from './helpers';
 import { useMergeClasses } from '../../hooks/useMergeClasses';
 import { useIsCollapseReversed } from './hooks/memos/useIsCollapseReversed';
-import { useToggleCollapse } from './hooks/callbacks/useToggleCollapse';
+// import { useToggleCollapse } from './hooks/callbacks/useToggleCollapse';
 import { useGetIsPaneCollapsed } from './hooks/callbacks/useGetIsCollapsed';
 import { useIsLtr } from './hooks/memos/useIsLtr';
 import { useCollapsedSizes } from './hooks/memos/useCollapsedSizes';
 import { Nullable } from '../../types/utilities';
+
+import { useStoreActions } from '../../store/hooks';
 
 export type SplitType = 'horizontal' | 'vertical';
 export type Direction = 'ltr' | 'rtl';
@@ -59,27 +61,32 @@ export interface SplitPaneProps {
   children: React.ReactChild[];
 }
 
-export const SplitPane = ({ className = '', ...props }: SplitPaneProps) => {
+export const SplitPaneView = ({ className = '', ...props }: SplitPaneProps) => {
   const collapsedSizes = useCollapsedSizes(props);
   const isLtr = useIsLtr(props);
 
-  const [collapsedIndices, setCollapsed] = useState<number[]>(
-    convertCollapseSizesToIndices(collapsedSizes)
-  );
+  const setCollapsed = useStoreActions(action => action.baseStates.setCollapsed);
+
+  // const [collapsedIndices, setCollapsed] = useState<number[]>(
+  //   convertCollapseSizesToIndices(collapsedSizes)
+  // );
 
   const { childPanes, handleDragStart, resizeState } = useSplitPaneResize({
     ...props,
     isLtr,
-    collapsedIndices,
     collapsedSizes,
   });
 
   const splitPaneClass = useMergeClasses(['SplitPane', props.split, className]);
   const resizingClass = useMergeClasses(['resizing', className]);
 
-  const toggleCollapse = useToggleCollapse({ setCollapsed, collapsedIndices });
-  const getIsPaneCollapsed = useGetIsPaneCollapsed({ collapsedIndices });
+  // const toggleCollapse = useToggleCollapse({ setCollapsed, collapsedIndices });
+  const getIsPaneCollapsed = useGetIsPaneCollapsed();
   const isCollapseReversed = useIsCollapseReversed(props.collapseOptions);
+
+  useEffect(() => {
+    setCollapsed(convertCollapseSizesToIndices(collapsedSizes));
+  }, [setCollapsed, collapsedSizes]);
 
   if (childPanes.length <= 1) {
     console.error(
@@ -104,7 +111,7 @@ export const SplitPane = ({ className = '', ...props }: SplitPaneProps) => {
             resizerOptions={props.resizerOptions}
             collapseOptions={props.collapseOptions}
             onDragStarted={handleDragStart}
-            onCollapseToggle={toggleCollapse}
+            // onCollapseToggle={toggleCollapse}
           />
         ) : null}
         <Pane
@@ -112,7 +119,7 @@ export const SplitPane = ({ className = '', ...props }: SplitPaneProps) => {
           forwardRef={pane.ref}
           size={pane.size}
           isCollapsed={getIsPaneCollapsed(paneIndex)}
-          collapsedIndices={collapsedIndices}
+          // collapsedIndices={collapsedIndices}
           split={props.split}
           minSize={getMinSize(paneIndex, props.minSizes)}
           className={className}
@@ -131,5 +138,5 @@ export const SplitPane = ({ className = '', ...props }: SplitPaneProps) => {
     </Wrapper>
   );
 };
-SplitPane.displayName = 'SplitPane';
-SplitPane.key = 'SplitPane';
+SplitPaneView.displayName = 'SplitPaneView';
+SplitPaneView.key = 'SplitPaneView';
