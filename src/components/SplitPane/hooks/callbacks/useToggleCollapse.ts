@@ -13,6 +13,6 @@ export function useToggleCollapse({
         ? setCollapsed(collapsedIndices.filter(i => i !== index))
         : setCollapsed([...collapsedIndices, index]);
     },
-    [collapsedIndices]
+    [collapsedIndices, setCollapsed]
   );
 }
