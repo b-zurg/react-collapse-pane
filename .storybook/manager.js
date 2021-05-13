@@ -17,7 +17,6 @@ addons.setConfig({
     brandTitle: 'react-collapse-pane',
     brandUrl: "https://github.com/b-zurg/react-collapse-pane",
     brandImage: "https://github.com/b-zurg/react-collapse-pane/raw/master/logo.svg?sanitize=true",
-    selectedPanel: "knobs"
   }),
 });
 

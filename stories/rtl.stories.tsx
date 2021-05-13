@@ -1,34 +1,21 @@
-import styled from '@emotion/styled';
-import { SplitPane } from '../src/components/SplitPane';
+import { SplitPane } from '../src';
 import { storiesOf } from '@storybook/react';
 import { action, configureActions } from '@storybook/addon-actions';
 import React from 'react';
-import { select, object, withKnobs } from '@storybook/addon-knobs';
 
 configureActions({
   depth: 5,
   limit: 5,
 });
-const Button = styled.div`
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 1000px;
-  background: grey;
-  cursor: pointer;
-  user-select: none;
-  text-align: center;
-  color: white;
-  border: 1px silver solid;
-`;
 
 storiesOf('Right to Left Support', module)
   .add('Vertical Split', () => {
-    const collapseDirection = select('Direction', { left: 'left', right: 'right' }, 'left');
-    const resizerCss = object('Resizer CSS', {
+    const collapseDirection = 'left';
+    const resizerCss = {
       width: '1px',
       background: 'rgba(0, 0, 0, 0.1)',
-    });
-    const resizerHoverCss = object('Resizer Hover CSS', {
+    };
+    const resizerHoverCss = {
       width: '10px',
       marginLeft: '-10px',
       backgroundImage:
@@ -37,7 +24,7 @@ storiesOf('Right to Left Support', module)
       backgroundPosition: '0 50%',
       backgroundRepeat: 'no-repeat',
       borderRight: '1px solid rgba(0, 0, 0, 0.1)',
-    });
+    };
     return (
       <div style={{ direction: 'rtl' }}>
         <SplitPane
@@ -66,12 +53,12 @@ storiesOf('Right to Left Support', module)
     );
   })
   .add('Horizontal Split', () => {
-    const collapseDirection = select('Direction', { up: 'up', down: 'down' }, 'up');
-    const resizerCss = object('Resizer CSS', {
+    const collapseDirection = 'up';
+    const resizerCss = {
       height: '1px',
       background: 'rgba(0, 0, 0, 0.1)',
-    });
-    const resizerHoverCss = object('Resizer Hover CSS', {
+    };
+    const resizerHoverCss = {
       height: '10px',
       marginTop: '-10px',
       backgroundImage:
@@ -80,7 +67,7 @@ storiesOf('Right to Left Support', module)
       backgroundPosition: '50% 0',
       backgroundRepeat: 'no-repeat',
       borderRight: '1px solid rgba(0, 0, 0, 0.1)',
-    });
+    };
     return (
       <div style={{ direction: 'rtl' }}>
         <SplitPane
@@ -108,5 +95,4 @@ storiesOf('Right to Left Support', module)
         </SplitPane>
       </div>
     );
-  })
-  .addDecorator(withKnobs);
+  });
