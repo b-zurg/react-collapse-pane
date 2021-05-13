@@ -174,3 +174,7 @@ This library easily supports RTL languages by providing a `direction` prop.  Thi
         </SplitPane>
       </div>
 ```
+
+# Note about Polyfills
+* If you require IE11 support then you will need to add a pollyfill for `AbortController`
+* If you are using the ionic framework then you will need a polyfill for `resize-observer-polyfill` otherwise the pane size calculation will not work.
