@@ -1,9 +1,8 @@
-import styled from '@emotion/styled';
-import { SplitPane } from '../src/components/SplitPane';
+import styled from 'styled-components';
+import { SplitPane } from '../src';
 import { storiesOf } from '@storybook/react';
 import { action, configureActions } from '@storybook/addon-actions';
 import React from 'react';
-import { select, withKnobs, object, number } from '@storybook/addon-knobs';
 // @ts-ignore
 import logo from '../docs/icon.svg';
 
@@ -43,25 +42,12 @@ const Link = styled.a`
 
 storiesOf('Collapsable Panes', module)
   .add('Vertical Split', () => {
-    const buttonPositionOffset = number('Button Position Offset', 0, {
-      min: -200,
-      max: 200,
-      range: true,
-    });
-    const collapseDirection = select('Direction', { left: 'left', right: 'right' }, 'left');
-    const minSizes = object('Minimum Sizes', [50, 50, 50, 50]);
-    const collapseTransition = number('Collapse Transition Speed (ms)', 500);
-    const grabberSize = number('Grabber Size (px)', 10, { min: 1, max: 100, range: true });
-    const buttonTransition = select(
-      'Button Transition',
-      {
-        fade: 'fade',
-        zoom: 'zoom',
-        grow: 'grow',
-        none: 'none',
-      },
-      'grow'
-    );
+    const buttonPositionOffset = 0;
+    const collapseDirection = 'left';
+    const minSizes = [50, 50, 50, 50];
+    const collapseTransition = 500;
+    const grabberSize = 10;
+    const buttonTransition = 'grow';
 
     return (
       <Header>
@@ -93,12 +79,12 @@ storiesOf('Collapsable Panes', module)
     );
   })
   .add('Horizontal Split', () => {
-    const collapseDirection = select('Direction', { up: 'up', down: 'down' }, 'up');
-    const resizerCss = object('Resizer CSS', {
+    const collapseDirection = 'up';
+    const resizerCss = {
       height: '1px',
       background: 'rgba(0, 0, 0, 0.1)',
-    });
-    const resizerHoverCss = object('Resizer Hover CSS', {
+    };
+    const resizerHoverCss = {
       height: '10px',
       marginTop: '-10px',
       backgroundImage:
@@ -107,8 +93,8 @@ storiesOf('Collapsable Panes', module)
       backgroundPosition: '50% 0',
       backgroundRepeat: 'no-repeat',
       borderRight: '1px solid rgba(0, 0, 0, 0.1)',
-    });
-    const minSizes = object('minimum sizes', [50, 50, 50, 50]);
+    };
+    const minSizes = [50, 50, 50, 50];
     return (
       <SplitPane
         split="horizontal"
@@ -134,5 +120,4 @@ storiesOf('Collapsable Panes', module)
         <div>This is a fourth div</div>
       </SplitPane>
     );
-  })
-  .addDecorator(withKnobs);
+  });

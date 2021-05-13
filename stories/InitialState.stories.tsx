@@ -1,29 +1,15 @@
-import styled from '@emotion/styled';
-import { SplitPane, SplitPaneProps } from '../src/components/SplitPane';
+import { SplitPane, SplitPaneProps } from '../src';
 import { storiesOf } from '@storybook/react';
 import { configureActions } from '@storybook/addon-actions';
 import React from 'react';
-import { boolean, select, withKnobs } from '@storybook/addon-knobs';
 
 configureActions({
   depth: 5,
   limit: 5,
 });
-const Button = styled.div`
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 1000px;
-  background: grey;
-  cursor: pointer;
-  user-select: none;
-  text-align: center;
-  color: white;
-  border: 1px silver solid;
-`;
-
 storiesOf('Initial States', module)
   .add('Ltr, First Pane Collapsed', () => {
-    const shouldCollapse = boolean('Collapsable?', true);
+    const shouldCollapse = true;
     const VerticalSplitPane = (props: Omit<SplitPaneProps, 'split'>) => (
       <SplitPane split={'vertical'} collapse={shouldCollapse} {...props}>
         {props.children}
@@ -39,7 +25,7 @@ storiesOf('Initial States', module)
     );
   })
   .add('Ltr, First Two Panes Collapsed', () => {
-    const shouldCollapse = boolean('Collapsable?', true);
+    const shouldCollapse = true;
     const VerticalSplitPane = (props: Omit<SplitPaneProps, 'split'>) => (
       <SplitPane split={'vertical'} collapse={shouldCollapse} {...props}>
         {props.children}
@@ -70,5 +56,4 @@ storiesOf('Initial States', module)
         <div>This is only one div!</div>
       </SplitPane>
     );
-  })
-  .addDecorator(withKnobs);
+  });
