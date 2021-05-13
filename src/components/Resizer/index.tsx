@@ -11,7 +11,7 @@ import {
 import { useMergeClasses } from '../../hooks/useMergeClasses';
 import { CollapseOptions, ResizerOptions } from '../SplitPane';
 import { useTransition } from './hooks/useTransition';
-import { SplitType } from '../SplitPane/index';
+import { SplitType } from '../SplitPane';
 import { debounce } from '../SplitPane/helpers';
 
 const defaultResizerOptions: Required<ResizerOptions> = {
@@ -93,9 +93,9 @@ export const Resizer = ({
     debounce(() => setIsHovered(false), 100),
     [setIsHovered]
   );
-  const handleMouseLeaveGrabber = useCallback(() => {
-    debouncedSetNotHovered();
-  }, [debouncedSetNotHovered]);
+  const handleMouseLeaveGrabber = useCallback(() => debouncedSetNotHovered(), [
+    debouncedSetNotHovered,
+  ]);
 
   const getWidthOrHeight = useCallback(
     (size: string | number) => (isVertical ? { width: size } : { height: size }),
