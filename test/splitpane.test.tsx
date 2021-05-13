@@ -1,6 +1,6 @@
 import React from 'react';
 import * as ReactDOM from 'react-dom';
-import { SplitPaneProps, SplitPane } from '../src/components/SplitPane';
+import { SplitPaneProps, SplitPane } from '../src';
 
 const SplitPaneBase: React.FC<SplitPaneProps> = props => (
   <SplitPane
