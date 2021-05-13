@@ -1,13 +1,13 @@
 import React, { useCallback } from 'react';
 
-export function useToggleCollapse({
+export const useToggleCollapse = ({
   collapsedIndices,
   setCollapsed,
 }: {
   collapsedIndices: number[];
   setCollapsed: React.Dispatch<React.SetStateAction<number[]>>;
-}) {
-  return useCallback(
+}) =>
+  useCallback(
     (index: number) => {
       collapsedIndices.includes(index)
         ? setCollapsed(collapsedIndices.filter(i => i !== index))
@@ -15,4 +15,3 @@ export function useToggleCollapse({
     },
     [collapsedIndices, setCollapsed]
   );
-}

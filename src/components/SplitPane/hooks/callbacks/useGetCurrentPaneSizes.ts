@@ -3,15 +3,14 @@ import { getRefSize } from '../../helpers';
 import { ChildPane } from '../useSplitPaneResize';
 import { SplitType } from '../..';
 
-export function useGetCurrentPaneSizes({
+export const useGetCurrentPaneSizes = ({
   childPanes,
   split,
 }: {
   childPanes: Pick<ChildPane, 'ref'>[];
   split: SplitType;
-}) {
-  return useCallback(() => childPanes.map(({ ref }): number => getRefSize({ split, ref })), [
+}) =>
+  useCallback(() => childPanes.map(({ ref }): number => getRefSize({ split, ref })), [
     childPanes,
     split,
   ]);
-}

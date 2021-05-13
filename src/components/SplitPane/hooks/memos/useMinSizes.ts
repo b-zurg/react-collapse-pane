@@ -5,7 +5,7 @@ import { CollapseOptions } from '../../index';
 /**
  * Returns the current actual minimum size of the panel.  This in some cases means the collapsed size.
  */
-export function useMinSizes({
+export const useMinSizes = ({
   minSizes,
   numSizes,
   collapsedIndices,
@@ -15,8 +15,8 @@ export function useMinSizes({
   minSizes?: number | number[];
   collapsedIndices: number[];
   collapseOptions?: CollapseOptions;
-}): number[] {
-  return useMemo(
+}): number[] =>
+  useMemo(
     () =>
       Array.from({ length: numSizes }).map((_child, idx) =>
         collapsedIndices.includes(idx)
@@ -25,4 +25,3 @@ export function useMinSizes({
       ),
     [numSizes, collapseOptions, collapsedIndices, minSizes]
   );
-}

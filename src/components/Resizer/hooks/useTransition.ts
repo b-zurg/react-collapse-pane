@@ -11,8 +11,7 @@ const transitionComponentMap: {
   none: Fade,
 };
 
-export function useTransition(collapseOptions?: CollapseOptions) {
-  return useMemo(() => transitionComponentMap[collapseOptions?.buttonTransition ?? 'fade'], [
+export const useTransition = (collapseOptions?: CollapseOptions) =>
+  useMemo(() => transitionComponentMap[collapseOptions?.buttonTransition ?? 'fade'], [
     collapseOptions,
   ]);
-}

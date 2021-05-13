@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { DragState } from '../effects/useDragState';
 import { moveCollapsedSiblings, moveSizes } from '../../helpers';
 
-export function useGetMovedSizes({
+export const useGetMovedSizes = ({
   sizes: originalSizes,
   isLtr,
   minSizes,
@@ -16,8 +16,8 @@ export function useGetMovedSizes({
   collapsedIndices: number[];
   isReversed: boolean;
   collapsedSize: number;
-}) {
-  return useCallback(
+}) =>
+  useCallback(
     (dragState: DragState): number[] => {
       const sizes = [...originalSizes];
       const index = dragState.index;
@@ -44,4 +44,3 @@ export function useGetMovedSizes({
     },
     [collapsedIndices, collapsedSize, isLtr, isReversed, minSizes, originalSizes]
   );
-}
