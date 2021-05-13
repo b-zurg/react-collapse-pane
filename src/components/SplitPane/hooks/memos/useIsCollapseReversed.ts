@@ -10,6 +10,5 @@ export const isCollapseDirectionReversed = (
     : false;
 };
 
-export function useIsCollapseReversed(collapseOptions?: Partial<CollapseOptions> | boolean) {
-  return useMemo(() => isCollapseDirectionReversed(collapseOptions), [collapseOptions]);
-}
+export const useIsCollapseReversed = (collapseOptions?: Partial<CollapseOptions> | boolean) =>
+  useMemo(() => isCollapseDirectionReversed(collapseOptions), [collapseOptions]);

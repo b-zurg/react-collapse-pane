@@ -1,7 +1,7 @@
 import { addArray } from '../../helpers';
 import React, { useCallback } from 'react';
 
-export function useRecalculateSizes({
+export const useRecalculateSizes = ({
   getCurrentPaneSizes,
   collapsedSize,
   collapsedIndices,
@@ -15,8 +15,8 @@ export function useRecalculateSizes({
   minSizes: number[];
   setMovedSizes: React.Dispatch<React.SetStateAction<number[]>>;
   setSizes: React.Dispatch<React.SetStateAction<number[]>>;
-}) {
-  return useCallback(
+}) =>
+  useCallback(
     (initialSizes?: number[]) => {
       const curSizes = getCurrentPaneSizes();
       const ratio =
@@ -41,4 +41,3 @@ export function useRecalculateSizes({
     },
     [collapsedIndices, collapsedSize, getCurrentPaneSizes, setMovedSizes, setSizes]
   );
-}

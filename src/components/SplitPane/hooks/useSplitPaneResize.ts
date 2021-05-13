@@ -42,7 +42,7 @@ interface SplitPaneResizeOptions
 /**
  * Manages the dragging, size calculation, collapse calculation, and general state management of the panes.  It propogates the results of its complex calculations into the `childPanes` which are used by the rest of the "dumb" react components that just take all of them and render them
  */
-export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneResizeReturns {
+export const useSplitPaneResize = (options: SplitPaneResizeOptions): SplitPaneResizeReturns => {
   const {
     children: originalChildren,
     split,
@@ -174,4 +174,4 @@ export function useSplitPaneResize(options: SplitPaneResizeOptions): SplitPaneRe
     resizingIndex: dragState?.index ?? null,
     handleDragStart,
   };
-}
+};

@@ -21,7 +21,7 @@ const getDefault = (props: {
 /**
  * function that returns a set of valid collapseOptions from uncertain input.
  */
-export function useCollapseOptions({
+export const useCollapseOptions = ({
   originalValue,
   ...orientationDetails
 }: {
@@ -29,8 +29,8 @@ export function useCollapseOptions({
   isVertical: boolean;
   isLtr: boolean;
   isReversed: boolean;
-}): Required<CollapseOptions> | undefined {
+}): Required<CollapseOptions> | undefined => {
   if (originalValue === undefined || originalValue === false) return undefined;
   if (originalValue === true) return getDefault(orientationDetails);
   return { ...getDefault(orientationDetails), ...originalValue };
-}
+};

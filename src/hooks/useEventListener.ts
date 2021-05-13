@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
-export function useEventListener<K extends keyof WindowEventMap>(
+export const useEventListener = <K extends keyof WindowEventMap>(
   type: K,
   listener?: (this: Window, ev: WindowEventMap[K]) => void
-): void {
+): void =>
   useEffect(() => {
     const abortController = new AbortController();
     if (!listener) return;
@@ -13,4 +13,3 @@ export function useEventListener<K extends keyof WindowEventMap>(
       abortController.abort();
     };
   }, [type, listener]);
-}

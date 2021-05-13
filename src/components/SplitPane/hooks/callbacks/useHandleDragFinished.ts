@@ -4,7 +4,7 @@ import { SplitPaneHooks } from '../..';
 /**
  * called at the end of a drag, sets the final size as well as runs the callback hook
  */
-export function useHandleDragFinished({
+export const useHandleDragFinished = ({
   setSizes,
   hooks,
   movedSizes,
@@ -13,9 +13,8 @@ export function useHandleDragFinished({
   setSizes: React.Dispatch<React.SetStateAction<number[]>>;
   movedSizes: number[];
   hooks?: SplitPaneHooks;
-}) {
-  return useCallback(() => {
+}) =>
+  useCallback(() => {
     setSizes(movedSizes);
     hooks?.onSaveSizes?.(movedSizes);
   }, [movedSizes, hooks, setSizes]);
-}

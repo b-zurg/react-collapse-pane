@@ -21,10 +21,10 @@ interface DragStateHandlers {
   onMouseEnter?: (event: MouseEvent) => void;
 }
 
-function useDragStateHandlers(
+const useDragStateHandlers = (
   isVertical: boolean,
   onDragFinished: (dragState: DragState) => void
-): DragStateHandlers {
+): DragStateHandlers => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartPos, setDragStartPos] = useState<number | null>(null);
   const [currentPos, setCurrentPos] = useState<number | null>(null);
@@ -90,16 +90,16 @@ function useDragStateHandlers(
   );
 
   return { beginDrag, dragState, onMouseMove, onTouchMove, onMouseUp, onMouseEnter };
-}
+};
 
 interface UseDragStateReturn {
   dragState: DragState | null;
   beginDrag: BeginDragCallback;
 }
-export function useDragState(
+export const useDragState = (
   isVertical: boolean,
   onDragFinished: (dragState: DragState) => void
-): UseDragStateReturn {
+): UseDragStateReturn => {
   const {
     beginDrag,
     dragState,
@@ -115,4 +115,4 @@ export function useDragState(
   useEventListener('mouseenter', onMouseEnter);
 
   return { dragState, beginDrag };
-}
+};

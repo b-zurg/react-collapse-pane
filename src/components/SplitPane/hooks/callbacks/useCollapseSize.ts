@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { moveCollapsedSiblings, moveSizes } from '../../helpers';
 import * as ReactDOM from 'react-dom';
 
-export function useCollapseSize({
+export const useCollapseSize = ({
   isReversed,
   movedSizes,
   minSizes,
@@ -18,8 +18,8 @@ export function useCollapseSize({
   setSizes: React.Dispatch<React.SetStateAction<number[]>>;
   setMovedSizes: React.Dispatch<React.SetStateAction<number[]>>;
   collapsedSize: number;
-}) {
-  return useCallback(
+}) =>
+  useCallback(
     ({ size, idx }: { idx: number; size: number }) => {
       const offset = isReversed ? -(collapsedSize - size) : collapsedSize - size;
       const index = isReversed ? idx - 1 : idx;
@@ -41,4 +41,3 @@ export function useCollapseSize({
     },
     [isReversed, collapsedSize, movedSizes, minSizes, collapsedIndices, setMovedSizes, setSizes]
   );
-}

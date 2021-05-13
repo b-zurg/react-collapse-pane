@@ -4,7 +4,7 @@ import { useUncollapseSize } from './useUncollapseSize';
 import { SplitPaneHooks } from '../..';
 import { Nullable } from '../../../../types/utilities';
 
-export function useUpdateCollapsedSizes({
+export const useUpdateCollapsedSizes = ({
   movedSizes,
   setCollapsedSizes,
   collapsedSizes,
@@ -20,8 +20,8 @@ export function useUpdateCollapsedSizes({
   unCollapseSize: ReturnType<typeof useUncollapseSize>;
   setCollapsedSizes: React.Dispatch<React.SetStateAction<Nullable<number>[]>>;
   hooks?: SplitPaneHooks;
-}) {
-  return useCallback(
+}) =>
+  useCallback(
     (indices: number[]) => {
       setCollapsedSizes(
         collapsedSizes.map((size, idx) => {
@@ -42,4 +42,3 @@ export function useUpdateCollapsedSizes({
     },
     [collapseSize, collapsedSizes, hooks, movedSizes, setCollapsedSizes, sizes, unCollapseSize]
   );
-}
