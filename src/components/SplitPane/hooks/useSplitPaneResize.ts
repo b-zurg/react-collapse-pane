@@ -1,4 +1,5 @@
-import * as React from 'react';
+
++import * as React from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SplitPaneProps, CollapseOptions } from '..';
 import { useDragState, BeginDragCallback } from './effects/useDragState';
@@ -142,7 +143,8 @@ export const useSplitPaneResize = (options: SplitPaneResizeOptions): SplitPaneRe
   }, [dragState, movedSizes, hooks]);
   useEffect(() => {
     hooks?.onCollapse?.(collapsedSizes);
-  }, [collapsedSizes, hooks]);
+    hooks?.onSaveSizes?.(movedSizes)
+  }, [collapsedSizes, movedSizes, hooks]);
   useEffect(() => {
     updateCollapsedSizes(collapsedIndices);
     // eslint-disable-next-line react-hooks/exhaustive-deps
