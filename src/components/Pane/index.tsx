@@ -119,7 +119,7 @@ const UnMemoizedPane = ({
       $timeout={timeout}
       className={classes}
       ref={forwardRef}
-      style={{ flexBasis: size }}
+      style={{ flexBasis: size, flexGrow: isCollapsed ? 0 : 1 }}
     >
       <CollapseOverlay $isCollapsed={isCollapsed} $timeout={timeout} style={collapseOverlayCss} />
       <WidthPreserver $isCollapsed={isCollapsed} style={widthPreserverStyle}>
