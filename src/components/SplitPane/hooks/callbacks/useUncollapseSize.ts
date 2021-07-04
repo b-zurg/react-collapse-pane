@@ -21,7 +21,7 @@ export function useUncollapseSize({
 }) {
   return useCallback(
     ({ size, idx }: { size: number; idx: number }) => {
-      const offset = isReversed ? -(size - 50) : size - 50;
+      const offset = isReversed ? -(size - collapsedSize) : size - collapsedSize;
       const index = isReversed ? idx - 1 : idx;
       const newSizes = [...movedSizes];
       moveSizes({ sizes: newSizes, index, offset, minSizes, collapsedSize, collapsedIndices });
