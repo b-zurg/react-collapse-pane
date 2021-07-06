@@ -13,9 +13,10 @@ import { useCollapseSize } from './callbacks/useCollapseSize';
 import { useUncollapseSize } from './callbacks/useUncollapseSize';
 import { useUpdateCollapsedSizes } from './callbacks/useUpdateCollapsedSizes';
 import { useCollapsedSize } from './memos/useCollapsedSize';
-import { debounce } from '../helpers';
+import { debounce, deepEqual } from '../helpers';
 import { useRecalculateSizes } from './callbacks/useRecalculateSizes';
 import { useEventListener } from '../../../hooks/useEventListener';
+import { usePrevious } from '../../../hooks/usePrevious';
 import { Nullable } from '../../../types/utilities';
 
 export interface ChildPane {
@@ -77,6 +78,7 @@ export const useSplitPaneResize = (options: SplitPaneResizeOptions): SplitPaneRe
   // STATE: a map keeping track of all of the pane sizes
   const [sizes, setSizes] = useState<number[]>(initialSizes);
   const [movedSizes, setMovedSizes] = useState<number[]>(sizes);
+  const prevMovedSizes = usePrevious(movedSizes);
   const [collapsedSizes, setCollapsedSizes] = useState<Nullable<number>[]>(
     originalCollapsedSizes ?? new Array(children.length).fill(null)
   );
@@ -142,7 +144,10 @@ export const useSplitPaneResize = (options: SplitPaneResizeOptions): SplitPaneRe
   }, [dragState, movedSizes, hooks]);
   useEffect(() => {
     hooks?.onCollapse?.(collapsedSizes);
-  }, [collapsedSizes, hooks]);
+    if (!deepEqual(prevMovedSizes, movedSizes)){
+      hooks?.onSaveSizes?.(movedSizes);
+    }
+  }, [collapsedSizes, movedSizes, prevMovedSizes, hooks]);
   useEffect(() => {
     updateCollapsedSizes(collapsedIndices);
     // eslint-disable-next-line react-hooks/exhaustive-deps

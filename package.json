@@ -2,7 +2,7 @@
   "version": "0.1.0",
   "license": "MIT",
   "name": "react-collapse-pane",
-  "repository": "https://github.com/b-zurg/react-collapse-pane",
+  "repository": "https://github.com/godsamit/react-collapse-pane",
   "homepage": "https://collapse-pane.zurg.dev",
   "bugs": "https://github.com/b-zurg/react-collapse-pane/issues",
   "description": "The splittable, draggable and collapsible react layout library.",

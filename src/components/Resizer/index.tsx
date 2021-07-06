@@ -112,7 +112,7 @@ export const Resizer = ({
   const isTransition = collapseOptions?.buttonTransition !== 'none';
   const collapseButton = collapseOptions ? (
     <ButtonContainer $isVertical={isVertical} $grabberSize={grabberSizeWithUnit} $isLtr={isLtr}>
-      <div style={{ flex: `1 1 ${preButtonFlex}` }} />
+      <div style={{ flex: `1 1 ${preButtonFlex}px` }} />
       <Transition
         in={isTransition ? isHovered : true}
         timeout={isTransition ? collapseOptions.buttonTransitionTimeout : 0}
@@ -126,7 +126,7 @@ export const Resizer = ({
           {isCollapsed ? collapseOptions.afterToggleButton : collapseOptions.beforeToggleButton}
         </ButtonWrapper>
       </Transition>
-      <div style={{ flex: `1 1 ${postButtonFlex}` }} />
+      <div style={{ flex: `1 1 ${postButtonFlex}px` }} />
     </ButtonContainer>
   ) : null;
 
