@@ -34,6 +34,7 @@ export interface CollapseOptions {
   collapseTransitionTimeout: number;
   collapsedSize: number;
   overlayCss: React.CSSProperties;
+  excludeNullChildren: boolean;
 }
 export interface ResizerOptions {
   css?: React.CSSProperties;

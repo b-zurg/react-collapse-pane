@@ -56,7 +56,11 @@ export const useSplitPaneResize = (options: SplitPaneResizeOptions): SplitPaneRe
     isLtr,
   } = options;
 
-  const children = !Array.isArray(originalChildren) ? [originalChildren] : originalChildren;
+  const allChildren = !Array.isArray(originalChildren) ? [originalChildren] : originalChildren;
+  const children = collapseOptions?.excludeNullChildren
+    ? allChildren.filter(child => child !== null)
+    : allChildren;
+
   // VALUES: const values used throughout the different logic
   const paneRefs = useRef(new Map<string, React.RefObject<HTMLDivElement>>());
 
