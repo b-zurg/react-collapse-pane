@@ -39,7 +39,7 @@ describe('Vertical', () => {
       div
     );
     ReactDOM.unmountComponentAtNode(div);
-    expect(console.error).toHaveBeenCalledTimes(1);
+    expect(console.error).toHaveBeenCalledTimes(3);
     expect(console.error).toHaveBeenCalledWith(
       '[react-collapse-pane] - You must have more than one non-null child inside the SplitPane component.  Even though SplitPane does not crash, you should resolve this error.'
     );

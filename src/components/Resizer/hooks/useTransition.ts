@@ -1,6 +1,6 @@
 import { CollapseOptions, TransitionType } from '../../SplitPane';
 import { useMemo } from 'react';
-import { Fade, Grow, Zoom } from '@material-ui/core';
+import { Fade, Grow, Zoom } from '@mui/material';
 type TransitionComponent = typeof Fade | typeof Grow | typeof Zoom;
 const transitionComponentMap: {
   [key in TransitionType]: TransitionComponent;

@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Fade } from '@material-ui/core';
+import { Fade } from '@mui/material';
 import { BeginDragCallback } from '../SplitPane/hooks/effects/useDragState';
 import {
   ButtonContainer,
