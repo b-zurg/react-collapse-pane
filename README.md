@@ -56,6 +56,13 @@ import { SplitPane } from "react-collapse-pane";
 ```
 
 If you're using Typescript the `SplitPaneProps`, as well as a few other helper types type is also available.
+
+NOTE: Since the upgrade to MUI v5 you need to install a peer dependency style engine. Since there is a decision between styled components and emotion I did not make this an explicit dependency.
+
+If you want to simply use the default then follow the install guide here https://mui.com/material-ui/getting-started/installation/
+If you want to use styled components then follow the configuration guide here https://mui.com/material-ui/guides/styled-engine/
+
+In the future this dependency will be removed, apologies for the hassle while that gets sorted out. The next version will be much leaner.
 ```ts
 import { SplitPane, SplitPaneProps, ResizerOptions, CollapseOptions, SplitPaneHooks } from "react-collapse-pane";
 ```
