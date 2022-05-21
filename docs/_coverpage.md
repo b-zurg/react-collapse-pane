@@ -11,7 +11,7 @@
 - Easy styling and configuration
 
 [GitHub](https://github.com/b-zurg/react-collapse-pane/)
-[Storybook](https://storybook.collapse-pane.zurg.dev/)
+[Storybook](https://storybook-collapse-pane.netlify.app//)
 [Get Started](/?id=react-collapse-pane)
 
 ![color](#2E2E2E)

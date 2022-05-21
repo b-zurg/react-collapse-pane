@@ -2,7 +2,7 @@
 
 This is intended to be **the** simple, reliable, configurable, and elegant solution to having splittable, draggable and collapsible panes in your React application. 
 
-<a href="https://collapse-pane.zurg.dev" target="_blank"><img src="logo.svg" alt="logo" style="width:100%"/></a>
+<a href="https://storybook-collapse-pane.netlify.app/" target="_blank"><img src="logo.svg" alt="logo" style="width:100%"/></a>
 <p align="center">
   <a href="https://github.com/b-zurg/react-collapse-pane/pulls">
     <img alt="prs welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg">
@@ -26,7 +26,7 @@ This is intended to be **the** simple, reliable, configurable, and elegant solut
   <a href="https://www.npmjs.com/package/react-collapse-pane/v/latest">
     <img alt="npm downloads" src="https://img.shields.io/npm/dw/react-collapse-pane">
   </a>
-  <a href="https://react-collapse-pane.zurg.dev/?path=/story/*">
+  <a href="https://storybook-collapse-pane.netlify.app/?path=/story/*">
     <img alt="storybook" src="https://cdn.jsdelivr.net/gh/storybookjs/brand@master/badge/badge-storybook.svg">
   </a>
   <a href="https://opensource.org/licenses/MIT">
@@ -35,8 +35,8 @@ This is intended to be **the** simple, reliable, configurable, and elegant solut
 
 </p>
 
-## [[click for storybook demo]](https://storybook.collapse-pane.zurg.dev/)
-## [[click for documentation site]](https://collapse-pane.zurg.dev/)
+## [[click for storybook demo]](https://storybook-collapse-pane.netlify.app/)
+## [[click for documentation site]](https://b-zurg.github.io/react-collapse-pane/)
 
 # Getting Started :rocket:
 
@@ -88,11 +88,11 @@ There is no limit to the number of elements you have as children.  The `SplitPan
 
 This library supports all of these things and more! 
 
-For more details check out [the documentation](https://collapse-pane.zurg.dev/)
+For more details check out [the documentation](https://b-zurg.github.io/react-collapse-pane/)
 
 # Documentation
 
-Documentation can be found at https://collapse-pane.zurg.dev 
+Documentation can be found at https://b-zurg.github.io/react-collapse-pane/ 
 
 If you notice an issue then please make an issue or a PR!  All docs are generated from the `docs` folder in the master branch.
 

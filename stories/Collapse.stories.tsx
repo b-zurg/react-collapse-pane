@@ -71,7 +71,7 @@ storiesOf('Collapsable Panes', module)
         >
           <Logo src={logo} className="App-logo" alt="logo" />
           <p>You can collapse and resize these panes!</p>
-          <Link href="https://collapse-pane.zurg.dev" target="_blank" rel="noopener noreferrer">
+          <Link href="https://b-zurg.github.io/react-collapse-pane/" target="_blank" rel="noopener noreferrer">
             <p>Check out the Docs</p>
           </Link>
         </SplitPane>
